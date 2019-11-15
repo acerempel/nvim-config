@@ -50,12 +50,16 @@ Plug 'https://github.com/tpope/vim-vinegar'
 Plug 'https://github.com/kabbamine/yowish.vim'
 Plug 'https://github.com/lifepillar/vim-solarized8'
 Plug 'https://github.com/ncm2/ncm2'
+Plug 'https://github.com/roxma/nvim-yarp'
 Plug 'https://github.com/ncm2/ncm2-bufword'
 Plug 'https://github.com/ncm2/ncm2-path'
 Plug 'raghur/fruzzy', {'do': { -> fruzzy#install()}}
 Plug 'https://github.com/andymass/vim-matchup'
 Plug 'https://github.com/mg979/vim-visual-multi'
-Plug 'https://github.com/autozimu/LanguageClient-neovim'
+Plug 'https://github.com/autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
 call plug#end()
 
 set background=light
@@ -197,6 +201,16 @@ endif
 
 command! -nargs=+ Find execute 'silent grep! <args>'
 
+inoremap <silent><expr> <TAB>
+    \ pumvisible() ? "\<C-n>" :
+    \ <SID>check_back_space() ? "\<TAB>" :
+    \ ncm2#manual_trigger()
+
+function! s:check_back_space() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
+
 augroup quickfix
     autocmd!
 
@@ -245,10 +259,12 @@ let g:ncm2#matcher = {
 let g:ncm2#auto_popup = 0
 let g:ncm2#total_popup_limit = 10
 
-inoremap <Tab> <C-r>=ncm2#manual_trigger()<CR>
+inoremap <C-n> <C-r>=ncm2#manual_trigger()<CR>
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
-" NCM2 requires noinsert
-set completeopt+=noinsert
+" NCM2 requires these.
+set completeopt=noinsert,menuone,noselect
 
 let g:pandoc#syntax#conceal#blacklist = ['ellipses']
 let g:pandoc#formatting#mode = 'h'
