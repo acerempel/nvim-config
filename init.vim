@@ -50,6 +50,8 @@ Plug 'https://github.com/tpope/vim-vinegar'
 Plug 'https://github.com/kabbamine/yowish.vim'
 Plug 'https://github.com/lifepillar/vim-solarized8'
 Plug 'https://github.com/ncm2/ncm2'
+Plug 'https://github.com/ncm2/ncm2-bufword'
+Plug 'https://github.com/ncm2/ncm2-path'
 Plug 'raghur/fruzzy', {'do': { -> fruzzy#install()}}
 Plug 'https://github.com/andymass/vim-matchup'
 Plug 'https://github.com/mg979/vim-visual-multi'
@@ -232,6 +234,21 @@ function! AR_autotoggle_list()
         autocmd InsertLeave <buffer=abuf> setlocal list
     augroup END
 endfunction
+
+let g:ncm2#matcher = {
+    \ 'name': 'must',
+    \ 'matchers': [
+    \   {'name': 'base_min_len', 'value': 3},
+    \   'abbrfuzzy'
+    \ ]}
+
+let g:ncm2#auto_popup = 0
+let g:ncm2#total_popup_limit = 10
+
+inoremap <Tab> <C-r>=ncm2#manual_trigger()<CR>
+
+" NCM2 requires noinsert
+set completeopt+=noinsert
 
 let g:pandoc#syntax#conceal#blacklist = ['ellipses']
 let g:pandoc#formatting#mode = 'h'
