@@ -50,7 +50,6 @@ Plug 'https://github.com/tpope/vim-vinegar'
 Plug 'https://github.com/kabbamine/yowish.vim'
 Plug 'https://github.com/lifepillar/vim-solarized8'
 Plug 'https://github.com/ncm2/ncm2'
-Plug 'https://github.com/Shougo/denite.nvim'
 Plug 'raghur/fruzzy', {'do': { -> fruzzy#install()}}
 Plug 'https://github.com/andymass/vim-matchup'
 Plug 'https://github.com/mg979/vim-visual-multi'
@@ -186,54 +185,6 @@ autocmd BufReadPost *
      \ endif
 
 map <leader>B :BufExplorer<CR>
-
-" denite configuration
-
-call denite#custom#option('default', {
-      \ 'prompt': '❯',
-      \ 'auto_resize': 1,
-      \ 'winminheight': '8',
-      \ 'winheight': '10',
-      \ })
-
-call denite#custom#source('_', 'matchers', ['matcher/fruzzy'])
-
-call denite#custom#var('file/rec', 'command',
-      \ ['fd', '--full-path', '--type', 'f', '--type', 'l'])
-call denite#custom#var('grep', 'command', ['rg'])
-call denite#custom#var('grep', 'default_opts',
-      \ ['--vimgrep', '--smart-case'])
-call denite#custom#var('grep', 'recursive_opts', [])
-call denite#custom#var('grep', 'pattern_opt', ['--regexp'])
-call denite#custom#var('grep', 'separator', ['--'])
-call denite#custom#var('grep', 'final_opts', [])
-
-augroup denite_config
-autocmd!
-autocmd FileType denite call s:denite_my_settings()
-augroup END
-
-function! s:denite_my_settings() abort
-  nnoremap <silent><buffer><expr> <CR>
-  \ denite#do_map('do_action')
-  nnoremap <silent><buffer><expr> d
-  \ denite#do_map('do_action', 'delete')
-  nnoremap <silent><buffer><expr> p
-  \ denite#do_map('do_action', 'preview')
-  nnoremap <silent><buffer><expr> q
-  \ denite#do_map('quit')
-  nnoremap <silent><buffer><expr> i
-  \ denite#do_map('open_filter_buffer')
-  nnoremap <silent><buffer><expr> v
-  \ denite#do_map('do_action', 'vsplitswitch')
-  nnoremap <silent><buffer><expr> s
-  \ denite#do_map('do_action', 'splitswitch')
-  nnoremap <silent><buffer><expr> t
-  \ denite#do_map('do_action', 'tabswitch')
-endfunction
-
-nmap <silent> <leader>f :Denite file/rec -start-filter -default-action=open<CR>
-nmap <silent> <leader>b :Denite buffer<CR>
 
 map <silent> <leader>n :set number! relativenumber!<CR>
 
