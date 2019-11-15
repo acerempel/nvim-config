@@ -56,10 +56,6 @@ Plug 'https://github.com/ncm2/ncm2-path'
 Plug 'raghur/fruzzy', {'do': { -> fruzzy#install()}}
 Plug 'https://github.com/andymass/vim-matchup'
 Plug 'https://github.com/mg979/vim-visual-multi'
-Plug 'https://github.com/autozimu/LanguageClient-neovim', {
-    \ 'branch': 'next',
-    \ 'do': 'bash install.sh',
-    \ }
 call plug#end()
 
 set background=light
@@ -69,11 +65,6 @@ highlight! link Conceal Normal
 
 let g:fruzzy#usenative = 1
 
-let g:LanguageClient_rootMarkers = ['cabal.project', '*.cabal', 'stack.yaml']
-let g:LanguageClient_serverCommands = {
-    \ 'rust': ['rls'],
-    \ 'haskell': ['ghcide', '--lsp'],
-    \ }
 
 " ~~~~~~~~~~~~~~
 " ~~ SETTINGS ~~
