@@ -281,8 +281,6 @@ let g:haskell_indent_in = 1
 let g:haskell_conceal_wide = 0
 let g:haskell_conceal_enumerations = 0
 
-let g:tagbar_ctags_bin = "/Users/alan/.local/bin/ctags"
-
 " ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 " ~~ elmelmelmelmelmelmelmelmelmelmelm ~~
 " ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
