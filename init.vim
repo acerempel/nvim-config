@@ -320,7 +320,6 @@ let g:ale_linters = { 'haskell': ['hlint'], 'php': [] }
 augroup haskell_ale
 au!
 autocmd FileType haskell let b:ale_lint_on_text_changed = 'none'
-autocmd FileType haskell setl
 augroup END
 
 map <Leader>ad :ALEDetail<CR>
