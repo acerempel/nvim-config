@@ -56,8 +56,6 @@ Plug 'https://github.com/ncm2/ncm2-path'
 Plug 'raghur/fruzzy', {'do': { -> fruzzy#install()}}
 Plug 'https://github.com/andymass/vim-matchup'
 Plug 'https://github.com/mg979/vim-visual-multi'
-Plug 'https://github.com/prabirshrestha/async.vim'
-Plug 'https://github.com/prabirshrestha/vim-lsp'
 call plug#end()
 
 set background=light
@@ -258,17 +256,6 @@ inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
 " NCM2 requires these.
 set completeopt=noinsert,menuone,noselect
-
-" vim-lsp
-
-let g:lsp_log_verbose = 1
-let g:lsp_log_file = expand('~/.local/share/nvim/vim-lsp.log')
-
-au User lsp_setup call lsp#register_server({
-    \ 'name': 'ghcide',
-    \ 'cmd': {server_info->['/Users/alan/.local/bin/ghcide', '--lsp']},
-    \ 'whitelist': ['haskell'],
-    \ })
 
 let g:pandoc#syntax#conceal#blacklist = ['ellipses']
 let g:pandoc#formatting#mode = 'h'
