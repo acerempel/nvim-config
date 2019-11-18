@@ -53,6 +53,7 @@ Plug 'https://github.com/ncm2/ncm2'
 Plug 'https://github.com/roxma/nvim-yarp'
 Plug 'https://github.com/ncm2/ncm2-bufword'
 Plug 'https://github.com/ncm2/ncm2-path'
+Plug 'https://github.com/Shougo/deoplete.nvim'
 Plug 'raghur/fruzzy', {'do': { -> fruzzy#install()}}
 Plug 'https://github.com/andymass/vim-matchup'
 Plug 'https://github.com/mg979/vim-visual-multi'
@@ -192,15 +193,40 @@ endif
 
 command! -nargs=+ Find execute 'silent grep! <args>'
 
+let g:deoplete#enable_at_startup = 1
+
+call deoplete#custom#option('auto_complete', v:false)
+
 inoremap <silent><expr> <TAB>
     \ pumvisible() ? "\<C-n>" :
     \ <SID>check_back_space() ? "\<TAB>" :
-    \ ncm2#manual_trigger()
+    \ deoplete#mappings#manual_complete()
 
 function! s:check_back_space() abort
     let col = col('.') - 1
     return !col || getline('.')[col - 1]  =~ '\s'
 endfunction
+
+call deoplete#custom#option('candidate_marks',
+      \ ['a', 's', 'd', 'f', 'g', 'h'])
+
+inoremap <expr> <C-a>       pumvisible() ?
+\ deoplete#insert_candidate(0) : ''
+inoremap <expr> <C-s>       pumvisible() ?
+\ deoplete#insert_candidate(1) : ''
+inoremap <expr> <C-d>       pumvisible() ?
+\ deoplete#insert_candidate(2) : ''
+inoremap <expr> <C-f>       pumvisible() ?
+\ deoplete#insert_candidate(3) : ''
+inoremap <expr> <C-g>       pumvisible() ?
+\ deoplete#insert_candidate(4) : ''
+inoremap <expr> <C-h>       pumvisible() ?
+\ deoplete#insert_candidate(5) : ''
+inoremap <expr> /       pumvisible() ?
+\ deoplete#complete_common_string() : '/'
+
+call deoplete#custom#source('_', 'matchers', ['matcher_length', 'matcher_fuzzy'])
+call deoplete#custom#source('_', 'disabled_syntaxes', ['Comment', 'String'])
 
 augroup quickfix
     autocmd!
