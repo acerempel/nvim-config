@@ -49,10 +49,6 @@ Plug 'https://github.com/dag/vim2hs'
 Plug 'https://github.com/tpope/vim-vinegar'
 Plug 'https://github.com/kabbamine/yowish.vim'
 Plug 'https://github.com/lifepillar/vim-solarized8'
-Plug 'https://github.com/ncm2/ncm2'
-Plug 'https://github.com/roxma/nvim-yarp'
-Plug 'https://github.com/ncm2/ncm2-bufword'
-Plug 'https://github.com/ncm2/ncm2-path'
 Plug 'https://github.com/Shougo/deoplete.nvim'
 Plug 'raghur/fruzzy', {'do': { -> fruzzy#install()}}
 Plug 'https://github.com/andymass/vim-matchup'
@@ -266,21 +262,6 @@ function! AR_autotoggle_list()
     augroup END
 endfunction
 
-let g:ncm2#matcher = {
-    \ 'name': 'must',
-    \ 'matchers': [
-    \   {'name': 'base_min_len', 'value': 3},
-    \   'abbrfuzzy'
-    \ ]}
-
-let g:ncm2#auto_popup = 0
-let g:ncm2#total_popup_limit = 10
-
-inoremap <C-n> <C-r>=ncm2#manual_trigger()<CR>
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-
-" NCM2 requires these.
 set completeopt=noinsert,menuone,noselect
 
 let g:pandoc#syntax#conceal#blacklist = ['ellipses']
