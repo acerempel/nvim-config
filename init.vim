@@ -50,7 +50,6 @@ Plug 'https://github.com/tpope/vim-vinegar'
 Plug 'https://github.com/kabbamine/yowish.vim'
 Plug 'https://github.com/lifepillar/vim-solarized8'
 Plug 'https://github.com/Shougo/deoplete.nvim'
-Plug 'raghur/fruzzy', {'do': { -> fruzzy#install()}}
 Plug 'https://github.com/andymass/vim-matchup'
 Plug 'https://github.com/mg979/vim-visual-multi'
 call plug#end()
@@ -59,9 +58,6 @@ set background=light
 set termguicolors
 colorscheme solarized8_high
 highlight! link Conceal Normal
-
-let g:fruzzy#usenative = 1
-
 
 " ~~~~~~~~~~~~~~
 " ~~ SETTINGS ~~
