@@ -40,6 +40,7 @@ Plug 'https://github.com/vim-pandoc/vim-pandoc.git'
 Plug 'https://github.com/vim-pandoc/vim-pandoc-syntax.git'
 Plug 'https://github.com/junegunn/vim-peekaboo'
 Plug 'https://github.com/tpope/vim-repeat'
+Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
 Plug 'https://github.com/shmargum/vim-sass-colors'
 Plug 'https://github.com/kshenoy/vim-signature'
 Plug 'https://github.com/justinmk/vim-sneak'
@@ -231,6 +232,28 @@ call deoplete#custom#option('sources', {
   \ })
 
 call deoplete#enable_logging('DEBUG', '/Users/alan/.local/share/nvim/deoplete.log')
+
+let g:Lf_WindowPosition = 'popup'
+let g:Lf_PreviewInPopup = 1
+let g:Lf_ShortcutF = '<Leader>ff'
+let g:Lf_ShortcutB = '<Leader>fb'
+let g:Lf_UseCache = 0
+let g:Lf_WildIgnore = {
+  \ 'dir': ['.git', 'dist-newstyle', '.stack-work'],
+  \ 'file': ['*.o', '*.hi']
+  \ }
+let g:Lf_ExternalCommand = 'fd . "%s" -t f'
+let g:Lf_RootMarkers = ['cabal.project', 'stack.yaml', '.git']
+let g:Lf_WorkingDirectoryMode = 'AF'
+let g:Lf_ShowHidden = 1
+let g:Lf_HideHelp = 1
+let g:Lf_IgnoreCurrentBufferName = 1
+let g:Lf_CommandMap = {
+  \ '<C-X>': ['<C-S>'], '<C-]>': ['<C-V>'],
+  \ '<C-K>': ['<C-P>'], '<C-J>': ['<C-N>']
+  \ }
+
+nnoremap <Leader>fc :Leaderf --fuzzy --cword file<CR>
 
 augroup quickfix
     autocmd!
