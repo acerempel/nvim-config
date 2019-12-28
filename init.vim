@@ -221,7 +221,7 @@ inoremap <expr> <C-h>       pumvisible() ?
 inoremap <expr> /       pumvisible() ?
 \ deoplete#complete_common_string() : '/'
 
-inoremap <silent><expr> <CR> pumvisible() ? "\<C-r>=deoplete#close_popup()\<CR>" : "\<CR>"
+inoremap <silent><expr> <CR> pumvisible() ? deoplete#close_popup() : "\<CR>"
 
 call deoplete#custom#source('_', 'matchers', ['matcher_length', 'matcher_fuzzy'])
 call deoplete#custom#source('_', 'disabled_syntaxes', ['Comment', 'String'])
