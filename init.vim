@@ -195,7 +195,7 @@ inoremap <silent><expr> <TAB>
     \ deoplete#manual_complete()
 
 inoremap <silent><expr> <S-TAB>
-    \ pumvisible() ? "\<C-p>" : \<S-TAB>"
+    \ pumvisible() ? "\<C-p>" : \<S-TAB>
 
 function! s:check_back_space() abort
     let col = col('.') - 1
@@ -220,7 +220,7 @@ inoremap <expr> <C-h>       pumvisible() ?
 inoremap <expr> /       pumvisible() ?
 \ deoplete#complete_common_string() : '/'
 
-inoremap <silent> <CR> <C-r>=deoplete#close_popup()<CR>
+inoremap <silent><expr> <CR> pumvisible() ? "\<C-r>=deoplete#close_popup()\<CR>" : "\<CR>"
 
 call deoplete#custom#source('_', 'matchers', ['matcher_length', 'matcher_fuzzy'])
 call deoplete#custom#source('_', 'disabled_syntaxes', ['Comment', 'String'])
