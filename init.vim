@@ -270,7 +270,7 @@ autocmd FileType html setlocal shiftwidth=2 tabstop=2 softtabstop=2
 
 autocmd BufWinLeave * lclose
 
-autocmd FileType text,markdown,pandoc     setlocal nonumber
+autocmd FileType text,markdown,pandoc     setlocal nonumber fo+=t tw=61
 autocmd FileType text setlocal nospell
 
 autocmd FileType markdown,pandoc call AR_autotoggle_list()
@@ -279,7 +279,7 @@ autocmd FileType gitcommit      setlocal textwidth=67
 
 autocmd FileType qf     setlocal wrap linebreak
 
-autocmd FileType haskell setlocal foldmethod=indent foldminlines=6
+autocmd FileType haskell setlocal nofoldenable
 
 autocmd FileType table setlocal tabstop=28 noexpandtab nolist
 
@@ -309,13 +309,6 @@ let g:clever_f_fix_key_direction = 1
 
 let g:haskellmode_completion_ghc = 0
 
-let g:haskell_enable_quantification = 1
-let g:haskell_enable_pattern_synonyms = 0
-let g:haskell_indent_if = 3
-let g:haskell_indent_case = 2
-let g:haskell_indent_let = 4
-let g:haskell_indent_in = 1
-
 let g:haskell_conceal_wide = 0
 let g:haskell_conceal_enumerations = 0
 
@@ -338,14 +331,6 @@ let g:elm_make_show_warnings=1
 let g:elm_detailed_complete=1
 let g:elm_format_autosave=1
 let g:elm_format_args = "--elm-version 0.17"
-
-" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-" ~~ supertabsupertabsupertabsupertab ~~
-" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-" set completeopt=longest,menu
-" let g:SuperTabLongestEnhanced=1
-" let g:SuperTabLongestHighlight=1
 
 " ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 " ~~ alealealealealealealealealealealeale ~~
@@ -372,6 +357,12 @@ map <Leader>ad :ALEDetail<CR>
 map <Leader>ai :ALEInfo<CR>
 map <silent> [w :ALEPreviousWrap<CR>
 map <silent> ]w :ALENextWrap<CR>
+
+augroup ale_haskell
+  au!
+  au FileType haskell nnoremap <silent> K :ALEHover<CR>
+  au FileType haskell nnoremap <silent> gd :ALEGoToDefinition<CR>
+augroup END
 
 set laststatus=2
 
