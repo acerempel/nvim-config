@@ -51,8 +51,6 @@ Plug 'https://github.com/lifepillar/vim-solarized8'
 Plug 'https://github.com/Shougo/deoplete.nvim'
 Plug 'https://github.com/andymass/vim-matchup'
 Plug 'https://github.com/mg979/vim-visual-multi'
-Plug 'https://github.com/junegunn/vader.vim'
-Plug 'file:///Users/alan/Code/intero-neovim'
 call plug#end()
 
 set background=light
