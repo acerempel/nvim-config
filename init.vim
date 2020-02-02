@@ -41,18 +41,18 @@ Plug 'https://github.com/vim-pandoc/vim-pandoc-syntax.git'
 Plug 'https://github.com/junegunn/vim-peekaboo'
 Plug 'https://github.com/tpope/vim-repeat'
 Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
-Plug 'https://github.com/shmargum/vim-sass-colors'
 Plug 'https://github.com/kshenoy/vim-signature'
 Plug 'https://github.com/justinmk/vim-sneak'
 Plug 'https://github.com/tpope/vim-surround'
 Plug 'https://github.com/tpope/vim-unimpaired'
-Plug 'https://github.com/dag/vim2hs'
 Plug 'https://github.com/tpope/vim-vinegar'
 Plug 'https://github.com/kabbamine/yowish.vim'
 Plug 'https://github.com/lifepillar/vim-solarized8'
 Plug 'https://github.com/Shougo/deoplete.nvim'
 Plug 'https://github.com/andymass/vim-matchup'
 Plug 'https://github.com/mg979/vim-visual-multi'
+Plug 'https://github.com/junegunn/vader.vim'
+Plug 'file:///Users/alan/Code/intero-neovim'
 call plug#end()
 
 set background=light
@@ -338,7 +338,7 @@ let g:elm_format_args = "--elm-version 0.17"
 
 let g:ale_lint_on_text_changed = 'normal'
 let g:ale_lint_on_insert_leave = 1
-let g:ale_linters = { 'haskell': ['hlint', 'ghc-ide'], 'php': [] }
+let g:ale_linters = { 'haskell': ['hlint'], 'php': [] }
 
 " Returns the directory containing the filename of the referenced buffer.
 function! s:get_buffer_directory(buffer_number) abort
