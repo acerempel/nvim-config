@@ -6,56 +6,17 @@ if &shell =~# 'fish$'
 endif
 
 call plug#begin('~/.local/share/nvim/plug')
-Plug 'https://github.com/w0rp/ale'
-Plug 'https://github.com/jiangmiao/auto-pairs'
-Plug 'https://github.com/sjl/badwolf'
-Plug 'https://github.com/jlanzarotta/bufexplorer'
-Plug 'https://github.com/vmchale/cabal-project-vim'
-Plug 'https://github.com/rhysd/clever-f.vim'
-Plug 'https://github.com/yuttie/comfortable-motion.vim'
-Plug 'https://github.com/rhysd/committia.vim'
-Plug 'https://github.com/konfekt/fastfold'
-Plug 'https://github.com/junegunn/gv.vim'
-Plug 'https://github.com/othree/html5.vim'
-Plug 'https://github.com/michaeljsmith/vim-indent-object'
-Plug 'https://github.com/hecal3/vim-leader-guide'
-Plug 'https://github.com/itchyny/lightline.vim'
-Plug 'https://github.com/justinmk/molokai'
-Plug 'https://github.com/cakebaker/scss-syntax.vim'
-Plug 'https://github.com/vim-jp/syntax-vim-ex'
-Plug 'https://github.com/godlygeek/tabular'
-Plug 'https://github.com/wellle/targets.vim'
-Plug 'https://github.com/cespare/vim-toml'
-Plug 'https://github.com/maralla/vim-toml-enhance'
-Plug 'https://github.com/mbbill/undotree'
-Plug 'https://github.com/tpope/vim-commentary'
-Plug 'https://github.com/christoomey/vim-conflicted'
-Plug 'https://github.com/hail2u/vim-css3-syntax'
-Plug 'https://github.com/dag/vim-fish'
-Plug 'https://github.com/tpope/vim-fugitive'
-Plug 'https://github.com/airblade/vim-gitgutter'
-Plug 'https://github.com/pangloss/vim-javascript'
-Plug 'https://github.com/elzr/vim-json.git'
-Plug 'https://github.com/vim-pandoc/vim-pandoc.git'
-Plug 'https://github.com/vim-pandoc/vim-pandoc-syntax.git'
-Plug 'https://github.com/junegunn/vim-peekaboo'
-Plug 'https://github.com/tpope/vim-repeat'
-Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
-Plug 'https://github.com/kshenoy/vim-signature'
-Plug 'https://github.com/justinmk/vim-sneak'
-Plug 'https://github.com/tpope/vim-surround'
-Plug 'https://github.com/tpope/vim-unimpaired'
-Plug 'https://github.com/tpope/vim-vinegar'
-Plug 'https://github.com/kabbamine/yowish.vim'
-Plug 'https://github.com/lifepillar/vim-solarized8'
-Plug 'https://github.com/Shougo/deoplete.nvim'
-Plug 'https://github.com/andymass/vim-matchup'
-Plug 'https://github.com/mg979/vim-visual-multi'
+if exists('g:vscode')
+  source <sfile>:h/init/plugins_vscode_too.vim
+else
+  source <sfile>:h/init/plugins_nvim_only.vim
+  source <sfile>:h/init/plugins_vscode_too.vim
+endif
 call plug#end()
 
-set background=light
 set termguicolors
-colorscheme solarized8_high
+source <sfile>:h/init/colours_solarized.vim
+
 highlight! link Conceal Normal
 
 " ~~~~~~~~~~~~~~
@@ -137,35 +98,10 @@ set secure
 
 set diffopt=filler,vertical,context:4
 
-" ~~~~~~~~~~~~~~
-" ~~ MAPPINGS ~~
-" ~~~~~~~~~~~~~~
-
 " Leader
 let mapleader = ";"
 let g:mapleader = ";"
 let maplocalleader = "'"
-
-imap ;; <Esc>
-
-map <C-J> <C-W>j
-map <C-K> <C-W>k
-map <C-H> <C-W>h
-map <C-L> <C-W>l
-
-noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
-noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
-
-noremap Q @@
-nnoremap <space> :
-
-imap <C-j> <Down>
-imap <C-k> <Up>
-imap <C-h> <Left>
-imap <C-l> <Right>
-
-" Make Y editor command consistent with D, C, etc.
-noremap Y y$
 
 " Return to last edit position when opening files -------- "
 autocmd BufReadPost *
@@ -173,85 +109,12 @@ autocmd BufReadPost *
      \   exe "normal! g`\"" |
      \ endif
 
-map <leader>B :BufExplorer<CR>
-
-map <silent> <leader>n :set number! relativenumber!<CR>
-
 if executable('rg')
     set grepprg=rg\ --vimgrep
     set grepformat^=%f:%l:%c:%m
 endif
 
 command! -nargs=+ Find execute 'silent grep! <args>'
-
-let g:deoplete#enable_at_startup = 1
-
-call deoplete#custom#option('auto_complete', v:false)
-
-inoremap <silent><expr> <TAB>
-    \ pumvisible() ? "\<C-n>" :
-    \ <SID>check_back_space() ? "\<TAB>" :
-    \ deoplete#manual_complete()
-
-inoremap <silent><expr> <S-TAB>
-    \ pumvisible() ? "\<C-p>" : \<S-TAB>
-
-function! s:check_back_space() abort
-    let col = col('.') - 1
-    return !col || getline('.')[col - 1]  =~ '\s'
-endfunction
-
-call deoplete#custom#option('candidate_marks',
-      \ ['a', 's', 'd', 'f', 'g', 'h'])
-
-inoremap <expr> <C-a>       pumvisible() ?
-\ deoplete#insert_candidate(0) : ''
-inoremap <expr> <C-s>       pumvisible() ?
-\ deoplete#insert_candidate(1) : ''
-inoremap <expr> <C-d>       pumvisible() ?
-\ deoplete#insert_candidate(2) : ''
-inoremap <expr> <C-f>       pumvisible() ?
-\ deoplete#insert_candidate(3) : ''
-inoremap <expr> <C-g>       pumvisible() ?
-\ deoplete#insert_candidate(4) : ''
-inoremap <expr> <C-h>       pumvisible() ?
-\ deoplete#insert_candidate(5) : ''
-inoremap <expr> /       pumvisible() ?
-\ deoplete#complete_common_string() : '/'
-
-inoremap <silent><expr> <CR> pumvisible() ? deoplete#close_popup() : "\<CR>"
-
-call deoplete#custom#source('_', 'matchers', ['matcher_length', 'matcher_fuzzy'])
-call deoplete#custom#source('_', 'disabled_syntaxes', ['Comment', 'String'])
-
-call deoplete#custom#option('sources', {
-  \ '_': ['buffer', 'files'],
-  \ 'haskell': ['ale'],
-  \ })
-
-call deoplete#enable_logging('DEBUG', '/Users/alan/.local/share/nvim/deoplete.log')
-
-let g:Lf_WindowPosition = 'popup'
-let g:Lf_PreviewInPopup = 1
-let g:Lf_ShortcutF = '<Leader>ff'
-let g:Lf_ShortcutB = '<Leader>fb'
-let g:Lf_UseCache = 0
-let g:Lf_WildIgnore = {
-  \ 'dir': ['.git', 'dist-newstyle', '.stack-work'],
-  \ 'file': ['*.o', '*.hi']
-  \ }
-let g:Lf_ExternalCommand = 'fd . "%s" -t f'
-let g:Lf_RootMarkers = ['cabal.project', 'stack.yaml', '.git']
-let g:Lf_WorkingDirectoryMode = 'AF'
-let g:Lf_ShowHidden = 1
-let g:Lf_HideHelp = 1
-let g:Lf_IgnoreCurrentBufferName = 1
-let g:Lf_CommandMap = {
-  \ '<C-X>': ['<C-S>'], '<C-]>': ['<C-V>'],
-  \ '<C-K>': ['<C-P>'], '<C-J>': ['<C-N>']
-  \ }
-
-nnoremap <Leader>fc :Leaderf --fuzzy --cword file<CR>
 
 augroup quickfix
     autocmd!
@@ -264,21 +127,14 @@ augroup END
 augroup vimrc
 autocmd!
 
-autocmd FileType html setlocal shiftwidth=2 tabstop=2 softtabstop=2
-
 autocmd BufWinLeave * lclose
-
+autocmd FileType html setlocal shiftwidth=2 tabstop=2 softtabstop=2
 autocmd FileType text,markdown,pandoc     setlocal nonumber fo+=t tw=61
 autocmd FileType text setlocal nospell
-
 autocmd FileType markdown,pandoc call AR_autotoggle_list()
-
 autocmd FileType gitcommit      setlocal textwidth=67
-
 autocmd FileType qf     setlocal wrap linebreak
-
 autocmd FileType haskell setlocal nofoldenable
-
 autocmd FileType table setlocal tabstop=28 noexpandtab nolist
 
 augroup END
@@ -305,136 +161,17 @@ let g:sneak#label = 1
 
 let g:clever_f_fix_key_direction = 1
 
-let g:haskellmode_completion_ghc = 0
-
-let g:haskell_conceal_wide = 0
-let g:haskell_conceal_enumerations = 0
-
-" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-" ~~ elmelmelmelmelmelmelmelmelmelmelm ~~
-" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-augroup elm
-autocmd!
-
-autocmd FileType elm    map <buffer> <LocalLeader>e <Plug>(elm-error-detail) |
-                     \  map <buffer> <LocalLeader>ds <Plug>(elm-show-docs)   |
-                     \  map <buffer> <LocalLeader>db <Plug>(elm-browse-docs)
-
-augroup END
-
-let g:elm_setup_keybindings=0
-let g:elm_jump_to_error=1
-let g:elm_make_show_warnings=1
-let g:elm_detailed_complete=1
-let g:elm_format_autosave=1
-let g:elm_format_args = "--elm-version 0.17"
-
-" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-" ~~ alealealealealealealealealealealeale ~~
-" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-let g:ale_lint_on_text_changed = 'normal'
-let g:ale_lint_on_insert_leave = 1
-let g:ale_linters = { 'haskell': ['hlint'], 'php': [] }
-
-" Returns the directory containing the filename of the referenced buffer.
-function! s:get_buffer_directory(buffer_number) abort
-  return fnamemodify(bufname((a:buffer_number)), ":h")
-endfunction
-
-call ale#linter#Define('haskell', {
-  \ 'name': 'ghc-ide',
-  \ 'lsp': 'stdio',
-  \ 'executable': '/Users/alan/.local/bin/ghcide',
-  \ 'command': '%e --lsp',
-  \ 'project_root': funcref("s:get_buffer_directory"),
-  \ })
-
-map <Leader>ad :ALEDetail<CR>
-map <Leader>ai :ALEInfo<CR>
-map <silent> [w :ALEPreviousWrap<CR>
-map <silent> ]w :ALENextWrap<CR>
-
-augroup ale_haskell
-  au!
-  au FileType haskell nnoremap <silent> K :ALEHover<CR>
-  au FileType haskell nnoremap <silent> gd :ALEGoToDefinition<CR>
-augroup END
-
 set laststatus=2
 
 let g:haddock_browser="/Applications/Safari.app/Contents/MacOS/Safari"
 
-nnoremap <silent> U :UndotreeToggle<CR>
-
-" Lightline
-
-let g:lightline = {}
-
-let g:lightline.active = {
-    \ 'left': [ [ 'mode', 'paste' ],
-    \           [ 'gitbranch', 'filename', 'readonly', 'gitdiff', 'modified' ] ],
-    \ 'right': [ [ 'alestatus', 'lineinfo' ],
-    \            [ 'percent' ],
-    \            [ 'filetype' ],
-    \            [ 'vm_modes' ] ]
-    \ }
-
-let g:lightline.inactive = {
-    \ 'left': [ [ 'filename', 'readonly', 'gitdiff', 'modified' ] ],
-    \ 'right': [ [ 'percent' ],
-    \            [ 'fileformat', 'filetype' ] ]
-    \ }
-
-let g:lightline.component = {
-    \ 'modified': '[%M]',
-    \ 'readonly': '[%R]'
-    \ }
-
-let g:lightline.component_function = {
-    \ 'gitbranch': 'AR_git_branch',
-    \ 'fileformat': 'AR_fileformat',
-    \ 'gitdiff': 'AR_gitgutter_status',
-    \ 'alestatus': 'AR_ale_status'
-    \ }
-
-let g:lightline.component_function_visible_condition = {
-    \ 'gitbranch': 'fugitive#head() != ""',
-    \ 'fileformat': '&ff != "unix"',
-    \ 'gitdiff': 'gitgutter#utility#is_active()'
-    \ }
-
-let g:lightline.subseparator = { 'left': '', 'right': '' }
-
-function! AR_git_branch()
-    return fugitive#head() != '' ? "(" . fugitive#head() . ")" : ''
-endfunction
-
-function! AR_gitgutter_status()
-    if gitgutter#utility#is_active(bufnr("%"))
-        let summary = GitGutterGetHunkSummary()
-        return "+" . summary[0] . " ~" . summary[1] . " -" . summary[2]
-    else
-        return ''
-    endif
-endfunction
-
-function! AR_fileformat()
-    return &ff == "unix" ? "" : &ff
-endfunction
-
-function! AR_ale_status()
-    let ale_status = ale#statusline#Count(bufnr("%"))
-    let notices = []
-    if ale_status.error > 0
-        call add(notices, "E:" . ale_status.error)
-    endif
-    if ale_status.warning > 0
-        call add(notices, "W:" . ale_status.warning)
-    endif
-    if ale_status.info > 0
-        call add(notices, "I:" . ale_status.info)
-    endif
-    return join(notices)
-endfunction
+if exists('g:vscode')
+  finish
+else
+  source <sfile>:h/init/mappings.vim
+  source <sfile>:h/init/deoplete.vim
+  source <sfile>:h/init/ale.vim
+  source <sfile>:h/init/lightline.vim
+  source <sfile>:h/init/leaderf.vim
+  source <sfile>:h/init/clap.vim
+endif
