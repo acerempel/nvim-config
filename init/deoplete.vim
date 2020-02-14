@@ -10,7 +10,7 @@ inoremap <silent><expr> <TAB>
     \ deoplete#manual_complete()
 
 inoremap <silent><expr> <S-TAB>
-    \ pumvisible() ? "\<C-p>" : \<S-TAB>
+    \ pumvisible() ? "\<C-p>" : "\<S-TAB>"
 
 function! s:check_back_space() abort
     let col = col('.') - 1
