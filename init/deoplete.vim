@@ -18,20 +18,16 @@ function! s:check_back_space() abort
 endfunction
 
 call deoplete#custom#option('candidate_marks',
-      \ ['a', 's', 'd', 'f', 'g', 'h'])
+      \ ['h', 'j', 'k', 'l'])
 
-inoremap <expr> <C-a>       pumvisible() ?
-\ deoplete#insert_candidate(0) : ''
-inoremap <expr> <C-s>       pumvisible() ?
-\ deoplete#insert_candidate(1) : ''
-inoremap <expr> <C-d>       pumvisible() ?
-\ deoplete#insert_candidate(2) : ''
-inoremap <expr> <C-f>       pumvisible() ?
-\ deoplete#insert_candidate(3) : ''
-inoremap <expr> <C-g>       pumvisible() ?
-\ deoplete#insert_candidate(4) : ''
 inoremap <expr> <C-h>       pumvisible() ?
-\ deoplete#insert_candidate(5) : ''
+\ deoplete#insert_candidate(0) : ''
+inoremap <expr> <C-j>       pumvisible() ?
+\ deoplete#insert_candidate(1) : ''
+inoremap <expr> <C-k>       pumvisible() ?
+\ deoplete#insert_candidate(2) : ''
+inoremap <expr> <C-l>       pumvisible() ?
+\ deoplete#insert_candidate(3) : ''
 inoremap <expr> /       pumvisible() ?
 \ deoplete#complete_common_string() : '/'
 
@@ -40,10 +36,4 @@ inoremap <silent><expr> <CR> pumvisible() ? deoplete#close_popup() : "\<CR>"
 call deoplete#custom#source('_', 'matchers', ['matcher_length', 'matcher_fuzzy'])
 call deoplete#custom#source('_', 'disabled_syntaxes', ['Comment', 'String'])
 
-call deoplete#custom#option('sources', {
-  \ '_': ['buffer', 'files'],
-  \ 'haskell': ['ale'],
-  \ })
-
 call deoplete#enable_logging('DEBUG', '/Users/alan/.local/share/nvim/deoplete.log')
-
