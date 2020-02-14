@@ -147,8 +147,6 @@ function! AR_autotoggle_list()
     augroup END
 endfunction
 
-set completeopt=noinsert,menuone,noselect
-
 let g:pandoc#syntax#conceal#blacklist = ['ellipses']
 let g:pandoc#formatting#mode = 'h'
 let g:pandoc#formatting#textwidth = 60

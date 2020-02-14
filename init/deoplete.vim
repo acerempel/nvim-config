@@ -1,5 +1,7 @@
 let g:deoplete#enable_at_startup = 1
 
+set completeopt=noinsert,menuone,noselect
+
 call deoplete#custom#option('auto_complete', v:false)
 
 inoremap <silent><expr> <TAB>
