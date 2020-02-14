@@ -29,4 +29,3 @@ augroup ale_haskell
   au FileType haskell nnoremap <silent> K :ALEHover<CR>
   au FileType haskell nnoremap <silent> gd :ALEGoToDefinition<CR>
 augroup END
-
