@@ -4,7 +4,7 @@
 
 let g:ale_lint_on_text_changed = 'normal'
 let g:ale_lint_on_insert_leave = 1
-let g:ale_linters = { 'haskell': ['hlint', 'ghc-ide'], 'php': [] }
+let g:ale_linters = { 'haskell': ['ghc-ide'], 'php': [] }
 
 " Returns the directory containing the filename of the referenced buffer.
 function! s:get_buffer_directory(buffer_number) abort
