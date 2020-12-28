@@ -98,6 +98,8 @@ set secure
 
 set diffopt=filler,vertical,context:4
 
+let g:python3_host_prog = "/opt/local/bin/python3"
+
 " Leader
 let mapleader = ";"
 let g:mapleader = ";"
@@ -128,8 +130,8 @@ augroup vimrc
 autocmd!
 
 autocmd BufWinLeave * lclose
-autocmd FileType html setlocal shiftwidth=2 tabstop=2 softtabstop=2
-autocmd FileType text,markdown,pandoc     setlocal nonumber fo+=t tw=61
+autocmd FileType html,vimwiki setlocal shiftwidth=2 tabstop=2 softtabstop=2
+autocmd FileType text,markdown,pandoc,vimwiki     setlocal nonumber fo+=t tw=72
 autocmd FileType text setlocal nospell
 autocmd FileType markdown,pandoc call AR_autotoggle_list()
 autocmd FileType gitcommit      setlocal textwidth=67
@@ -163,13 +165,14 @@ set laststatus=2
 
 let g:haddock_browser="/Applications/Safari.app/Contents/MacOS/Safari"
 
+source <sfile>:h/init/vimwiki.vim
 if exists('g:vscode')
   finish
 else
   source <sfile>:h/init/mappings.vim
   source <sfile>:h/init/deoplete.vim
   source <sfile>:h/init/ale.vim
+  source <sfile>:h/init/languageclient.vim
   source <sfile>:h/init/lightline.vim
   source <sfile>:h/init/leaderf.vim
-  source <sfile>:h/init/clap.vim
 endif
