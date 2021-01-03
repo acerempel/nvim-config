@@ -27,7 +27,6 @@ Plug 'https://github.com/tpope/vim-repeat'
 Plug 'https://github.com/tpope/vim-surround'
 Plug 'https://github.com/tpope/vim-unimpaired'
 Plug 'https://github.com/lifepillar/vim-solarized8'
-Plug 'https://github.com/Shougo/deoplete.nvim'
 Plug 'https://github.com/andymass/vim-matchup'
 Plug 'https://github.com/mg979/vim-visual-multi'
 Plug 'https://github.com/kassio/neoterm'
@@ -35,7 +34,7 @@ Plug 'https://github.com/bluz71/vim-nightfly-guicolors'
 Plug 'https://github.com/xarthurx/taskwarrior.vim'
 Plug 'https://github.com/ocaml/vim-ocaml'
 Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
-Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
 Plug 'https://github.com/brooth/far.vim'
 Plug 'https://github.com/neovimhaskell/haskell-vim'
-Plug 'https://github.com/janet-lang/janet.vim'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'https://github.com/kevinoid/vim-jsonc'

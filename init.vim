@@ -31,6 +31,8 @@ set nohlsearch
 set noshowmode
 set showcmd
 set clipboard=unnamed
+set cmdheight=2
+set updatetime=300
 
 set formatoptions=croqj
 set textwidth=80
@@ -80,7 +82,8 @@ set undofile
 set undodir=~/.local/share/nvim/undo
 set history=10000
 
-set shortmess=fnxoOtT
+set shortmess=fnxoOtTc
+set signcolumn=yes
 set wildchar=<Tab>
 set wildmode=longest:full,full
 set wildignore=*.o,*.hi,*/.git/*,*/dist-newstyle/*,*/.stack-work/*,*/node_modules/*,*/elm-stuff/*,*/serve/*
@@ -170,9 +173,8 @@ if exists('g:vscode')
   finish
 else
   source <sfile>:h/init/mappings.vim
-  source <sfile>:h/init/deoplete.vim
   source <sfile>:h/init/ale.vim
-  source <sfile>:h/init/languageclient.vim
   source <sfile>:h/init/lightline.vim
   source <sfile>:h/init/leaderf.vim
+  source <sfile>:h/init/coc.vim
 endif

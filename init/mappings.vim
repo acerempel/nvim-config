@@ -26,3 +26,7 @@ noremap Y y$
 map <leader>B :BufExplorer<CR>
 
 nnoremap <silent> U :UndotreeToggle<CR>
+
+nnoremap <silent> [t :tabprevious<CR>
+nnoremap <silent> ]t :tabnext<CR>
+noremap <silent> <D-t> :tabnew<CR>
