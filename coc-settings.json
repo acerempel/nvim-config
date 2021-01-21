@@ -1,4 +1,20 @@
 {
   "suggest.autoTrigger": "none",
-  "diagnostic.virtualText": true
+  "diagnostic.virtualText": true,
+  "git.branchCharacter": "⌥",
+  "coc.source.issues.enable": false,
+  "typescript.preferences.quoteStyle": "double",
+  "javascript.preferences.quoteStyle": "single",
+  "html.suggest.ionic": false,
+  "html.suggest.angular1": false,
+  "html.autoClosingTags": true,
+  "suggest.enablePreselect": true,
+  "suggest.numberSelect": false,
+  "suggest.maxCompleteItemCount": 7,
+  "diagnostic.refreshOnInsertMode": true,
+  "diagnostic.infoSign": "--",
+  "list.selectedSignText": "➤",
+  "coc.preferences.extensionUpdateCheck": "weekly",
+  "list.source.files.args": ["--hidden", "--files"],
+  "list.source.files.defaultArgs": ["-F"]
 }

@@ -44,12 +44,7 @@ function! AR_git_branch()
 endfunction
 
 function! AR_gitgutter_status()
-    if gitgutter#utility#is_active(bufnr("%"))
-        let summary = GitGutterGetHunkSummary()
-        return "+" . summary[0] . " ~" . summary[1] . " -" . summary[2]
-    else
-        return ''
-    endif
+  return get(b:, 'coc_git_status', '')
 endfunction
 
 function! AR_fileformat()

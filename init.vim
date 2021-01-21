@@ -5,17 +5,15 @@ if &shell =~# 'fish$'
     set shell=sh
 endif
 
+set termguicolors
+set background=light
+
 call plug#begin('~/.local/share/nvim/plug')
-if exists('g:vscode')
-  source <sfile>:h/init/plugins_vscode_too.vim
-else
-  source <sfile>:h/init/plugins_nvim_only.vim
-  source <sfile>:h/init/plugins_vscode_too.vim
-endif
+source <sfile>:h/init/plugins.vim
+source <sfile>:h/init/colours.vim
 call plug#end()
 
-set termguicolors
-source <sfile>:h/init/colours_solarized.vim
+colorscheme gruvbox
 
 highlight! link Conceal Normal
 
@@ -31,7 +29,6 @@ set nohlsearch
 set noshowmode
 set showcmd
 set clipboard=unnamed
-set cmdheight=2
 set updatetime=300
 
 set formatoptions=croqj
@@ -169,12 +166,8 @@ set laststatus=2
 let g:haddock_browser="/Applications/Safari.app/Contents/MacOS/Safari"
 
 source <sfile>:h/init/vimwiki.vim
-if exists('g:vscode')
-  finish
-else
-  source <sfile>:h/init/mappings.vim
-  source <sfile>:h/init/ale.vim
-  source <sfile>:h/init/lightline.vim
-  source <sfile>:h/init/leaderf.vim
-  source <sfile>:h/init/coc.vim
-endif
+source <sfile>:h/init/mappings.vim
+source <sfile>:h/init/ale.vim
+source <sfile>:h/init/lightline.vim
+source <sfile>:h/init/leaderf.vim
+source <sfile>:h/init/coc.vim

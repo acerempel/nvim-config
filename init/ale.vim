@@ -4,7 +4,9 @@
 
 let g:ale_lint_on_text_changed = 'normal'
 let g:ale_lint_on_insert_leave = 1
-let g:ale_linters = { 'haskell': ['ghc-ide'], 'php': [], 'rust': ['analyzer'] }
+let g:ale_linters = { 'haskell': ['ghc-ide'], 'php': [], 'rust': ['analyzer'],
+  \ 'javascript': [], 'typescript': [], 'typescriptreact': [] }
+let g:ale_disable_lsp = 1
 
 function! s:get_ghcide_root_directory(buffer_number) abort
   let l:bufinfo = getbufinfo(a:buffer_number)[0]
