@@ -40,6 +40,9 @@ let g:lightline.component_function_visible_condition = {
 let g:lightline.subseparator = { 'left': '', 'right': '' }
 
 function! AR_git_branch()
+    if has('nvim-0.5')
+      return
+    endif
     return fugitive#head() != '' ? "(" . fugitive#head() . ")" : ''
 endfunction
 
@@ -52,6 +55,7 @@ function! AR_fileformat()
 endfunction
 
 function! AR_ale_status()
+  if !has('nvim-0.5')
     let ale_status = ale#statusline#Count(bufnr("%"))
     let notices = []
     if ale_status.error > 0
@@ -64,4 +68,5 @@ function! AR_ale_status()
         call add(notices, "I:" . ale_status.info)
     endif
     return join(notices)
+  endif
 endfunction

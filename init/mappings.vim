@@ -2,7 +2,8 @@
 " ~~ MAPPINGS ~~
 " ~~~~~~~~~~~~~~
 
-imap ;; <Esc>
+inoremap ;; <Esc>
+inoremap zz <Esc>
 
 map <C-J> <C-W>j
 map <C-K> <C-W>k
@@ -13,7 +14,7 @@ noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
 noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
 
 noremap Q @@
-nnoremap <space> :
+nnoremap ; :
 
 imap <C-j> <Down>
 imap <C-k> <Up>
@@ -30,3 +31,15 @@ nnoremap <silent> U :UndotreeToggle<CR>
 nnoremap <silent> [t :tabprevious<CR>
 nnoremap <silent> ]t :tabnext<CR>
 noremap <silent> <D-t> :tabnew<CR>
+
+augroup pandoc
+  au!
+  au FileType pandoc call PandocMappings()
+augroup END
+
+function! PandocMappings()
+  nmap <buffer> <Leader>nn <Plug>AddVimFootnote
+  nmap <buffer> <Leader>ne <Plug>EditVimFootnote
+  nmap <buffer> <Leader>nr <Plug>ReturnFromFootnote
+  imap <buffer> <C-f> <Plug>AddVimFootnote
+endfunction
