@@ -10,19 +10,27 @@ return require('packer').startup(function()
   -- Misc normal mode commands
   use 'tpope/vim-unimpaired'
 
+  -- Close parentheses, if blocks, etc. when Enter is pressed
+  use 'rstacruz/vim-closer'
+  use 'tpope/vim-endwise'
+
   -- Navigation
-  use 'andymass/vim-matchup'
+  -- Bugs with nvim 0.5: use 'andymass/vim-matchup'
   use 'rhysd/clever-f.vim'
   use 'justinmk/vim-sneak'
 
-  -- Git commands
-  use 'tpope/fugitive'
+  -- GIT {{{
 
-  -- Nice interface for vim's tree-shaped undo
-  use 'mbbill/undotree'
+  -- Show the commit message for the last commit affecting this line
+  use 'rhysd/git-messenger.vim'
 
   -- Show diff when writing a commit message
   use 'rhysd/committia.vim'
+
+  -- }}}
+
+  -- Nice interface for vim's tree-shaped undo
+  use 'mbbill/undotree'
 
   -- Pretty status line
   use 'itchyny/lightline.vim'
@@ -42,4 +50,8 @@ return require('packer').startup(function()
   use 'pangloss/vim-javascript'
   use 'leafgarland/typescript-vim'
   use 'peitalin/vim-jsx-typescript'
+  use 'elzr/vim-json'
+
+  -- Language server configuration
+  use 'neovim/nvim-lspconfig'
 end)
