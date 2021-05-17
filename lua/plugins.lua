@@ -38,6 +38,14 @@ return require('packer').startup(function()
     end
   }
 
+  use {
+    'TimUntersberger/neogit',
+    requires = 'nvim-lua/plenary.nvim',
+    config = function()
+      require('neogit').setup{}
+    end
+  }
+
   -- }}}
 
   -- Nice interface for vim's tree-shaped undo
