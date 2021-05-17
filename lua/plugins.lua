@@ -54,6 +54,14 @@ return require('packer').startup(function()
 
   -- EXTRA FEATURES {{{
 
+  -- Fuzzy finder
+  use {
+    'Yggdroot/LeaderF',
+    run = function ()
+      vim.cmd 'LeaderfInstallCExtension'
+    end
+  }
+
   -- Nice interface for vim's tree-shaped undo
   use 'mbbill/undotree'
 

@@ -15,6 +15,7 @@ source <sfile>:h/init/mappings.vim
 source <sfile>:h/init/pandoc.vim
 source <sfile>:h/init/vimwiki.vim
 source <sfile>:h/init/lightline.vim
+source <sfile>:h/init/leaderf.vim
 source <sfile>:h/init/misc_plugin_settings.vim
 
 if !has('nvim-0.5')
