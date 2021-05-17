@@ -27,6 +27,17 @@ return require('packer').startup(function()
   -- Show diff when writing a commit message
   use 'rhysd/committia.vim'
 
+  -- Show signs indicating which lines have been changed
+  use {
+    'lewis6991/gitsigns.nvim',
+    requires = {
+      'nvim-lua/plenary.nvim'
+    },
+    config = function()
+      require('gitsigns').setup{}
+    end
+  }
+
   -- }}}
 
   -- Nice interface for vim's tree-shaped undo
