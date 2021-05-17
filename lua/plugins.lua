@@ -2,7 +2,9 @@ return require('packer').startup(function()
   -- Packer itself
   use 'wbthomason/packer.nvim'
 
-  -- Editing commands
+  -- ENHANCEMENTS to the basic Vim experience {{{
+
+  -- Editing-oriented normal mode commands
   use 'tpope/vim-repeat'
   use 'tpope/vim-surround'
   use 'tpope/vim-commentary'
@@ -19,7 +21,9 @@ return require('packer').startup(function()
   use 'rhysd/clever-f.vim'
   use 'justinmk/vim-sneak'
 
-  -- GIT {{{
+  -- }}}
+
+  -- GIT integration {{{
 
   -- Show the commit message for the last commit affecting this line
   use 'rhysd/git-messenger.vim'
@@ -48,11 +52,10 @@ return require('packer').startup(function()
 
   -- }}}
 
+  -- EXTRA FEATURES {{{
+
   -- Nice interface for vim's tree-shaped undo
   use 'mbbill/undotree'
-
-  -- Pretty status line
-  use 'itchyny/lightline.vim'
 
   -- Fancy startup screen with sessions and mru etc.
   use 'mhinz/vim-startify'
@@ -60,13 +63,24 @@ return require('packer').startup(function()
   -- Faster folds, I guess
   use 'konfekt/fastfold'
 
-  -- Colour schemes
-  use 'morhetz/gruvbox'
-
   -- .editorconfig support
   use 'editorconfig/editorconfig-vim'
 
-  -- Language support
+  -- }}}
+
+  -- AESTHETICS {{{
+
+  -- Pretty status line
+  use 'itchyny/lightline.vim'
+
+  -- Colour schemes
+  use 'morhetz/gruvbox'
+
+  -- }}}
+
+  -- LANGUAGE support {{{
+
+  -- Syntax highlighting and suchlike
   use 'neovimhaskell/haskell-vim'
   use 'StanAngeloff/php.vim'
   use 'pangloss/vim-javascript'
@@ -76,6 +90,8 @@ return require('packer').startup(function()
 
   -- Language server configuration
   use 'neovim/nvim-lspconfig'
+
+  -- }}}
 end)
 
 -- vim:foldmethod=marker
