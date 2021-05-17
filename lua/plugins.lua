@@ -54,6 +54,9 @@ return require('packer').startup(function()
   -- Pretty status line
   use 'itchyny/lightline.vim'
 
+  -- Fancy startup screen with sessions and mru etc.
+  use 'mhinz/vim-startify'
+
   -- Faster folds, I guess
   use 'konfekt/fastfold'
 
