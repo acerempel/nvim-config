@@ -66,3 +66,5 @@ return require('packer').startup(function()
   -- Language server configuration
   use 'neovim/nvim-lspconfig'
 end)
+
+-- vim:foldmethod=marker
