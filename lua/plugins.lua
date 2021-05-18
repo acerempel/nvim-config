@@ -17,7 +17,7 @@ return require('packer').startup(function()
   use 'tpope/vim-endwise'
 
   -- Navigation
-  -- Bugs with nvim 0.5: use 'andymass/vim-matchup'
+  use 'andymass/vim-matchup'
   use 'rhysd/clever-f.vim'
   use 'justinmk/vim-sneak'
 
