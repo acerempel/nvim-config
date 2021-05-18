@@ -72,10 +72,14 @@ return require('packer').startup(function()
 
   -- Fuzzy finder
   use {
-    'Yggdroot/LeaderF',
-    run = function ()
-      vim.cmd 'LeaderfInstallCExtension'
-    end
+    'liuchengxu/vim-clap',
+    run = function () vim.cmd 'Clap install-binary' end,
+    config = function ()
+      vim.api.nvim_set_keymap('n', '<Leader>ff', '<Cmd>Clap files<CR>', { noremap = true })
+      vim.api.nvim_set_keymap('n', '<Leader>fi', '<Cmd>Clap filer<CR>', { noremap = true })
+      vim.api.nvim_set_keymap('n', '<Leader>fb', '<Cmd>Clap buffers<CR>', { noremap = true })
+      vim.api.nvim_set_keymap('n', '<Leader>fg', '<Cmd>Clap grep2<CR>', { noremap = true })
+    end,
   }
 
   -- Nice interface for vim's tree-shaped undo
