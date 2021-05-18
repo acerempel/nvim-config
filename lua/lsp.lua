@@ -14,8 +14,8 @@ lsp_saga.init_lsp_saga {
   }
 }
 
-local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
 local on_attach = function(client, bufnr)
+  local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
   local opts = { noremap=true, silent=true }
   buf_set_keymap('n', 'K', "<Cmd>lua require'lspsaga.hover'.render_hover_doc()<CR>", opts)
   buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
