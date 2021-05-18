@@ -115,6 +115,9 @@ return require('packer').startup(function()
   -- Language server configuration
   use 'neovim/nvim-lspconfig'
 
+  -- Nice UI over built-in language client
+  use 'glepnir/lspsaga.nvim'
+
   -- }}}
 end)
 
