@@ -21,6 +21,14 @@ return require('packer').startup(function()
   use 'rhysd/clever-f.vim'
   use 'justinmk/vim-sneak'
 
+  -- Fix performance issues with the CursorHold autocmd
+  use {
+    'antoinemadec/FixCursorHold.nvim',
+    run = function ()
+      vim.g.cursorhold_updatetime = 700
+    end
+  }
+
   -- }}}
 
   -- GIT integration {{{
