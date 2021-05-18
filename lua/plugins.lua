@@ -74,6 +74,9 @@ return require('packer').startup(function()
   use {
     'liuchengxu/vim-clap',
     run = function () vim.cmd 'Clap install-binary' end,
+    setup = function ()
+      vim.g.clap_theme = 'material_design_dark'
+    end,
     config = function ()
       vim.api.nvim_set_keymap('n', '<Leader>ff', '<Cmd>Clap files<CR>', { noremap = true })
       vim.api.nvim_set_keymap('n', '<Leader>fi', '<Cmd>Clap filer<CR>', { noremap = true })
