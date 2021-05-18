@@ -62,6 +62,14 @@ return require('packer').startup(function()
 
   -- EXTRA FEATURES {{{
 
+  -- Tree-sitter language grammars
+  use {
+    'nvim-treesitter/nvim-treesitter',
+    run = function ()
+      vim.cmd 'TSUpdate'
+    end
+  }
+
   -- Fuzzy finder
   use {
     'Yggdroot/LeaderF',
