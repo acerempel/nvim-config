@@ -8,7 +8,7 @@ let g:Lf_WildIgnore = {
   \ 'file': ['*.o', '*.hi']
   \ }
 let g:Lf_ExternalCommand = 'fd . "%s" -t f'
-let g:Lf_RootMarkers = ['cabal.project', 'stack.yaml', 'composer.json', 'Cargo.toml', '.git', 'package.json']
+let g:Lf_RootMarkers = ['.git', 'cabal.project', 'stack.yaml', 'composer.json', 'Cargo.toml', 'package.json']
 let g:Lf_WorkingDirectoryMode = 'AF'
 let g:Lf_ShowHidden = 1
 let g:Lf_HideHelp = 1
