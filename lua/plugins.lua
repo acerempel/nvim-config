@@ -86,7 +86,12 @@ return require('packer').startup(function()
   use 'mbbill/undotree'
 
   -- Fancy startup screen with sessions and mru etc.
-  use 'mhinz/vim-startify'
+  use {
+    'mhinz/vim-startify',
+    setup = function ()
+      vim.g.startify_custom_header_quotes = require('quotes')
+    end
+  }
 
   -- Faster folds, I guess
   use 'konfekt/fastfold'
