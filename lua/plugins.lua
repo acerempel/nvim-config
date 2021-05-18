@@ -13,8 +13,8 @@ return require('packer').startup(function()
   use 'tpope/vim-unimpaired'
 
   -- Close parentheses, if blocks, etc. when Enter is pressed
-  use 'rstacruz/vim-closer'
   use 'tpope/vim-endwise'
+  use { 'rstacruz/vim-closer', after = 'vim-endwise' }
 
   -- Navigation
   use 'andymass/vim-matchup'
