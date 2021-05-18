@@ -123,6 +123,14 @@ return require('packer').startup(function()
   use 'leafgarland/typescript-vim'
   use 'peitalin/vim-jsx-typescript'
   use 'elzr/vim-json'
+  use {
+    'gabrielelana/vim-markdown',
+    setup = function ()
+      vim.g.markdown_enable_mappings = 0
+      vim.g.markdown_enable_input_abbreviations = 0
+      vim.g.markdown_enable_insert_mode_mappings = 1
+    end,
+  }
 
   -- Language server configuration
   use 'neovim/nvim-lspconfig'
