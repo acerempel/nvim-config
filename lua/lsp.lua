@@ -12,3 +12,7 @@ lspconfig.intelephense.setup {
   root_dir = util.root_pattern("composer.json"),
   on_attach = on_attach,
 }
+
+lspconfig.rust_analyzer.setup {
+  on_attach = on_attach
+}
