@@ -15,6 +15,14 @@ return require('packer').startup(function()
   -- Close parentheses, if blocks, etc. when Enter is pressed
   use 'rstacruz/vim-closer'
 
+  -- Show available keybindings as you type
+  use {
+    'folke/which-key.nvim',
+    config = function ()
+      require('which-key').setup {}
+    end
+  }
+
   -- Navigation
   use 'andymass/vim-matchup'
   use 'rhysd/clever-f.vim'
