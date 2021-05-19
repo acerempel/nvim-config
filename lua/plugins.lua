@@ -135,6 +135,13 @@ return require('packer').startup(function()
   -- Nice UI over built-in language client
   use 'glepnir/lspsaga.nvim'
 
+  -- Autocomplete
+  use 'acerempel/nvim-compe'
+
+  -- Snippets
+  use 'hrsh7th/vim-vsnip'
+  use 'rafamadriz/friendly-snippets'
+
   -- }}}
 end)
 

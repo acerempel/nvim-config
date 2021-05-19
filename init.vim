@@ -2,8 +2,11 @@ source <sfile>:h/init/settings.vim
 source <sfile>:h/init/autocmds.vim
 
 if has('nvim-0.5')
-  lua require('plugins')
-  lua require('lsp')
+lua << ENDLUA
+  require('plugins')
+  require('lsp')
+  require('completion')
+ENDLUA
 else
   call plug#begin('~/.local/share/nvim/plug')
   source <sfile>:h/init/plugins.vim
