@@ -21,6 +21,18 @@ if has('nvim-0.5')
   augroup END
 endif
 
+augroup terminal
+  au!
+  au TermOpen * tnoremap <buffer> <Esc> <c-\><c-n>
+augroup END
+
+if has('nvim-0.5')
+  augroup YankHighlight
+    autocmd!
+    autocmd TextYankPost * silent! lua vim.highlight.on_yank()
+  augroup END
+endif
+
 augroup filetypes
 autocmd!
 
