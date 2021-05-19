@@ -16,80 +16,56 @@ highlight! link Conceal Normal
 
 set mouse=a
 
-set incsearch
-set inccommand=nosplit
-set nohlsearch
-set noshowmode
-set showcmd
+set incsearch inccommand=nosplit nohlsearch
+set noshowmode showcmd
 set clipboard=unnamed
 set updatetime=300
 
-set formatoptions=croqj
-set textwidth=80
-set autoindent
-set nojoinspaces
+set formatoptions=croqj textwidth=80
+set autoindent nojoinspaces
 
-set list
-set listchars=tab:↹·,nbsp:⎵,trail:·,extends:⇉,precedes:⇇
-set showbreak=↪︎\
-set fillchars=vert:│,fold:—
+set list listchars=tab:↹·,nbsp:⎵,trail:·,extends:⇉,precedes:⇇
+set showbreak=↪︎\ fillchars=vert:│,fold:—
+set diffopt=filler,vertical,context:4
+set nowrap linebreak breakindent
+
+set linespace=6
 set foldminlines=4
 set concealcursor=nc
 
-set nowrap
-set linebreak
-set linespace=6
-
-set scrolloff=2
-set sidescrolloff=4
-set sidescroll=1
+set scrolloff=2 sidescrolloff=4 sidescroll=1
 set startofline
 
-set expandtab
-set tabstop=2
-set softtabstop=2
-set shiftwidth=2
-set shiftround
+set expandtab tabstop=2 softtabstop=2
+set shiftwidth=2 shiftround
 
 set backspace=indent,eol,start
 set virtualedit=block,onemore
-set nostartofline
-set allowrevins
+set nostartofline allowrevins
 
-set ignorecase
-set smartcase
-set gdefault
+set ignorecase smartcase gdefault
 
-set splitbelow
-set splitright
-set equalalways
+set splitbelow splitright equalalways
 set switchbuf=useopen,usetab
 set guioptions-=L
 let no_buffers_menu = 0
 set lazyredraw
 
-set undofile
-set undodir=~/.local/share/nvim/undo
+set undofile undodir=~/.local/share/nvim/undo
+set noswapfile nobackup nowritebackup
 set history=10000
 
 set shortmess=fnxoOtTc
 set signcolumn=yes
+
 set wildchar=<Tab>
 set wildmode=longest:full,full
 set wildignore=*.o,*.hi,*/.git/*,*/dist-newstyle/*,*/.stack-work/*,*/node_modules/*,*/elm-stuff/*
 
-set noswapfile
-set nobackup
-set nowritebackup
-
 " Remember info about open buffers on close -------------- "
-set shada^=%
-set hidden
+set shada^=% hidden
 
-set exrc
-set secure
-
-set diffopt=filler,vertical,context:4
+set exrc secure
 
 if executable('rg')
     set grepprg=rg\ --vimgrep
