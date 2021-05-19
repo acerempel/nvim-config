@@ -10,17 +10,20 @@ augroup quickfix
     autocmd QuickFixCmdPost [^l]* cwindow
     autocmd QuickFixCmdPost l*    lwindow
     autocmd VimEnter        *     cwindow
+    autocmd BufWinLeave * lclose
 augroup END
 
-augroup vimrc
-autocmd!
-
 if has('nvim-0.5')
-  " Automatically enable changes to plugin configuration
-  autocmd BufWritePost plugins.lua PackerCompile
+  augroup packer
+    autocmd!
+    " Automatically enable changes to plugin configuration
+    autocmd BufWritePost plugins.lua PackerCompile
+  augroup END
 endif
 
-autocmd BufWinLeave * lclose
+augroup filetypes
+autocmd!
+
 autocmd FileType html,vimwiki setlocal shiftwidth=2 tabstop=2 softtabstop=2
 autocmd FileType text,markdown,pandoc,vimwiki     setlocal nonumber fo+=t tw=72
 autocmd FileType text setlocal nospell

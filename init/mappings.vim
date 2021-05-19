@@ -24,6 +24,13 @@ imap <C-l> <Right>
 " Make Y editor command consistent with D, C, etc.
 noremap Y y$
 
+" Leader
+let mapleader = " "
+let g:mapleader = " "
+let maplocalleader = "'"
+
+noremap <silent> <Space> <Nop>
+
 map <leader>B :BufExplorer<CR>
 
 nnoremap <silent> U :UndotreeToggle<CR>

@@ -91,11 +91,6 @@ set secure
 
 set diffopt=filler,vertical,context:4
 
-" Leader
-let mapleader = " "
-let g:mapleader = " "
-let maplocalleader = "'"
-
 if executable('rg')
     set grepprg=rg\ --vimgrep
     set grepformat^=%f:%l:%c:%m
