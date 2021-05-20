@@ -39,9 +39,18 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', ']w', "<Cmd>lua require'lspsaga.diagnostic'.lsp_jump_diagnostic_next()<CR>")
 end
 
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities.textDocument.completion.completionItem.snippetSupport = true;
+
+local basic_lsp_config = {
+  on_attach = on_attach,
+  capabilities = capabilities,
+}
+
 lspconfig.intelephense.setup {
   root_dir = util.root_pattern("composer.json"),
   on_attach = on_attach,
+  capabilities = capabilities,
 }
-lspconfig.rust_analyzer.setup { on_attach = on_attach }
-lspconfig.tsserver.setup { on_attach = on_attach }
+lspconfig.rust_analyzer.setup basic_lsp_config
+lspconfig.tsserver.setup basic_lsp_config
