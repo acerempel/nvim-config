@@ -140,6 +140,7 @@ return require('packer').startup(function()
 
   -- Nice UI over built-in language client
   use 'glepnir/lspsaga.nvim'
+  use 'ray-x/lsp_signature.nvim'
 
   -- Autocomplete
   use 'acerempel/nvim-compe'

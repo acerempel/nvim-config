@@ -14,7 +14,17 @@ lsp_saga.init_lsp_saga {
   }
 }
 
+local lsp_signature = require('lsp_signature')
+local lsp_signature_config = {
+  bind = false, -- because we are using lspsaga
+  doc_lines = 5,
+  use_lspsaga = true,
+  handler_opts = { border = "single" },
+  decorator = { "**", "**" },
+}
+
 local on_attach = function(client, bufnr)
+  lsp_signature.on_attach(lsp_signature_config)
   local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
   local opts = { noremap=true, silent=true }
   buf_set_keymap('n', 'K', "<Cmd>lua require'lspsaga.hover'.render_hover_doc()<CR>", opts)
