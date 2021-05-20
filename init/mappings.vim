@@ -2,9 +2,6 @@
 " ~~ MAPPINGS ~~
 " ~~~~~~~~~~~~~~
 
-inoremap ;; <Esc>
-inoremap zz <Esc>
-
 map <C-J> <C-W>j
 map <C-K> <C-W>k
 map <C-H> <C-W>h
