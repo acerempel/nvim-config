@@ -46,6 +46,8 @@ autocmd FileType haskell,markdown,pandoc setlocal nofoldenable
 autocmd FileType table setlocal tabstop=28 noexpandtab nolist
 autocmd FileType cabal au BufWritePre <buffer=abuf> %!cabal-fmt
 
+autocmd BufReadPost,BufNew *.wiki ++once packadd vimwiki
+
 augroup END
 
 function! AR_autotoggle_list()

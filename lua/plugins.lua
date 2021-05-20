@@ -137,6 +137,11 @@ return require('packer').startup(function()
     end,
   }
 
+  use {
+    'vimwiki/vimwiki',
+    opt = true
+  }
+
   -- Language server configuration
   use 'neovim/nvim-lspconfig'
 
