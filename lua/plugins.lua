@@ -108,6 +108,7 @@ return require('packer').startup(function()
 
   -- Colour schemes
   use 'morhetz/gruvbox'
+  use 'lifepillar/vim-gruvbox8'
 
   -- }}}
 
