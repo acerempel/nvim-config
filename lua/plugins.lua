@@ -66,6 +66,12 @@ return require('packer').startup(function()
     'nvim-treesitter/nvim-treesitter',
     run = function ()
       vim.cmd 'TSUpdate'
+    end,
+    config = function ()
+      require('nvim-treesitter.configs').setup {
+        highlight = { enable = true },
+        indent = { enable = true},
+      }
     end
   }
 
@@ -118,11 +124,6 @@ return require('packer').startup(function()
 
   -- Syntax highlighting and suchlike
   use 'neovimhaskell/haskell-vim'
-  use 'StanAngeloff/php.vim'
-  use 'pangloss/vim-javascript'
-  use 'leafgarland/typescript-vim'
-  use 'peitalin/vim-jsx-typescript'
-  use 'elzr/vim-json'
   use {
     'gabrielelana/vim-markdown',
     setup = function ()
