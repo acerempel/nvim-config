@@ -28,6 +28,9 @@ return require('packer').startup(function()
   use 'rhysd/clever-f.vim'
   use 'justinmk/vim-sneak'
 
+  -- Show register contents
+  use 'gennaro-tedesco/nvim-peekup'
+
   -- Fix performance issues with the CursorHold autocmd
   use {
     'antoinemadec/FixCursorHold.nvim',
