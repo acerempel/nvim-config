@@ -88,6 +88,7 @@ return require('packer').startup(function()
       vim.api.nvim_set_keymap('n', '<Leader>fi', '<Cmd>Clap filer<CR>', { noremap = true })
       vim.api.nvim_set_keymap('n', '<Leader>fb', '<Cmd>Clap buffers<CR>', { noremap = true })
       vim.api.nvim_set_keymap('n', '<Leader>fg', '<Cmd>Clap grep2<CR>', { noremap = true })
+      vim.api.nvim_set_keymap('n', '<Leader>fh', '<Cmd>Clap history<CR>', { noremap = true })
     end,
   }
 
