@@ -6,17 +6,17 @@ endif
 
 let g:lightline.active = {
     \ 'left': [ [ 'mode', 'paste' ],
-    \           [ 'gitbranch', 'filename', 'readonly', 'gitdiff', 'modified' ] ],
-    \ 'right': [ [ 'alestatus', 'lineinfo' ],
-    \            [ 'percent' ],
-    \            [ 'filetype' ],
-    \            [ 'vm_modes' ] ]
+    \           [ 'filename', 'readonly', 'modified' ],
+    \           [ 'gitbranch', 'gitdiff' ] ],
+    \ 'right': [ [ 'percent', 'lineinfo' ],
+    \            [ 'filetype', 'fileformat' ],
+    \            [ 'lspstatus' ] ]
     \ }
 
 let g:lightline.inactive = {
-    \ 'left': [ [ 'filename', 'readonly', 'gitdiff', 'modified' ] ],
+    \ 'left': [ [ 'filename', 'readonly', 'modified' ], [ 'gitdiff' ] ],
     \ 'right': [ [ 'percent' ],
-    \            [ 'fileformat', 'filetype' ] ]
+    \            [ 'filetype', 'fileformat' ] ]
     \ }
 
 let g:lightline.component = {
@@ -28,45 +28,38 @@ let g:lightline.component_function = {
     \ 'gitbranch': 'AR_git_branch',
     \ 'fileformat': 'AR_fileformat',
     \ 'gitdiff': 'AR_gitgutter_status',
-    \ 'alestatus': 'AR_ale_status'
+    \ 'lspstatus': 'AR_lsp_status'
     \ }
 
 let g:lightline.component_function_visible_condition = {
-    \ 'gitbranch': 'fugitive#head() != ""',
+    \ 'gitdiff': 'exists("b:gitsigns_head")',
+    \ 'gitbranch': 'exists("b:gitsigns_head")',
     \ 'fileformat': '&ff != "unix"',
-    \ 'gitdiff': 'gitgutter#utility#is_active()'
+    \ 'lspstatus': 'luaeval("not vim.tbl_isempty(vim.lsp.buf_get_clients(0))")'
     \ }
 
 let g:lightline.subseparator = { 'left': '', 'right': '' }
 
 function! AR_git_branch()
-    if has('nvim-0.5')
-      return
-    endif
-    return fugitive#head() != '' ? "(" . fugitive#head() . ")" : ''
+  return get(b:, 'gitsigns_head', '')
 endfunction
 
 function! AR_gitgutter_status()
-  return get(b:, 'coc_git_status', '')
+  return get(b:, 'gitsigns_status', '')
 endfunction
 
 function! AR_fileformat()
     return &ff == "unix" ? "" : &ff
 endfunction
 
-function! AR_ale_status()
-  if !has('nvim-0.5')
-    let ale_status = ale#statusline#Count(bufnr("%"))
-    let notices = []
-    if ale_status.error > 0
-        call add(notices, "E:" . ale_status.error)
-    endif
-    if ale_status.warning > 0
-        call add(notices, "W:" . ale_status.warning)
-    endif
-    if ale_status.info > 0
-        call add(notices, "I:" . ale_status.info)
-    endif
-    return join(notices)
+function! AR_lsp_status()
+  if luaeval("not vim.tbl_isempty(vim.lsp.buf_get_clients(0))")
+    let l:status = 'E:'
+    let l:status .= luaeval("vim.lsp.diagnostic.get_count(0, 'Error')")
+    let l:status .= ' W:'
+    let l:status .= luaeval("vim.lsp.diagnostic.get_count(0, 'Warning')")
+    return l:status
+  else
+    return ''
   endif
 endfunction
