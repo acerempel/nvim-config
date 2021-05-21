@@ -107,8 +107,10 @@ return require('packer').startup(function()
   use 'itchyny/lightline.vim'
 
   -- Colour schemes
-  use 'morhetz/gruvbox'
   use 'lifepillar/vim-gruvbox8'
+  use 'bluz71/vim-nightfly-guicolors'
+  use 'ishan9299/nvim-solarized-lua'
+  use 'folke/tokyonight.nvim'
 
   -- }}}
 

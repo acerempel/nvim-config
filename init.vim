@@ -1,4 +1,9 @@
 source <sfile>:h/init/settings.vim
+
+set termguicolors
+source <sfile>:h/init/colours_gruvbox.vim
+highlight! link Conceal Normal
+
 source <sfile>:h/init/autocmds.vim
 
 if has('nvim-0.5')

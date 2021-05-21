@@ -1,2 +1,3 @@
 set background=light
-colorscheme solarized8_high
+let g:solarized_diffmode = 'high'
+colorscheme solarized-high

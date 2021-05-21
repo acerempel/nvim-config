@@ -3,17 +3,6 @@ if &shell =~# 'fish$'
     set shell=sh
 endif
 
-set termguicolors
-set background=dark
-
-let g:gruvbox_bold = 1
-let g:gruvbox_plugin_hi_groups = 1
-let g:gruvbox_filetype_hi_groups = 1
-
-colorscheme gruvbox8_hard
-
-highlight! link Conceal Normal
-
 " ~~~~~~~~~~~~~~
 " ~~ SETTINGS ~~
 " ~~~~~~~~~~~~~~
