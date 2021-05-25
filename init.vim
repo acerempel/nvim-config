@@ -1,3 +1,8 @@
+if !has('nvim-0.5')
+  echoerr "Neovim too old!!"
+  exit
+endif
+
 source <sfile>:h/init/settings.vim
 
 set termguicolors
@@ -6,21 +11,11 @@ highlight! link Conceal Normal
 
 source <sfile>:h/init/autocmds.vim
 
-if has('nvim-0.5')
 lua << ENDLUA
   require('plugins')
   require('lsp')
   require('completion')
 ENDLUA
-else
-  call plug#begin('~/.local/share/nvim/plug')
-  source <sfile>:h/init/plugins.vim
-  source <sfile>:h/init/colours.vim
-  call plug#end()
-
-  source <sfile>:h/init/coc.vim
-  source <sfile>:h/init/ale.vim
-endif
 
 source <sfile>:h/init/mappings.vim
 source <sfile>:h/init/pandoc.vim
