@@ -19,9 +19,11 @@ set formatoptions=croqj textwidth=80
 set autoindent nojoinspaces
 
 set list listchars=tab:↹·,nbsp:⎵,trail:·,extends:⇉,precedes:⇇
-set showbreak=↪︎\ fillchars=vert:│,fold:—
+set showbreak=↪︎
+set fillchars=vert:│,fold:—
 set diffopt=filler,vertical,context:4
 set nowrap linebreak breakindent
+set foldlevelstart=2
 
 set linespace=6
 set foldminlines=4
