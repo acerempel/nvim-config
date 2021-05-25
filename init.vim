@@ -140,6 +140,15 @@ ENDLUA
 
 " MAPPINGS {{{
 
+" Leaders {{{
+let mapleader = " "
+let g:mapleader = " "
+let maplocalleader = "'"
+
+noremap <silent> <Space> <Nop>
+" }}}
+
+" Moving around {{{
 map <C-J> <C-W>j
 map <C-K> <C-W>k
 map <C-H> <C-W>h
@@ -151,6 +160,8 @@ noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
 noremap Q @@
 nnoremap ; :
 
+nnoremap <silent> U <Cmd>UndotreeToggle<CR>
+
 imap <C-j> <Down>
 imap <C-k> <Up>
 imap <C-h> <Left>
@@ -159,19 +170,12 @@ imap <C-l> <Right>
 " Make Y editor command consistent with D, C, etc.
 noremap Y y$
 
-" Leader
-let mapleader = " "
-let g:mapleader = " "
-let maplocalleader = "'"
-
-noremap <silent> <Space> <Nop>
-
-nnoremap <silent> U <Cmd>UndotreeToggle<CR>
-
 nnoremap <silent> [t :tabprevious<CR>
 nnoremap <silent> ]t :tabnext<CR>
 noremap <silent> <D-t> :tabnew<CR>
+" }}}
 
+" Pandoc {{{
 augroup pandoc
   au!
   au FileType pandoc call PandocMappings()
@@ -183,6 +187,15 @@ function! PandocMappings()
   nmap <buffer> <Leader>nr <Plug>ReturnFromFootnote
   imap <buffer> <C-f> <Plug>AddVimFootnote
 endfunction
+" }}}
+
+" Telescope {{{
+cmap <C-R> <Plug>(TelescopeFuzzyCommandSearch)
+nnoremap <leader>ff <cmd>lua require('telescope.builtin').find_files()<cr>
+nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<cr>
+nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers()<cr>
+nnoremap <leader>fh <cmd>lua require('telescope.builtin').help_tags()<cr>
+" }}}
 
 " }}}
 

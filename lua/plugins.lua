@@ -78,18 +78,18 @@ return require('packer').startup(function()
     end
   }
 
-  -- Fuzzy finder
   use {
-    'liuchengxu/vim-clap',
-    run = function () vim.cmd 'Clap install-binary' end,
-    setup = function ()
-      -- vim.g.clap_theme = 'material_design_dark'
-      vim.api.nvim_set_keymap('n', '<Leader>ff', '<Cmd>Clap files<CR>', { noremap = true })
-      vim.api.nvim_set_keymap('n', '<Leader>fi', '<Cmd>Clap filer<CR>', { noremap = true })
-      vim.api.nvim_set_keymap('n', '<Leader>fb', '<Cmd>Clap buffers<CR>', { noremap = true })
-      vim.api.nvim_set_keymap('n', '<Leader>fg', '<Cmd>Clap grep2<CR>', { noremap = true })
-      vim.api.nvim_set_keymap('n', '<Leader>fh', '<Cmd>Clap history<CR>', { noremap = true })
-    end,
+    'nvim-telescope/telescope.nvim',
+    requires = {
+      'nvim-lua/popup.nvim',
+      'nvim-lua/plenary.nvim',
+      'nvim-telescope/telescope-fzy-native.nvim',
+    },
+    config = function ()
+      local telescope = require('telescope')
+      telescope.setup()
+      telescope.load_extension('fzy_native')
+    end
   }
 
   -- Nice interface for vim's tree-shaped undo
