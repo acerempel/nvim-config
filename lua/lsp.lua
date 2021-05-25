@@ -52,5 +52,7 @@ lspconfig.intelephense.setup {
   on_attach = on_attach,
   capabilities = capabilities,
 }
-lspconfig.rust_analyzer.setup basic_lsp_config
-lspconfig.tsserver.setup basic_lsp_config
+local servers = { "rust_analyzer", "tsserver", "hls", "elmls" }
+for _, server in ipairs(servers) do
+  lspconfig[server].setup(basic_lsp_config)
+end
