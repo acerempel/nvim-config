@@ -114,7 +114,36 @@ return require('packer').startup(function()
   -- AESTHETICS {{{
 
   -- Pretty status line
-  use 'itchyny/lightline.vim'
+  use {
+    'hoob3rt/lualine.nvim',
+    config = function ()
+      require('lualine').setup {
+        options = {
+          icons_enabled = false,
+          theme = "gruvbox_light",
+        },
+        sections = {
+          lualine_b = { 'filename' },
+          lualine_c = { 'diff', 'branch' },
+          lualine_x = {
+            {
+              'diagnostics',
+              sources = { 'nvim_lsp' },
+              sections = { 'error', 'warn' }
+            }
+          },
+          lualine_y = { 'filetype' },
+          lualine_z = { 'location', 'progress' },
+        },
+        inactive_sections = {
+          lualine_b = { 'filename' },
+          lualine_c = { 'diff' },
+          lualine_x = { 'filetype' },
+          lualine_y = { 'progress' },
+        }
+      }
+    end
+  }
 
   -- Colour schemes
   use 'lifepillar/vim-gruvbox8'

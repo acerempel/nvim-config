@@ -201,7 +201,6 @@ nnoremap <leader>fh <cmd>lua require('telescope.builtin').help_tags()<cr>
 
 source <sfile>:h/init/pandoc.vim
 source <sfile>:h/init/vimwiki.vim
-source <sfile>:h/init/lightline.vim
 source <sfile>:h/init/misc_plugin_settings.vim
 
 " vim:foldmethod=marker:foldenable
