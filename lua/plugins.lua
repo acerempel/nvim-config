@@ -19,7 +19,11 @@ return require('packer').startup(function()
   use {
     'folke/which-key.nvim',
     config = function ()
-      require('which-key').setup {}
+      require('which-key').setup {
+        layout = {
+          height = { min = 4, max = 20 }
+        }
+      }
     end
   }
 
