@@ -6,19 +6,23 @@ whichkey.register(
       name = "Find files from various lists",
       f = {
         "<cmd>lua require('telescope.builtin').find_files()<cr>",
-        "Find files in the current directory"
+        "Files beneath the current directory"
       },
       b = {
         "<cmd>lua require('telescope.builtin').buffers()<cr>",
-        "Find from among open buffers"
+        "Open buffers"
       },
       i = {
         "<cmd>lua require('telescope.builtin').file_browser()<cr>",
-        "Open a file browser"
+        "Directory tree"
       },
       h = {
         "<cmd>lua require('telescope.builtin').help_tags()<cr>",
-        "Find help files by tag"
+        "Help tags"
+      },
+      o = {
+        "<cmd>lua require('telescope.builtin').oldfiles()<cr>",
+        "Files from previous sessions"
       },
     },
     k = {
@@ -45,4 +49,57 @@ whichkey.register(
     },
   },
   { prefix = "<Leader>" }
+)
+
+whichkey.register(
+  {
+    ["["] = {
+      name = "Previous, before, above",
+      w = {
+        "<Cmd>lua require'lspsaga.diagnostic'.lsp_jump_diagnostic_prev({severity_limit='Warning'})<CR>",
+        "Previous warning or error"
+      },
+      j = {
+        "<Cmd>lua require'lspsaga.diagnostic'.lsp_jump_diagnostic_prev({severity_limit='Error'})<CR>",
+        "Previous error"
+      },
+      d = {
+        "<Cmd>lua require'lspsaga.diagnostic'.lsp_jump_diagnostic_prev()<CR>",
+        "Previous diagnostic"
+      },
+      c = { "Previous Git change" },
+    },
+    ["]"] = {
+      name = "Next, after, below",
+      w = {
+        "<Cmd>lua require'lspsaga.diagnostic'.lsp_jump_diagnostic_next({severity_limit='Warning'})<CR>",
+        "Next warning or error"
+      },
+      j = {
+        "<Cmd>lua require'lspsaga.diagnostic'.lsp_jump_diagnostic_next({severity_limit='Error'})<CR>",
+        "Next error"
+      },
+      d = {
+        "<Cmd>lua require'lspsaga.diagnostic'.lsp_jump_diagnostic_next()<CR>",
+        "Next diagnostic"
+      },
+      c = { "Next Git change" },
+    },
+    g = {
+      name = "Go to; selection manipulation",
+      s = { "Select syntax node under cursor" },
+      c = { "Comment" },
+    }
+  }
+)
+
+whichkey.register(
+  {
+    g = {
+      n = { "Extend the selection to the enclosing node" },
+      m = { "Extend the selection to the enclosing scope" },
+      N = { "Intend the selection to the enclosed node" },
+    }
+  },
+  { mode = "v" }
 )

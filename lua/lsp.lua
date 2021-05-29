@@ -9,7 +9,7 @@ lsp_saga.init_lsp_saga {
   code_action_prompt = { enable = false },
   finder_action_keys = {
     open = "<CR>", split = "s",
-    vsplit = "v", quit = 'q',
+    vsplit = "v", quit = '<Esc>',
     scroll_down = '<C-e>', scroll_up = '<C-y>',
   }
 }
@@ -25,18 +25,29 @@ local lsp_signature_config = {
 
 local on_attach = function(client, bufnr)
   lsp_signature.on_attach(lsp_signature_config)
-  local opts = { noremap=true, silent=true }
-  local function buf_set_keymap(mode, lhs, rhs)
-    vim.api.nvim_buf_set_keymap(bufnr, mode, lhs, rhs, opts)
-  end
-  buf_set_keymap('n', 'K', "<Cmd>lua require'lspsaga.hover'.render_hover_doc()<CR>")
-  buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>')
-  buf_set_keymap('n', '<Leader>ji', "<Cmd>lua require'lspsaga.provider'.lsp_finder()<CR>")
-  buf_set_keymap('n', '<Leader>jp', "<Cmd>lua require'lspsaga.provider'.preview_definition()<CR>")
-  buf_set_keymap('n', '<C-e>', "<Cmd>lua require'lspsaga.action'.smart_scroll_with_saga(1)<CR>")
-  buf_set_keymap('n', '<C-y>', "<Cmd>lua require'lspsaga.action'.smart_scroll_with_saga(-1)<CR>")
-  buf_set_keymap('n', '[w', "<Cmd>lua require'lspsaga.diagnostic'.lsp_jump_diagnostic_prev()<CR>")
-  buf_set_keymap('n', ']w', "<Cmd>lua require'lspsaga.diagnostic'.lsp_jump_diagnostic_next()<CR>")
+  local whichkey = require('which-key')
+  whichkey.register(
+    {
+      ["K"] = {
+        "<Cmd>lua require'lspsaga.hover'.render_hover_doc()<CR>",
+        "Show documentation for the symbol under the cursor"
+      },
+      ["gO"] = "<Cmd>lua require'telescope.builtin'.lsp_document_symbols()<CR>",
+      ["gd"] = {
+        "<Cmd>lua vim.lsp.buf.definition()<CR>",
+        "Go to definition"
+      },
+      ["<C-e>"] = {
+        "<Cmd>lua require'lspsaga.action'.smart_scroll_with_saga(1)<CR>",
+        "Scroll down one line"
+      },
+      ["<C-y>"] = {
+        "<Cmd>lua require'lspsaga.action'.smart_scroll_with_saga(-1)<CR>",
+        "Scroll up one line"
+      },
+    },
+    { buffer = bufnr }
+  )
 end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
