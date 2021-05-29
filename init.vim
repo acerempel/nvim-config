@@ -130,6 +130,17 @@ augroup filetypes
   autocmd BufReadPost,BufNew *.wiki ++once packadd vimwiki
 augroup END
 
+function! SetTreeSitterFolding() abort
+  setlocal foldenable
+  setlocal foldmethod=expr
+  setlocal foldexpr=nvim_treesitter#foldexpr()
+endfunction
+
+augroup treesitter
+  au!
+  au FileType rust,javascript,typescript,javascriptreact,typescriptreact,lua,nix,php,html,css call SetTreeSitterFolding()
+augroup END
+
 " }}}
 
 lua << ENDLUA
