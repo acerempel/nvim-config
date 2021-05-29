@@ -77,7 +77,15 @@ return require('packer').startup(function()
     config = function ()
       require('nvim-treesitter.configs').setup {
         highlight = { enable = true },
-        indent = { enable = true },
+        incremental_selection = {
+          enable = true,
+          keymaps = {
+            init_selection = "gs",
+            node_incremental = "gn",
+            scope_incremental = "go",
+            node_decremental = "gN",
+          },
+        }
       }
     end
   }
@@ -128,7 +136,7 @@ return require('packer').startup(function()
         },
         sections = {
           lualine_b = { 'filename' },
-          lualine_c = { 'diff', 'branch' },
+          lualine_c = { 'branch' },
           lualine_x = {
             {
               'diagnostics',
@@ -141,7 +149,7 @@ return require('packer').startup(function()
         },
         inactive_sections = {
           lualine_b = { 'filename' },
-          lualine_c = { 'diff' },
+          lualine_c = { },
           lualine_x = { 'filetype' },
           lualine_y = { 'progress' },
         }
