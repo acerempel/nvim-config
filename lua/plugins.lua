@@ -12,8 +12,14 @@ return require('packer').startup(function()
   -- Misc normal mode commands
   use 'tpope/vim-unimpaired'
 
+  -- Improvements to QuickFix and Location List
+  use 'romainl/vim-qf'
+
   -- Close parentheses, if blocks, etc. when Enter is pressed
   use 'rstacruz/vim-closer'
+
+  -- Nice interface for vim's tree-shaped undo
+  use 'mbbill/undotree'
 
   -- Show available keybindings as you type
   use {
@@ -103,9 +109,6 @@ return require('packer').startup(function()
       telescope.load_extension('fzy_native')
     end
   }
-
-  -- Nice interface for vim's tree-shaped undo
-  use 'mbbill/undotree'
 
   -- Fancy startup screen with sessions and mru etc.
   use {

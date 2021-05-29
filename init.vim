@@ -93,14 +93,6 @@ autocmd BufReadPost *
      \   exe "normal! g`\"" |
      \ endif
 
-augroup quickfix
-    autocmd!
-    autocmd QuickFixCmdPost [^l]* cwindow
-    autocmd QuickFixCmdPost l*    lwindow
-    autocmd VimEnter        *     cwindow
-    autocmd BufWinLeave * lclose
-augroup END
-
 augroup packer
   autocmd!
   " Automatically enable changes to plugin configuration
