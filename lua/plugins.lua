@@ -112,7 +112,7 @@ return require('packer').startup(function()
 
   use {
     'sindrets/diffview.nvim',
-    cmd = 'DiffViewOpen',
+    cmd = 'DiffviewOpen',
     config = function ()
       require('diffview').setup {
         file_panel = { use_icons = false },
