@@ -142,31 +142,7 @@ return require('packer').startup(function()
   use {
     'hoob3rt/lualine.nvim',
     config = function ()
-      require('lualine').setup {
-        options = {
-          icons_enabled = false,
-          theme = "gruvbox_light",
-        },
-        sections = {
-          lualine_b = { 'filename' },
-          lualine_c = { 'branch' },
-          lualine_x = {
-            {
-              'diagnostics',
-              sources = { 'nvim_lsp' },
-              sections = { 'error', 'warn' }
-            }
-          },
-          lualine_y = { 'filetype' },
-          lualine_z = { 'location', 'progress' },
-        },
-        inactive_sections = {
-          lualine_b = { 'filename' },
-          lualine_c = { },
-          lualine_x = { 'filetype' },
-          lualine_y = { 'progress' },
-        }
-      }
+      require('statusline').setup()
     end
   }
 
