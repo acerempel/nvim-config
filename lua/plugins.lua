@@ -91,10 +91,21 @@ return require('packer').startup(function()
             scope_incremental = "go",
             node_decremental = "gN",
           },
-        }
+        },
+        select = {
+          enable = true,
+          keymaps = {
+            ["af"] = "@function.outer",
+            ["if"] = "@function.inner",
+            ["ac"] = "@class.outer",
+            ["ic"] = "@class.inner",
+          }
+        },
       }
     end
   }
+
+  use { 'nvim-treesitter/nvim-treesitter-textobjects' }
 
   use {
     'nvim-telescope/telescope.nvim',
