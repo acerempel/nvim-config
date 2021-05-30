@@ -20,7 +20,7 @@ set incsearch inccommand=nosplit nohlsearch
 set noshowmode showcmd
 set clipboard=unnamed
 
-set updatetime=300 timeoutlen=600
+set updatetime=300 timeoutlen=700
 
 set formatoptions=croqj textwidth=80
 set autoindent nojoinspaces
