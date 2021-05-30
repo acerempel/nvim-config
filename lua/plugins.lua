@@ -110,6 +110,16 @@ return require('packer').startup(function()
     end
   }
 
+  use {
+    'sindrets/diffview.nvim',
+    cmd = 'DiffViewOpen',
+    config = function ()
+      require('diffview').setup {
+        file_panel = { use_icons = false },
+      }
+    end
+  }
+
   -- Fancy startup screen with sessions and mru etc.
   use {
     'mhinz/vim-startify',
