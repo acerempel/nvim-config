@@ -8,9 +8,12 @@ function M.setup ()
     },
     sections = {
       lualine_b = {
-        { 'filename', file_status = true, path = 1 }
+        'b:gitsigns_head',
       },
-      lualine_c = { 'b:gitsigns_head', 'b:gitsigns_status' },
+      lualine_c = {
+        { 'filename', file_status = true, path = 1 },
+        'b:gitsigns_status',
+      },
       lualine_x = {
         {
           'diagnostics',
