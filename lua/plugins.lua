@@ -220,12 +220,79 @@ return require('packer').startup(function()
 
   -- Keystroke-saving, incl. completion {{{
 
-  -- Autocomplete
-  use { 'acerempel/nvim-compe' }
+  use {
+    'L3MON4D3/LuaSnip',
+    config = function ()
+      vim.api.nvim_set_keymap("i", "<C-,>", "<Plug>luasnip-next-choice", {})
+      vim.api.nvim_set_keymap("s", "<C-,>", "<Plug>luasnip-next-choice", {})
+      vim.api.nvim_set_keymap("i", "<C-.>", "<Plug>luasnip-prev-choice", {})
+      vim.api.nvim_set_keymap("s", "<C-.>", "<Plug>luasnip-prev-choice", {})
+      vim.api.nvim_set_keymap("i", "<C-;>", "<Plug>luasnip-expand-or-jump", {expr = true})
+      vim.api.nvim_set_keymap("s", "<C-;>", "<Plug>luasnip-expand-or-jump", {expr = true})
+      vim.api.nvim_set_keymap("i", "<C-'>", "<Plug>luasnip-jump-prev", {expr = true})
+      vim.api.nvim_set_keymap("s", "<C-'>", "<Plug>luasnip-jump-prev", {expr = true})
+    end
+  }
 
-  -- Snippets
-  use 'hrsh7th/vim-vsnip'
-  use 'rafamadriz/friendly-snippets'
+  local check_back_space = function()
+    local col = vim.fn.col('.') - 1
+    return col == 0 or vim.fn.getline('.'):sub(col, col):match('%s')
+  end
+
+  local term = function(s)
+    return vim.api.nvim_replace_termcodes(s, true, true, true)
+  end
+
+  -- Autocomplete
+  use {
+    'hrsh7th/nvim-cmp',
+    requires = {
+      "hrsh7th/cmp-buffer",
+      "saadparwaiz1/cmp_luasnip",
+      "hrsh7th/cmp-nvim-lsp",
+    },
+    config = function ()
+      local cmp = require('cmp')
+      cmp.setup {
+        snippet = {
+          expand = function(args)
+            require('luasnip').lsp_expand(args.body)
+          end
+        },
+        completion = {
+          autocomplete = false,
+          completeopt = 'menu,menuone,noinsert',
+        },
+        mapping = {
+          ['<CR>'] = cmp.mapping.confirm(),
+          ['<C-e>'] = cmp.mapping.close(),
+          ['<C-d>'] = cmp.mapping.scroll_docs(4),
+          ['<C-u>'] = cmp.mapping.scroll_docs(-4),
+          ['<Tab>'] = function(fallback)
+              if vim.fn.pumvisible() == 1 then
+                vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-n>', true, true, true), 'n')
+              elseif check_back_space() then
+                vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Tab>', true, true, true), 'n')
+              else
+                fallback()
+              end
+            end,
+          ['<S-Tab>'] = function(fallback)
+              if vim.fn.pumvisible() == 1 then
+                vim.api.nvim_feedkeys(term('<C-p>'), 'n')
+              else
+                vim.api.nvim_feedkeys(term('<S-Tab>'), '')
+              end
+            end,
+        },
+        sources = {
+          { name = 'buffer' },
+          { name = 'nvim_lua' },
+          { name = 'nvim_lsp' },
+        },
+      }
+    end
+  }
 
   -- }}}
 
