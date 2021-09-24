@@ -1,3 +1,16 @@
+_G.check_back_space = function()
+  local col = vim.fn.col('.') - 1
+  if col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') then
+    return true
+  else
+    return false
+  end
+end
+
+_G.term = function(s)
+  return vim.api.nvim_replace_termcodes(s, true, true, true)
+end
+
 return require('packer').startup(function()
   -- Packer itself
   use 'wbthomason/packer.nvim'
@@ -15,8 +28,10 @@ return require('packer').startup(function()
   -- Improvements to QuickFix and Location List
   use 'romainl/vim-qf'
 
+  -- Cache lua require() calls
+  use 'lewis6991/impatient.nvim'
+
   -- Close parentheses, etc. automatically
-  use 'Raimondi/delimitMate'
 
   -- Nice interface for vim's tree-shaped undo
   use 'mbbill/undotree'
@@ -106,7 +121,7 @@ return require('packer').startup(function()
     cond = function() return vim.g.vscode == nil end,
     config = function ()
       require('diffview').setup {
-        file_panel = { use_icons = false },
+        use_icons = false,
       }
     end
   }
@@ -125,6 +140,8 @@ return require('packer').startup(function()
 
   -- .editorconfig support
   use 'editorconfig/editorconfig-vim'
+
+  use 'chrisbra/unicode.vim'
 
   -- }}}
 
@@ -174,6 +191,7 @@ return require('packer').startup(function()
   -- Tree-sitter language grammars
   use {
     'nvim-treesitter/nvim-treesitter',
+    requires = { 'nvim-treesitter/nvim-treesitter-textobjects' },
     cond = function() return vim.g.vscode == nil end,
     run = function ()
       vim.cmd 'TSUpdate'
@@ -190,22 +208,47 @@ return require('packer').startup(function()
             node_decremental = "gN",
           },
         },
-        select = {
-          enable = true,
-          keymaps = {
-            ["af"] = "@function.outer",
-            ["if"] = "@function.inner",
-            ["ac"] = "@class.outer",
-            ["ic"] = "@class.inner",
-          }
+        textobjects = {
+          select = {
+            enable = true,
+            keymaps = {
+              ["af"] = "@function.outer",
+              ["if"] = "@function.inner",
+              ["ac"] = "@class.outer",
+              ["ic"] = "@class.inner",
+            }
+          },
         },
+        lsp_interop = {
+          enable = true,
+          border = "rounded",
+          peek_definition_code = {
+            ["<Leader>kf"] = "@function.outer",
+          },
+        },
+        playground = {
+          enable = true,
+          disable = {},
+          updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
+          persist_queries = false, -- Whether the query persists across vim sessions
+          keybindings = {
+            toggle_query_editor = 'o',
+            toggle_hl_groups = 'i',
+            toggle_injected_languages = 't',
+            toggle_anonymous_nodes = 'a',
+            toggle_language_display = 'I',
+            focus_language = 'f',
+            unfocus_language = 'F',
+            update = 'R',
+            goto_node = '<cr>',
+            show_help = '?',
+          },
+        }
       }
     end
   }
-  use {
-    'nvim-treesitter/nvim-treesitter-textobjects',
-    cond = function() return vim.g.vscode == nil end
-  }
+
+  use 'nvim-treesitter/playground'
 
   -- }}}
 
@@ -223,25 +266,48 @@ return require('packer').startup(function()
   use {
     'L3MON4D3/LuaSnip',
     config = function ()
-      vim.api.nvim_set_keymap("i", "<C-,>", "<Plug>luasnip-next-choice", {})
-      vim.api.nvim_set_keymap("s", "<C-,>", "<Plug>luasnip-next-choice", {})
-      vim.api.nvim_set_keymap("i", "<C-.>", "<Plug>luasnip-prev-choice", {})
-      vim.api.nvim_set_keymap("s", "<C-.>", "<Plug>luasnip-prev-choice", {})
-      vim.api.nvim_set_keymap("i", "<C-;>", "<Plug>luasnip-expand-or-jump", {expr = true})
-      vim.api.nvim_set_keymap("s", "<C-;>", "<Plug>luasnip-expand-or-jump", {expr = true})
-      vim.api.nvim_set_keymap("i", "<C-'>", "<Plug>luasnip-jump-prev", {expr = true})
-      vim.api.nvim_set_keymap("s", "<C-'>", "<Plug>luasnip-jump-prev", {expr = true})
+      local types = require('luasnip.util.types')
+      _G.luasnip = require('luasnip')
+      luasnip.config.set_config({
+        history = true,
+        -- Update more often, :h events for more info.
+        updateevents = "TextChanged,TextChangedI",
+        ext_opts = {
+          [types.choiceNode] = {
+            active = {
+              virt_text = { { "choiceNode", "Comment" } },
+            },
+          },
+        },
+        -- treesitter-hl has 100, use something higher (default is 200).
+        ext_base_prio = 300,
+        -- minimal increase in priority.
+        ext_prio_increase = 1,
+      })
+      _G.mapping_ctrl_n = function ()
+        if luasnip.choice_active() then
+          return term('<Cmd>lua luasnip.change_choice(1)<CR>')
+        else
+          return term('<C-n>')
+        end
+      end
+      _G.mapping_ctrl_p = function ()
+        if luasnip.choice_active() then
+          return term('<Cmd>lua luasnip.change_choice(-1)<CR>')
+        else
+          return term('<C-p>')
+        end
+      end
+      vim.api.nvim_set_keymap("i", "<C-n>", "v:lua.mapping_ctrl_n()", { expr = true, noremap = true })
+      vim.api.nvim_set_keymap("s", "<C-n>", "v:lua.mapping_ctrl_n()", { expr = true, noremap = true })
+      vim.api.nvim_set_keymap("i", "<C-p>", "v:lua.mapping_ctrl_p()", { expr = true, noremap = true })
+      vim.api.nvim_set_keymap("s", "<C-p>", "v:lua.mapping_ctrl_p()", { expr = true, noremap = true })
+      vim.api.nvim_set_keymap("i", "<C-j>", "<Plug>luasnip-expand-or-jump", {})
+      vim.api.nvim_set_keymap("s", "<C-j>", "<Plug>luasnip-expand-or-jump", {})
+      vim.api.nvim_set_keymap("i", "<C-k>", "<Plug>luasnip-jump-prev", {})
+      vim.api.nvim_set_keymap("s", "<C-k>", "<Plug>luasnip-jump-prev", {})
     end
   }
-
-  local check_back_space = function()
-    local col = vim.fn.col('.') - 1
-    return col == 0 or vim.fn.getline('.'):sub(col, col):match('%s')
-  end
-
-  local term = function(s)
-    return vim.api.nvim_replace_termcodes(s, true, true, true)
-  end
 
   -- Autocomplete
   use {
@@ -251,6 +317,7 @@ return require('packer').startup(function()
       "saadparwaiz1/cmp_luasnip",
       "hrsh7th/cmp-nvim-lsp",
     },
+    after = { 'LuaSnip' },
     config = function ()
       local cmp = require('cmp')
       cmp.setup {
@@ -261,34 +328,38 @@ return require('packer').startup(function()
         },
         completion = {
           autocomplete = false,
-          completeopt = 'menu,menuone,noinsert',
+          completeopt = 'menu,menuone,noselect',
         },
         mapping = {
-          ['<CR>'] = cmp.mapping.confirm(),
+          -- Pears handles this now
+          -- ['<CR>'] = cmp.mapping.confirm({select = true}),
           ['<C-e>'] = cmp.mapping.close(),
           ['<C-d>'] = cmp.mapping.scroll_docs(4),
           ['<C-u>'] = cmp.mapping.scroll_docs(-4),
+          ['<C-Space>'] = cmp.mapping.complete(),
           ['<Tab>'] = function(fallback)
               if vim.fn.pumvisible() == 1 then
-                vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<C-n>', true, true, true), 'n')
+                vim.api.nvim_feedkeys(term('<C-n>'), 'n', true)
               elseif check_back_space() then
-                vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Tab>', true, true, true), 'n')
-              else
                 fallback()
+                -- vim.api.nvim_feedkeys(term('<Tab>'), 'n', true)
+              else
+                cmp.complete()
               end
             end,
           ['<S-Tab>'] = function(fallback)
               if vim.fn.pumvisible() == 1 then
-                vim.api.nvim_feedkeys(term('<C-p>'), 'n')
+                vim.api.nvim_feedkeys(term('<C-p>'), 'n', true)
               else
-                vim.api.nvim_feedkeys(term('<S-Tab>'), '')
+                fallback()
+                -- vim.api.nvim_feedkeys(term('<S-Tab>'), 'n', true)
               end
             end,
         },
         sources = {
-          { name = 'buffer' },
-          { name = 'nvim_lua' },
           { name = 'nvim_lsp' },
+          { name = 'nvim_lua' },
+          { name = 'buffer' },
         },
       }
     end

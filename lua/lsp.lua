@@ -65,19 +65,19 @@ local on_attach = function(client, bufnr)
 end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require('nvim_cmp_lsp').update_capabilities(capabilities)
+capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 
 local basic_lsp_config = {
   on_attach = on_attach,
   capabilities = capabilities,
 }
 
-lspconfig.intelephense.setup {
-  root_dir = util.root_pattern("composer.json"),
+lspconfig.tailwindcss.setup {
+  cmd = { "pnpx", "tailwindcss-language-server", "--stdio" },
   on_attach = on_attach,
   capabilities = capabilities,
 }
-local servers = { "rust_analyzer", "tsserver", "hls", "elmls" }
+local servers = { "rust_analyzer", "tsserver", "hls", "elmls", "intelephense", "html", "cssls", "jsonls" }
 for _, server in ipairs(servers) do
   lspconfig[server].setup(basic_lsp_config)
 end

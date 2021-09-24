@@ -3,6 +3,8 @@ if !has('nvim-0.5')
   exit
 endif
 
+lua require('impatient')
+
 " OPTIONS {{{
 
 " Fish isn't sufficiently posixy for vim's use.
@@ -142,7 +144,7 @@ augroup filetypes
   autocmd FileType gitcommit      setlocal textwidth=67
   autocmd FileType qf     setlocal wrap linebreak
   autocmd FileType table setlocal tabstop=28 noexpandtab nolist
-  autocmd FileType cabal au BufWritePre <buffer=abuf> %!cabal-fmt
+  autocmd FileType cabal au BufWritePre <buffer=abuf> %!cabal-fmt | norm g'.
   autocmd BufReadPost,BufNew *.wiki ++once packadd vimwiki
 augroup END
 
@@ -161,10 +163,11 @@ augroup END
 
 lua << ENDLUA
   require('plugins')
-  require('completion')
   if vim.g.vscode == nil then
     require('lsp')
     require('mappings')
+    require('snippets')
+    require('pairs')
   end
 ENDLUA
 
@@ -196,10 +199,10 @@ nnoremap <silent> U <Cmd>UndotreeToggle<CR>
 noremap Q @@
 nnoremap _ "_d
 
-imap <C-j> <Down>
-imap <C-k> <Up>
-imap <C-h> <Left>
-imap <C-l> <Right>
+" imap <C-j> <Down>
+" imap <C-k> <Up>
+" imap <C-h> <Left>
+" imap <C-l> <Right>
 
 " Make Y editor command consistent with D, C, etc.
 noremap Y y$
