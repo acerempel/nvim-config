@@ -47,7 +47,7 @@ end
 M.mapping_cr = function ()
   if vim.fn.pumvisible() == 1 then
     local cmp = require('cmp')
-    cmp.confirm({ select = true, behavior = cmp.ConfirmBehavior.Replace })
+    cmp.confirm({ select = true, behavior = cmp.ConfirmBehavior.Insert })
   else
     local line = api.nvim_get_current_line()
     local pos = api.nvim_win_get_cursor(0)

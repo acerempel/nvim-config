@@ -321,6 +321,7 @@ return require('packer').startup(function()
       "hrsh7th/cmp-buffer",
       "saadparwaiz1/cmp_luasnip",
       "hrsh7th/cmp-nvim-lsp",
+      "hrsh7th/cmp-nvim-lua",
     },
     after = { 'LuaSnip' },
     config = function ()
@@ -333,7 +334,7 @@ return require('packer').startup(function()
         },
         completion = {
           autocomplete = false,
-          completeopt = 'menu,menuone,noselect',
+          completeopt = 'menu,menuone,noinsert',
         },
         mapping = {
           -- Pears handles this now
@@ -364,7 +365,10 @@ return require('packer').startup(function()
         sources = {
           { name = 'nvim_lsp' },
           { name = 'nvim_lua' },
-          { name = 'buffer' },
+          { name = 'luasnip' },
+        },
+        experimental = {
+          ghost_text = true,
         },
       }
     end
