@@ -216,11 +216,15 @@ return require('packer').startup(function()
           select = {
             enable = true,
             keymaps = {
-              ["af"] = "@function.outer",
-              ["if"] = "@function.inner",
-              ["ac"] = "@class.outer",
-              ["ic"] = "@class.inner",
-              ["ip"] = "@param.inner",
+              af = "@function.outer",
+              ['if'] = "@function.inner",
+              ic = "@call.inner",
+              ac = "@call.outer",
+              iC = "@class.inner",
+              aC = "@class.outer",
+              iP = "@parameter.inner",
+              ib = "@block.inner",
+              ab = "@block.outer",
             }
           },
         },
@@ -334,7 +338,7 @@ return require('packer').startup(function()
         },
         completion = {
           autocomplete = false,
-          completeopt = 'menu,menuone,noinsert',
+          completeopt = 'menu,menuone,noselect',
         },
         mapping = {
           -- Pears handles this now
