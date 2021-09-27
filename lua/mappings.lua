@@ -66,7 +66,7 @@ whichkey.register(
         "Previous error"
       },
       d = {
-        "<Cmd>lua vim.lsp.diagnostic.goto_prev()<CR>",
+        "<Plug>(coc-diagnostic-prev)",
         "Previous diagnostic"
       },
       c = { "Previous Git change" },
@@ -86,7 +86,7 @@ whichkey.register(
         "Next error"
       },
       d = {
-        "<Cmd> lua vim.lsp.diagnostic.goto_next()<CR>",
+        "<Plug>(coc-diagnostic-next)",
         "Next diagnostic"
       },
       c = { "Next Git change" },
@@ -99,6 +99,9 @@ whichkey.register(
       name = "Go to; jump around; select",
       s = { "Select syntax node under cursor" },
       c = { "Comment" },
+      t = { "Go to type definition" },
+      r = { "Show references" },
+      i = { "Go to implementation" },
       O = { "Show document outline" },
       o = { "Go to nth byte" },
     },

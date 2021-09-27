@@ -164,7 +164,6 @@ augroup END
 lua << ENDLUA
   require('plugins')
   if vim.g.vscode == nil then
-    require('lsp')
     require('mappings')
     require('snippets')
     require('pairs')
@@ -208,10 +207,19 @@ noremap ZZ "_dd
 
 " Make Y editor command consistent with D, C, etc.
 noremap Y y$
+" }}}
 
-nnoremap <silent> [t :tabprevious<CR>
-nnoremap <silent> ]t :tabnext<CR>
+" Tabs {{{
+
+nnoremap [t <Cmd>tabprevious<CR>
+nnoremap ]t <Cmd>tabnext<CR>
+nnoremap [T <Cmd>tabfirst<CR>
+nnoremap ]T <Cmd>tablast<CR>
 noremap <silent> <D-t> :tabnew<CR>
+nnoremap <silent> <Leader>td <Cmd>tcd %:h<CR>
+nnoremap <silent> <Leader>tn <Cmd>tabnew<CR>
+nnoremap <silent> <Leader>tc <Cmd>tabclose<CR>
+
 " }}}
 
 " Pandoc {{{
@@ -257,6 +265,97 @@ let g:vim_svelte_plugin_use_foldexpr = 1
 let php_html_in_strings=0
 let php_html_in_heredoc=0
 let php_html_in_nowdoc=0
+" }}}
+
+" COC mappings {{{
+lua << ENDLUA
+function keys(ks)
+  vim.api.nvim_feedkeys(ks, 'n', true)
+end
+
+_G.coc_tab = function ()
+  if vim.fn.pumvisible() == 1 then
+    keys(term('<C-n>'))
+  elseif check_back_space() then
+    keys(term('<Tab>'))
+  else
+    vim.fn['coc#start']()
+  end
+end
+
+local coc_map_config = {
+  ['hover'] = { { 'K', 'doHover', 'Show documentation' } },
+  ['documentSymbol'] = { { 'gO', 'showOutline', 'Show outline' } },
+  ['documentHighlight'] = { { 'kh', 'highlight', 'Highlight occurrences' } },
+  ['reference'] = { { 'gr', 'jumpReferences', 'Show references' } },
+  ['definition'] = {
+    { 'gd', 'jumpDefinition', 'Go to definition' },
+    { '<Leader>kd', 'definitionHover', 'Show definition' },
+  },
+  ['typeDefinition'] = { { 'gt', 'jumpTypeDefinition', 'Go to type definition' } },
+  ['declaration'] = { { 'gD', 'jumpDeclaration', 'Go to declaration' } },
+  ['rename'] = {
+    { '<Leader>kr', 'rename', 'Rename' },
+    { '<Leader>kR', 'refactor', 'Refactor' },
+  },
+  ['any'] = {
+    { '<Leader>dk', 'diagnosticInfo', 'Expand diagnostic under cursor' },
+    { '<Leader>dl', 'diagnosticList', 'List all diagnostics' },
+  }
+}
+
+_G.coc_buf_maps = function (bufnr)
+  if not vim.fn.CocAction('ensureDocument') then
+    if bufnr == vim.api.nvim_get_current_buf() then
+      vim.api.nvim_command 'echom "COC not attached to current buffer"'
+    end
+    return nil
+  end
+  local whichkey = require('which-key')
+  local mappings = {}
+  local supported = {}
+  for feature, maps in pairs(coc_map_config) do
+    if feature == 'any' or vim.fn.CocHasProvider(feature) then
+      for _, map in pairs(maps) do
+        local command = '<Cmd>call CocActionAsync(' .. map[2] .. ')<CR>'
+        mappings[map[1]] = { command, map[3] }
+        table.insert(supported, map[2])
+      end
+    end
+  end
+  whichkey.register(mappings, { buffer = bufnr })
+  local message = "Supported mappings: " .. table.concat(supported, ", ")
+  if bufnr == vim.api.nvim_get_current_buf() then
+    vim.api.nvim_command("echom '" .. message .. "'")
+  else
+    vim.api.nvim_command(string.format("au coc_mappings BufEnter <buffer=%d> ++once echom '%s'", bufnr, message))
+  end
+end
+
+_G.setup_coc_maps = function()
+  vim.api.nvim_command [[echom 'Setting up COC mappings']]
+  for _, buf in ipairs(vim.api.nvim_list_bufs()) do coc_buf_maps(buf) end
+  vim.api.nvim_command [[au coc_mappings BufEnter * call luaeval('coc_buf_maps(_A + 0)', expand('<abuf>'))]]
+end
+ENDLUA
+
+" inoremap <silent><expr> <TAB>
+"       \ pumvisible() ? "\<C-n>" :
+"       \ <SID>check_back_space() ? "\<TAB>" :
+"       \ coc#refresh()
+inoremap <Tab> <Cmd>lua coc_tab()<CR>
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+" Make <CR> auto-select the first completion item and notify coc.nvim to
+" format on enter
+" inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+"                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+augroup coc_mappings
+  au!
+  au User CocNvimInit lua setup_coc_maps()
+augroup END
+
 " }}}
 
 " Pandoc settings {{{

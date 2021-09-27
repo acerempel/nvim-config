@@ -17,7 +17,7 @@ function M.setup ()
       lualine_x = {
         {
           'diagnostics',
-          sources = { 'nvim_lsp' },
+          sources = { 'coc' },
           sections = { 'error', 'warn' }
         }
       },

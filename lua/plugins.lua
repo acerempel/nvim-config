@@ -263,11 +263,6 @@ return require('packer').startup(function()
 
   -- Semantic knowledge, incl. LSP {{{
 
-  -- Language server configuration
-  use { 'neovim/nvim-lspconfig' }
-
-  use 'ray-x/lsp_signature.nvim'
-
   -- }}}
 
   -- Keystroke-saving, incl. completion {{{
@@ -319,8 +314,10 @@ return require('packer').startup(function()
   }
 
   -- Autocomplete
+
   use {
     'hrsh7th/nvim-cmp',
+    disable = true,
     requires = {
       "hrsh7th/cmp-buffer",
       "saadparwaiz1/cmp_luasnip",
@@ -376,6 +373,12 @@ return require('packer').startup(function()
         },
       }
     end
+  }
+
+  use {
+    'neoclide/coc.nvim',
+    branch = 'release',
+    cond = function () return vim.g.vscode == nil end,
   }
 
   -- }}}

@@ -46,10 +46,15 @@ end
 
 M.mapping_cr = function ()
   if vim.fn.pumvisible() == 1 then
-    local cmp = require('cmp')
-    cmp.confirm({ select = true, behavior = cmp.ConfirmBehavior.Insert })
+    -- local cmp = require('cmp')
+    -- cmp.confirm({ select = true, behavior = cmp.ConfirmBehavior.Insert })
+    -- api.nvim_feedkeys(term(vim.fn['coc#_select_confirm']()), 'n', true)
+    return vim.fn['coc#_select_confirm']()
   else
-    local line = api.nvim_get_current_line()
+    return term('<C-g>u<CR><C-r>=coc#on_enter()<CR>')
+    -- api.nvim_feedkeys(term('<C-g>u<CR>'), 'n', true)
+    -- vim.fn['coc#rpc#notify']('CocAutocmd', { 'Enter', api.nvim_get_current_buf() })
+    --[[ local line = api.nvim_get_current_line()
     local pos = api.nvim_win_get_cursor(0)
     local col = pos[2]
     local right = M.pairs[line:sub(col,col)]
@@ -57,7 +62,7 @@ M.mapping_cr = function ()
       api.nvim_feedkeys(term('<CR><Esc>O'), 'n', true)
     else
       api.nvim_feedkeys(term('<CR>'), 'n', true)
-    end
+    end ]]--
   end
 end
 
@@ -118,7 +123,7 @@ for left, right in pairs(M.pairs) do
   end
 end
 
-api.nvim_set_keymap('i', '<CR>', '<Cmd>lua auto_pairs.mapping_cr()<CR>', { noremap = true })
+api.nvim_set_keymap('i', '<CR>', 'v:lua.auto_pairs.mapping_cr()', { expr = true, noremap = true })
 api.nvim_set_keymap('i', '<BS>', 'v:lua.auto_pairs.mapping_bs()', { expr = true, noremap = true })
 api.nvim_set_keymap('i', '<Space>', 'v:lua.auto_pairs.mapping_space()', { expr = true, noremap = true })
 
