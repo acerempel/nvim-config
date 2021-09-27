@@ -25,7 +25,7 @@ local on_attach = function(client, bufnr)
     {
       ["K"] = {
         "<Cmd>lua vim.lsp.buf.hover()<CR>",
-        "Show documentation for the symbol under the cursor"
+        "Show documentation for symbol"
       },
       ["gO"] = {
         "<Cmd>lua require'telescope.builtin'.lsp_document_symbols()<CR>",
@@ -45,7 +45,7 @@ local on_attach = function(client, bufnr)
       },
       ["<Leader>kr"] = {
         "<Cmd>lua vim.lsp.buf.rename()<CR>",
-        "Rename the identifier under the cursor"
+        "Rename symbol"
       },
       ["<Leader>ka"] = {
         "<Cmd>lua require'telescope.builtin'.lsp_code_actions()<CR>",
@@ -55,9 +55,9 @@ local on_attach = function(client, bufnr)
         "<Cmd>lua vim.lsp.buf.document_highlight()<CR>",
         "Highlight occurrences"
       },
-      ["gR"] = {
+      ["gt"] = {
         "<Cmd>Trouble lsp_references<CR>",
-        "Show references to the current symbol"
+        "Show references"
       }
     },
     { buffer = bufnr }
@@ -72,12 +72,13 @@ local basic_lsp_config = {
   capabilities = capabilities,
 }
 
-lspconfig.tailwindcss.setup {
-  cmd = { "pnpx", "tailwindcss-language-server", "--stdio" },
-  on_attach = on_attach,
-  capabilities = capabilities,
+
+local servers = {
+  "rust_analyzer", "tsserver", "hls",
+  "elmls", "intelephense", "html",
+  "cssls", "jsonls", "tailwindcss",
 }
-local servers = { "rust_analyzer", "tsserver", "hls", "elmls", "intelephense", "html", "cssls", "jsonls" }
+
 for _, server in ipairs(servers) do
   lspconfig[server].setup(basic_lsp_config)
 end

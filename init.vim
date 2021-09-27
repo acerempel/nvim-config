@@ -156,7 +156,7 @@ endfunction
 
 augroup treesitter
   au!
-  au FileType rust,javascript,typescript,javascriptreact,typescriptreact,lua,nix,php,html,css call SetTreeSitterFolding()
+  au FileType rust,javascript,typescript,javascriptreact,typescriptreact,lua,nix,php,html,css,scss,sass,vim call SetTreeSitterFolding()
 augroup END
 
 " }}}
@@ -182,22 +182,24 @@ noremap <silent> <Space> <Nop>
 " }}}
 
 " Moving around {{{
-map <C-J> <C-W>j
-map <C-K> <C-W>k
-map <C-H> <C-W>h
-map <C-L> <C-W>l
+noremap <C-J> <C-W>j
+noremap <C-K> <C-W>k
+noremap <C-H> <C-W>h
+noremap <C-L> <C-W>l
 
 noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
 noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
 
 nnoremap ; <Cmd>call luaeval("require'harpoon.ui'.nav_file(_A)", v:count1)<CR>
-nnoremap <Leader>bb <Cmd>lua require'harpoon.mark'.add_file()<CR>
+nnoremap <Leader>bb <Cmd>call luaeval("require'harpoon.ui'.nav_file(_A)", v:count1)<CR>
+nnoremap <Leader>ba <Cmd>lua require'harpoon.mark'.add_file()<CR>
 nnoremap <Leader>be <Cmd>lua require'harpoon.ui'.toggle_quick_menu()<CR>
 
 nnoremap <silent> U <Cmd>UndotreeToggle<CR>
 
 noremap Q @@
-nnoremap _ "_d
+noremap Z "_d
+noremap ZZ "_dd
 
 " imap <C-j> <Down>
 " imap <C-k> <Up>
@@ -219,6 +221,7 @@ augroup pandoc
 augroup END
 
 function! PandocMappings()
+  " TODO which-key these
   nmap <buffer> <Leader>nn <Plug>AddVimFootnote
   nmap <buffer> <Leader>ne <Plug>EditVimFootnote
   nmap <buffer> <Leader>nr <Plug>ReturnFromFootnote

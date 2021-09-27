@@ -8,8 +8,9 @@ whichkey.register(
         "<cmd>lua require('telescope.builtin').buffers()<cr>",
         "Fuzzy find"
       },
-      b = { "Add to harpoon list" },
+      a = { "Add to harpoon list" },
       e = { "Edit harpoon list" },
+      b = { "Go to Nth harpooned buffer" },
     },
     f = {
       name = "Find files from various lists",
@@ -37,7 +38,7 @@ whichkey.register(
       s = { "Grep string" },
     },
     k = {
-      name = "Show information about the symbol under the cursor",
+      name = "Symbol under the cursor",
     },
     h = {
       name = "Current hunk of git changes",
@@ -46,6 +47,7 @@ whichkey.register(
       s = { "Stage" },
       u = { "Undo stage" },
       b = { "Show last commit affecting this line" },
+      B = { "<Plug>(git-messenger)", "Show last commit affecting this line, more detail" },
     },
   },
   { prefix = "<Leader>" }
@@ -68,9 +70,10 @@ whichkey.register(
         "Previous diagnostic"
       },
       c = { "Previous Git change" },
-      b = {
-        "Previous buffer"
-      },
+      b = { "Previous buffer" },
+      B = { "First buffer" },
+      t = { "<Cmd>tabprev<CR>", "Previous tab" },
+      T = { "<Cmd>tabfirst<CR>", "First tab" },
     },
     ["]"] = {
       name = "Next, after, below",
@@ -83,19 +86,26 @@ whichkey.register(
         "Next error"
       },
       d = {
-        "<Cmd>lua vim.lsp.diagnostic.goto_next()<CR>",
+        "<Cmd> lua vim.lsp.diagnostic.goto_next()<CR>",
         "Next diagnostic"
       },
       c = { "Next Git change" },
-      b = {
-        "Next buffer"
-      },
+      b = { "Next buffer" },
+      B = { "Last buffer" },
+      t = { "<Cmd>tabnext<CR>", "Next tab" },
+      T = { "<Cmd>tablast<CR>", "Last tab" },
     },
     g = {
-      name = "Go to; selection manipulation",
+      name = "Go to; jump around; select",
       s = { "Select syntax node under cursor" },
       c = { "Comment" },
-    }
+      O = { "Show document outline" },
+      o = { "Go to nth byte" },
+    },
+    Y = { "Yank till end of line" },
+    Q = { "Re-run last used macro" },
+    U = { "Show/hide undo tree" },
+    Z = { "Delete without register" },
   }
 )
 

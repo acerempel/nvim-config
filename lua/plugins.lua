@@ -43,7 +43,11 @@ return require('packer').startup(function()
       require('which-key').setup {
         layout = {
           height = { min = 4, max = 20 }
-        }
+        },
+        operators = {
+          gc = "Comment",
+          Z = "Delete without register",
+        },
       }
     end
   }
@@ -216,6 +220,7 @@ return require('packer').startup(function()
               ["if"] = "@function.inner",
               ["ac"] = "@class.outer",
               ["ic"] = "@class.inner",
+              ["ip"] = "@param.inner",
             }
           },
         },
