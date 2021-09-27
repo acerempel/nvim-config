@@ -209,12 +209,8 @@ noremap ZZ "_dd
 noremap Y y$
 " }}}
 
-" Tabs {{{
-
-nnoremap [t <Cmd>tabprevious<CR>
-nnoremap ]t <Cmd>tabnext<CR>
-nnoremap [T <Cmd>tabfirst<CR>
-nnoremap ]T <Cmd>tablast<CR>
+nnoremap <silent> [t :tabprevious<CR>
+nnoremap <silent> ]t :tabnext<CR>
 noremap <silent> <D-t> :tabnew<CR>
 nnoremap <silent> <Leader>td <Cmd>tcd %:h<CR>
 nnoremap <silent> <Leader>tn <Cmd>tabnew<CR>
@@ -283,59 +279,68 @@ _G.coc_tab = function ()
   end
 end
 
-local coc_map_config = {
-  ['hover'] = { { 'K', 'doHover', 'Show documentation' } },
-  ['documentSymbol'] = { { 'gO', 'showOutline', 'Show outline' } },
-  ['documentHighlight'] = { { 'kh', 'highlight', 'Highlight occurrences' } },
-  ['reference'] = { { 'gr', 'jumpReferences', 'Show references' } },
-  ['definition'] = {
-    { 'gd', 'jumpDefinition', 'Go to definition' },
-    { '<Leader>kd', 'definitionHover', 'Show definition' },
-  },
-  ['typeDefinition'] = { { 'gt', 'jumpTypeDefinition', 'Go to type definition' } },
-  ['declaration'] = { { 'gD', 'jumpDeclaration', 'Go to declaration' } },
-  ['rename'] = {
-    { '<Leader>kr', 'rename', 'Rename' },
-    { '<Leader>kR', 'refactor', 'Refactor' },
-  },
-  ['any'] = {
-    { '<Leader>dk', 'diagnosticInfo', 'Expand diagnostic under cursor' },
-    { '<Leader>dl', 'diagnosticList', 'List all diagnostics' },
-  }
+_G.coc_map_config = {
+  { 'K', 'doHover', 'Show documentation' },
+  { 'gd', 'jumpDefinition', 'Go to definition' },
+  { '<Leader>kd', 'definitionHover', 'Show definition' },
+  { 'gt', 'jumpTypeDefinition', 'Go to type definition' },
+  { 'gD', 'jumpDeclaration', 'Go to declaration' },
+  { '<Leader>kr', 'rename', 'Rename' },
+  { '<Leader>kR', 'refactor', 'Refactor' },
+  { '<Leader>dk', 'diagnosticInfo', 'Expand diagnostic under cursor' },
+  { '<Leader>dl', 'diagnosticList', 'List all diagnostics' },
 }
 
-_G.coc_buf_maps = function (bufnr)
-  if not vim.fn.CocAction('ensureDocument') then
-    if bufnr == vim.api.nvim_get_current_buf() then
-      vim.api.nvim_command 'echom "COC not attached to current buffer"'
+filetypes = {}
+
+_G.coc_update_fts = function ()
+  local services = vim.fn.CocAction('services')
+  for _, service in ipairs(services) do
+    print(vim.inspect(service.languageIds))
+    for _, ft in ipairs(service.languageIds) do
+      filetypes[ft] = true
     end
+  end
+end
+
+_G.coc_buf_maps = function (bufnr)
+  if not vim.api.nvim_buf_call(bufnr, function() return vim.fn.CocAction('ensureDocument') end) then
+    vim.cmd([[echom 'Document not COCified ]] .. bufnr .. [[']])
     return nil
   end
   local whichkey = require('which-key')
   local mappings = {}
-  local supported = {}
-  for feature, maps in pairs(coc_map_config) do
-    if feature == 'any' or vim.fn.CocHasProvider(feature) then
-      for _, map in pairs(maps) do
-        local command = '<Cmd>call CocActionAsync(' .. map[2] .. ')<CR>'
-        mappings[map[1]] = { command, map[3] }
-        table.insert(supported, map[2])
-      end
-    end
+  for _, map in ipairs(coc_map_config) do
+    local command = '<Cmd>call CocActionAsync("' .. map[2] .. '")<CR>'
+    mappings[map[1]] = { command, map[3] }
   end
   whichkey.register(mappings, { buffer = bufnr })
-  local message = "Supported mappings: " .. table.concat(supported, ", ")
-  if bufnr == vim.api.nvim_get_current_buf() then
-    vim.api.nvim_command("echom '" .. message .. "'")
-  else
-    vim.api.nvim_command(string.format("au coc_mappings BufEnter <buffer=%d> ++once echom '%s'", bufnr, message))
-  end
+  vim.api.nvim_buf_set_var(bufnr, 'coc_did_mappings', true)
 end
 
 _G.setup_coc_maps = function()
   vim.api.nvim_command [[echom 'Setting up COC mappings']]
-  for _, buf in ipairs(vim.api.nvim_list_bufs()) do coc_buf_maps(buf) end
-  vim.api.nvim_command [[au coc_mappings BufEnter * call luaeval('coc_buf_maps(_A + 0)', expand('<abuf>'))]]
+  local extensions = vim.fn.CocAction('extensionStats')
+  local filetypes = {}
+  for _, ext in ipairs(extensions) do
+    for _, event in ipairs(ext.packageJSON.activationEvents) do
+      local ft_match = event:match('^onLanguage:([%w%._-]+)$')
+      if ft_match then
+        filetypes[ft_match] = true
+      end
+    end
+  end
+  local fts_pat = table.concat(vim.tbl_keys(filetypes), ',')
+  vim.api.nvim_command(
+    string.format([[au FileType %s call luaeval('coc_buf_maps(_A+0)', expand('<abuf>'))]], fts_pat)
+  )
+  local bufs = vim.api.nvim_list_bufs()
+  for _, buf in ipairs(bufs) do
+    local ft = vim.api.nvim_buf_get_option(bufnr, 'filetype')
+    if filetypes[ft] then
+      coc_buf_maps(buf)
+    end
+  end
 end
 ENDLUA
 
