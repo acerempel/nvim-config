@@ -158,4 +158,12 @@ luasnip.snippets = {
     lua_pairs, lua_ipairs,
     lua_if, lua_if_else,
   },
+  javascript = {
+    js_for_of,
+  },
+  typescript = {},
 }
+
+for _, snip in ipairs(luasnip.snippets.javascript) do
+  table.insert(luasnip.snippets.typescript, snip)
+end
