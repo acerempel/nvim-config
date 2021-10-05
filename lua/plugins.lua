@@ -65,6 +65,7 @@ return require('packer').startup(function()
           Z = "Delete without register",
         },
       }
+      require('mappings')
     end
   }
 
@@ -107,7 +108,7 @@ return require('packer').startup(function()
       'nvim-lua/plenary.nvim',
       'nvim-telescope/telescope-fzy-native.nvim',
     },
-    after = { 'trouble.nvim' },
+    after = { 'trouble.nvim', 'nvim-nonicons' },
     config = function ()
       local telescope = require('telescope')
       local actions = require('telescope.actions')
@@ -138,6 +139,7 @@ return require('packer').startup(function()
   use {
     'folke/trouble.nvim',
     cond = is_not_vscode,
+    after = { 'nvim-nonicons' },
     config = function ()
       require("trouble").setup {}
     end
@@ -174,16 +176,19 @@ return require('packer').startup(function()
   use {
     'NTBBloodbath/galaxyline.nvim',
     requires = { 'yamatsum/nvim-nonicons' },
+    after = { 'nvim-nonicons', 'lsp-status.nvim', 'harpoon' },
     config = function () require('statusline') end
   }
 
   use {
     'yamatsum/nvim-nonicons',
+    cond = is_not_vscode,
     requires = {'kyazdani42/nvim-web-devicons'}
   }
 
   use {
     'nanozuki/tabby.nvim',
+    after = { 'nvim-nonicons' },
     config = function ()
       require('tabby').setup {
         tabline = require("tabby.presets").tab_with_top_win,
@@ -308,9 +313,23 @@ return require('packer').startup(function()
 
   -- Semantic knowledge, incl. LSP {{{
 
-  use 'nvim-lua/lsp-status.nvim'
-  use 'neovim/nvim-lspconfig'
-  use 'ray-x/lsp_signature.nvim'
+  use {
+     'nvim-lua/lsp-status.nvim',
+     after = { 'nvim-nonicons' },
+  }
+  use {
+     'neovim/nvim-lspconfig',
+     after = { 'lsp_signature.nvim' },
+     config = function() require('lsp') end,
+  }
+  use {
+     'ray-x/lsp_signature.nvim',
+     after = { 'nvim-nonicons' },
+  }
+  use {
+    'simrat39/symbols-outline.nvim',
+    after = { 'nvim-nonicons' },
+  }
 
   -- }}}
 
@@ -361,6 +380,7 @@ return require('packer').startup(function()
       vim.api.nvim_set_keymap("s", "<C-j>", "<Plug>luasnip-expand-or-jump", {})
       vim.api.nvim_set_keymap("i", "<C-k>", "<Plug>luasnip-jump-prev", {})
       vim.api.nvim_set_keymap("s", "<C-k>", "<Plug>luasnip-jump-prev", {})
+      require('snippets')
     end
   }
 

@@ -1,4 +1,3 @@
-vim.cmd [[packadd nvim-web-devicons]]
 local gl = require 'galaxyline'
 local utils = require 'utils'
 local condition = require 'galaxyline.condition'

@@ -31,6 +31,10 @@ local on_attach = function(client, bufnr)
         "<Cmd>lua require'telescope.builtin'.lsp_document_symbols()<CR>",
         "Search document symbols"
       },
+      ["gO"] = {
+        "<Cmd>SymbolsOutline<CR>",
+        "Show document outline"
+      },
       ["gW"] = {
         "<Cmd>lua require'telescope.builtin'.lsp_workspace_symbols()<CR>",
         "Show all workspace symbols"
@@ -83,7 +87,7 @@ local basic_lsp_config = {
 local servers = {
   "rust_analyzer", "tsserver", "hls", "elmls",
   "intelephense", "html", "cssls", "jsonls",
-  "tailwindcss",
+  "tailwindcss", "vimls",
 }
 
 for _, server in ipairs(servers) do

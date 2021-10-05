@@ -39,7 +39,7 @@ set foldminlines=6
 set concealcursor=nc
 
 set scrolloff=2 sidescrolloff=4 sidescroll=1
-set startofline
+set nostartofline
 
 set expandtab tabstop=2 softtabstop=2
 set shiftwidth=2 shiftround
@@ -103,15 +103,6 @@ highlight FloatBorder guibg=#e4d8ca
 " }}}
 
 " AUTOCOMMANDS {{{
-
-augroup restore
-autocmd!
-" Return to last edit position when opening files -------- "
-" autocmd BufReadPost *
-"      \ if line("'\"") > 0 && line("'\"") <= line("$") |
-"      \   exe "normal! g`\"" |
-"      \ endif
-augroup END
 
 augroup reload
   autocmd!
@@ -285,14 +276,20 @@ augroup END
 
 " }}}
 
+" Misc lua config {{{
 lua << ENDLUA
-  if vim.g.vscode == nil then
-    require('mappings')
-    require('snippets')
-    require('pairs')
-    require('lsp')
+  _G.check_back_space = function()
+    local col = vim.fn.col('.') - 1
+    if col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') then
+      return true
+    else
+      return false
+    end
   end
+
+  require('pairs')
 ENDLUA
+" }}}
 
 " Telescope {{{
 cmap <C-R> <Plug>(TelescopeFuzzyCommandSearch)
@@ -300,170 +297,13 @@ nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<cr>
 nnoremap <leader>fs <cmd>lua require('telescope.builtin').grep_string()<cr>
 " }}}
 
-" }}}
-
 " COC mappings {{{
-lua << ENDLUA
-function keys(ks)
-  vim.api.nvim_feedkeys(ks, 'n', true)
-end
-
-_G.check_back_space = function()
-  local col = vim.fn.col('.') - 1
-  if col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') then
-    return true
-  else
-    return false
-  end
-end
-
-_G.coc_tab = function ()
-  if vim.fn.pumvisible() == 1 then
-    keys(term('<C-n>'))
-  elseif check_back_space() then
-    keys(term('<Tab>'))
-  else
-    vim.fn['coc#start']()
-  end
-end
-
-_G.coc_map_config = {
-  { 'K', 'doHover', 'Show documentation' },
-  { 'gd', 'jumpDefinition', 'Go to definition' },
-  { 'go', '<Cmd>CocList symbols', 'Search workspace symbols' },
-  { 'gO', 'showOutline', 'Show document outline' },
-  { '<Leader>kd', 'definitionHover', 'Show definition' },
-  { 'gt', 'jumpTypeDefinition', 'Go to type definition' },
-  { 'gD', 'jumpDeclaration', 'Go to declaration' },
-  { 'g]', '<Cmd>CocList references', 'Search references' },
-  { 'g}', 'jumpReferences', 'Go to references' },
-  { '<Leader>kr', 'rename', 'Rename' },
-  { '<Leader>kR', 'refactor', 'Refactor' },
-  { '<Leader>dk', 'diagnosticInfo', 'Expand diagnostic under cursor' },
-  { '<Leader>dl', 'diagnosticList', 'List all diagnostics' },
-}
-
-filetypes = {}
-
-_G.coc_update_fts = function ()
-  local services = vim.fn.CocAction('services')
-  for _, service in ipairs(services) do
-    print(vim.inspect(service.languageIds))
-    for _, ft in ipairs(service.languageIds) do
-      filetypes[ft] = true
-    end
-  end
-end
-
-_G.coc_buf_maps = function (bufnr)
-  if not vim.api.nvim_buf_call(bufnr, function() return vim.fn.CocAction('ensureDocument') end) then
-    vim.cmd([[echom 'Document not COCified ]] .. bufnr .. [[']])
-    return nil
-  end
-  local whichkey = require('which-key')
-  local mappings = {}
-  for _, map in ipairs(coc_map_config) do
-    local command = ''
-    if vim.startswith(map[2], '<Cmd>') then
-      command = map[2] .. '<CR>'
-    else
-      command = '<Cmd>call CocActionAsync("' .. map[2] .. '")<CR>'
-    end
-    mappings[map[1]] = { command, map[3] }
-  end
-  whichkey.register(mappings, { buffer = bufnr })
-  vim.api.nvim_buf_set_var(bufnr, 'coc_did_mappings', true)
-end
-
-_G.setup_coc_maps = function()
-  vim.api.nvim_command [[echom 'Setting up COC mappings']]
-  local extensions = vim.fn.CocAction('extensionStats')
-  local filetypes = {}
-  for _, ext in ipairs(extensions) do
-    for _, event in ipairs(ext.packageJSON.activationEvents) do
-      local ft_match = event:match('^onLanguage:([%w%._-]+)$')
-      if ft_match then
-        filetypes[ft_match] = true
-      end
-    end
-  end
-  local fts_pat = table.concat(vim.tbl_keys(filetypes), ',')
-  vim.api.nvim_command(
-    string.format([[au FileType %s call luaeval('coc_buf_maps(_A+0)', expand('<abuf>'))]], fts_pat)
-  )
-  local bufs = vim.api.nvim_list_bufs()
-  for _, buf in ipairs(bufs) do
-    local ft = vim.api.nvim_buf_get_option(bufnr, 'filetype')
-    if filetypes[ft] then
-      coc_buf_maps(buf)
-    end
-  end
-end
-ENDLUA
-
-" inoremap <silent><expr> <TAB>
-"       \ pumvisible() ? "\<C-n>" :
-"       \ <SID>check_back_space() ? "\<TAB>" :
-"       \ coc#refresh()
-inoremap <Tab> <Cmd>lua coc_tab()<CR>
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-
-" Make <CR> auto-select the first completion item and notify coc.nvim to
-" format on enter
-" inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-"                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 augroup coc_mappings
   au!
-  au User CocNvimInit lua setup_coc_maps()
+  au User CocNvimInit lua require('coc').setup_coc_maps()
 augroup END
 
-" }}}
-
-" Pandoc settings {{{
-let g:pandoc#syntax#conceal#blacklist = ['ellipses']
-let g:pandoc#formatting#mode = 'h'
-let g:pandoc#formatting#textwidth = 60
-let g:pandoc#formatting#smart_autoformat_on_cursormoved = 0
-let g:pandoc#spell#enabled = 1
-
-function! ZoteroCite()
-  " pick a format based on the filetype (customize at will)
-  let format = &filetype =~ '.*tex' ? 'citep' : 'pandoc'
-  let api_call = 'http://127.0.0.1:23119/better-bibtex/cayw?format='.format.'&brackets=1'
-  let ref = system('curl -s '.shellescape(api_call))
-  return ref
-endfunction
-
-noremap <leader>z "=ZoteroCite()<CR>p
-inoremap <C-z> <C-r>=ZoteroCite()<CR>
-" }}}
-
-" Vimwiki settings {{{
-let g:vimwiki_list =
-  \ [{'path': '~/Documents/Grand-Schemes',
-  \   'path_html': '~/Documents/Grand-Schemes/Hypertext',
-  \   'index': 'Index',
-  \   'auto_toc': 1,
-  \   'syntax': 'default',
-  \   'ext': '.wiki',
-  \   'template_path': '~/Documents/Grand-Schemes/Templates',
-  \   'template_default': 'default',
-  \   'template_ext': '.template.html',
-  \   'diary_rel_path': 'Catalogue-of-Days',
-  \   'diary_index': 'Days',
-  \   'diary_header': 'The Catalogue of Days',
-  \   'diary_sort': 'desc',
-  \   'auto_tags': 1,
-  \   'auto_diary_index': 1,
-  \ }]
-
-let g:vimwiki_dir_link = 'Index'
-let g:vimwiki_html_header_numbering = 2
-let g:vimwiki_html_header_numbering_sym = '.'
-let g:vimwiki_autowriteall = 0
-let g:vimwiki_ext2syntax = {}
-let g:vimwiki_global_ext = 0
 " }}}
 
 " vim:foldmethod=marker:foldenable

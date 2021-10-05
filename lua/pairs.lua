@@ -92,23 +92,26 @@ end
 
 M.mapping_cr = function ()
   if vim.fn.pumvisible() == 1 then
-    -- local cmp = require('cmp')
-    -- cmp.confirm({ select = true, behavior = cmp.ConfirmBehavior.Insert })
+    local cmp = require('cmp')
+    cmp.confirm({ select = true, behavior = cmp.ConfirmBehavior.Insert })
     -- api.nvim_feedkeys(term(vim.fn['coc#_select_confirm']()), 'n', true)
-    return vim.fn['coc#_select_confirm']()
+    -- return vim.fn['coc#_select_confirm']()
   else
-    return term('<C-g>u<CR><C-r>=coc#on_enter()<CR>')
+    -- return term('<C-g>u<CR><C-r>=coc#on_enter()<CR>')
     -- api.nvim_feedkeys(term('<C-g>u<CR>'), 'n', true)
     -- vim.fn['coc#rpc#notify']('CocAutocmd', { 'Enter', api.nvim_get_current_buf() })
-    --[[ local line = api.nvim_get_current_line()
+    local line = api.nvim_get_current_line()
     local pos = api.nvim_win_get_cursor(0)
     local col = pos[2]
-    local right = M.pairs[line:sub(col,col)]
-    if right == line:sub(col+1,col+1) then
+    local left = line:sub(col,col)
+    local pairs = api.nvim_buf_get_var(0, 'auto_pairs_pairs')
+    local pair = pairs[left]
+    local right = pair and pair.right
+    if right and right == line:sub(col+1,col+1) then
       api.nvim_feedkeys(term('<CR><Esc>O'), 'n', true)
     else
       api.nvim_feedkeys(term('<CR>'), 'n', true)
-    end ]]--
+    end
   end
 end
 
@@ -226,7 +229,7 @@ M.setup_filetype = function()
   end
   api.nvim_buf_set_var(0, 'auto_pairs_pairs', buf_pairs)
   if api.nvim_buf_get_option(0, 'buftype') ~= 'prompt' then
-    imap_expr('<CR>', 'v:lua.auto_pairs.mapping_cr()')
+    imap('<CR>', '<Cmd>lua auto_pairs.mapping_cr()<CR>')
   end
   imap_expr('<BS>', 'v:lua.auto_pairs.mapping_bs()')
   imap_expr('<Space>', 'v:lua.auto_pairs.mapping_space()')
