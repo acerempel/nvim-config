@@ -68,11 +68,8 @@ return require('packer').startup(function()
     end
   }
 
-  -- Show register contents
-  use 'gennaro-tedesco/nvim-peekup'
-
   -- Nice interface for vim's tree-shaped undo
-  use 'mbbill/undotree'
+  use {  'mbbill/undotree', cmd = "UndotreeToggle" }
 
   -- }}}
 
@@ -82,9 +79,6 @@ return require('packer').startup(function()
   -- }}}
 
   -- GIT integration {{{
-
-  -- Show the commit message for the last commit affecting this line
-  use { 'rhysd/git-messenger.vim', cond = is_not_vscode }
 
   -- Show diff when writing a commit message
   use 'rhysd/committia.vim'
@@ -321,6 +315,7 @@ return require('packer').startup(function()
   use {
     'L3MON4D3/LuaSnip',
     cond = is_not_vscode,
+    event = "InsertEnter *",
     config = function ()
       local types = require('luasnip.util.types')
       _G.luasnip = require('luasnip')
