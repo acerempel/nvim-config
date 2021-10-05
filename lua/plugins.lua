@@ -388,6 +388,7 @@ return require('packer').startup(function()
 
   use {
     'hrsh7th/nvim-cmp',
+    event = "InsertEnter *",
     requires = {
       "hrsh7th/cmp-buffer",
       "saadparwaiz1/cmp_luasnip",
