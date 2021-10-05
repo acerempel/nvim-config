@@ -145,21 +145,7 @@ return require('packer').startup(function()
     'folke/trouble.nvim',
     cond = is_not_vscode,
     config = function ()
-      require("trouble").setup {
-        icons = false,
-        -- settings without a patched font or icons
-        fold_open = "⏷", -- icon used for open folds
-        fold_closed = "⏵", -- icon used for closed folds
-        indent_lines = false, -- add an indent guide below the fold icons
-        signs = {
-            -- icons / text used for a diagnostic
-            error = "error",
-            warning = "warn",
-            hint = "hint",
-            information = "info"
-        },
-        use_lsp_diagnostic_signs = false -- enabling this will use the signs defined in your lsp client
-      }
+      require("trouble").setup {}
     end
   }
 
@@ -168,9 +154,7 @@ return require('packer').startup(function()
     cmd = 'DiffviewOpen',
     cond = is_not_vscode,
     config = function ()
-      require('diffview').setup {
-        use_icons = false,
-      }
+      require('diffview').setup {}
     end
   }
 
@@ -194,14 +178,22 @@ return require('packer').startup(function()
 
   -- Pretty status line
   use {
-    'hoob3rt/lualine.nvim',
+    'NTBBloodbath/galaxyline.nvim',
+    requires = { 'yamatsum/nvim-nonicons' },
     config = function () require('statusline').setup() end
+  }
+
+  use {
+    'yamatsum/nvim-nonicons',
+    requires = {'kyazdani42/nvim-web-devicons'}
   }
 
   use {
     'nanozuki/tabby.nvim',
     config = function ()
-      require('tabby').setup()
+      require('tabby').setup {
+        tabline = require("tabby.presets").tab_with_top_win,
+      }
     end
   }
 
