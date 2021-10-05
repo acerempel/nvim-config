@@ -1,29 +1,16 @@
-_G.check_back_space = function()
-  local col = vim.fn.col('.') - 1
-  if col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') then
-    return true
-  else
-    return false
-  end
-end
+vim.cmd [[packadd packer.nvim]]
 
 _G.term = function(s)
   return vim.api.nvim_replace_termcodes(s, true, true, true)
 end
 
+_G.is_not_vscode = function() return vim.g.vscode == nil end
+
 return require('packer').startup(function()
   -- Packer itself
-  use 'wbthomason/packer.nvim'
+  use {  'wbthomason/packer.nvim', cmd = 'Packer*' }
 
   -- ENHANCEMENTS to the basic Vim experience {{{
-
-  -- Editing-oriented normal mode commands
-  use 'tpope/vim-repeat'
-  use 'tpope/vim-surround'
-  use { 'tpope/vim-commentary', cond = function() return vim.g.vscode == nil end }
-
-  -- Misc normal mode commands
-  use 'tpope/vim-unimpaired'
 
   -- Improvements to QuickFix and Location List
   use 'romainl/vim-qf'
@@ -31,14 +18,43 @@ return require('packer').startup(function()
   -- Cache lua require() calls
   use 'lewis6991/impatient.nvim'
 
-  -- Close parentheses, etc. automatically
+  use { 'tpope/vim-commentary', cond = is_not_vscode }
+  use 'andymass/vim-matchup'
 
-  -- Nice interface for vim's tree-shaped undo
-  use 'mbbill/undotree'
+  -- Fix performance issues with the CursorHold autocmd
+  use {
+    'antoinemadec/FixCursorHold.nvim',
+    run = function ()
+      vim.g.cursorhold_updatetime = 700
+    end
+  }
 
+  -- Faster folds, I guess
+  use { 'konfekt/fastfold', cond = is_not_vscode }
+  use { 'zhimsel/vim-stay', after = 'fastfold', cond = is_not_vscode }
+  use {
+    'rmagatti/auto-session', cond = is_not_vscode,
+    config = function ()
+      require('auto-session').setup {
+        auto_session_suppress_dirs = { vim.fn.expand('~') }
+      }
+    end
+  }
+
+  -- }}}
+
+  -- Editing-oriented normal mode commands {{{
+  use 'tpope/vim-repeat'
+  use 'tpope/vim-surround'
+  -- Misc normal mode commands
+  use 'tpope/vim-unimpaired'
+  -- }}}
+
+  -- Show what is otherwise hidden {{{
   -- Show available keybindings as you type
   use {
     'folke/which-key.nvim',
+    cond = is_not_vscode,
     config = function ()
       require('which-key').setup {
         layout = {
@@ -52,28 +68,23 @@ return require('packer').startup(function()
     end
   }
 
-  -- Navigation
-  use 'andymass/vim-matchup'
-  use 'rhysd/clever-f.vim'
-  use 'justinmk/vim-sneak'
-
   -- Show register contents
   use 'gennaro-tedesco/nvim-peekup'
 
-  -- Fix performance issues with the CursorHold autocmd
-  use {
-    'antoinemadec/FixCursorHold.nvim',
-    run = function ()
-      vim.g.cursorhold_updatetime = 700
-    end
-  }
+  -- Nice interface for vim's tree-shaped undo
+  use 'mbbill/undotree'
 
+  -- }}}
+
+  -- Moving around {{{
+  use 'rhysd/clever-f.vim'
+  use 'justinmk/vim-sneak'
   -- }}}
 
   -- GIT integration {{{
 
   -- Show the commit message for the last commit affecting this line
-  use { 'rhysd/git-messenger.vim', cond = function() return vim.g.vscode == nil end }
+  use { 'rhysd/git-messenger.vim', cond = is_not_vscode }
 
   -- Show diff when writing a commit message
   use 'rhysd/committia.vim'
@@ -84,7 +95,7 @@ return require('packer').startup(function()
     requires = {
       'nvim-lua/plenary.nvim'
     },
-    cond = function() return vim.g.vscode == nil end,
+    cond = is_not_vscode,
     config = function()
       require('gitsigns').setup{}
     end
@@ -96,25 +107,58 @@ return require('packer').startup(function()
 
   use {
     'nvim-telescope/telescope.nvim',
-    cond = function() return vim.g.vscode == nil end,
+    cond = is_not_vscode,
     requires = {
       'nvim-lua/popup.nvim',
       'nvim-lua/plenary.nvim',
       'nvim-telescope/telescope-fzy-native.nvim',
     },
+    after = { 'trouble.nvim' },
     config = function ()
       local telescope = require('telescope')
-      telescope.setup()
+      local actions = require('telescope.actions')
+      local trouble = require('trouble.providers.telescope')
+      telescope.setup({
+        defaults = {
+          mappings = {
+            i = {
+              ["<Esc>"] = actions.close,
+              ["<C-w>"] = trouble.open_with_trouble,
+            },
+            n = {
+              ["<C-w>"] = trouble.open_with_trouble,
+            },
+          }
+        }
+      })
       telescope.load_extension('fzy_native')
     end
   }
 
   use {
+    'ThePrimeagen/harpoon',
+    cond = is_not_vscode,
+    config = function () require('harpoon').setup {} end,
+  }
+
+  use {
     'folke/trouble.nvim',
-    cond = function() return vim.g.vscode == nil end,
+    cond = is_not_vscode,
     config = function ()
       require("trouble").setup {
-        icons = false
+        icons = false,
+        -- settings without a patched font or icons
+        fold_open = "⏷", -- icon used for open folds
+        fold_closed = "⏵", -- icon used for closed folds
+        indent_lines = false, -- add an indent guide below the fold icons
+        signs = {
+            -- icons / text used for a diagnostic
+            error = "error",
+            warning = "warn",
+            hint = "hint",
+            information = "info"
+        },
+        use_lsp_diagnostic_signs = false -- enabling this will use the signs defined in your lsp client
       }
     end
   }
@@ -122,7 +166,7 @@ return require('packer').startup(function()
   use {
     'sindrets/diffview.nvim',
     cmd = 'DiffviewOpen',
-    cond = function() return vim.g.vscode == nil end,
+    cond = is_not_vscode,
     config = function ()
       require('diffview').setup {
         use_icons = false,
@@ -133,14 +177,11 @@ return require('packer').startup(function()
   -- Fancy startup screen with sessions and mru etc.
   use {
     'mhinz/vim-startify',
-    cond = function() return vim.g.vscode == nil end,
+    cond = is_not_vscode,
     setup = function ()
       vim.g.startify_custom_header_quotes = require('quotes')
     end
   }
-
-  -- Faster folds, I guess
-  use 'konfekt/fastfold'
 
   -- .editorconfig support
   use 'editorconfig/editorconfig-vim'
@@ -154,14 +195,14 @@ return require('packer').startup(function()
   -- Pretty status line
   use {
     'hoob3rt/lualine.nvim',
-    config = function ()
-      require('statusline').setup()
-    end
+    config = function () require('statusline').setup() end
   }
 
   use {
-    'ThePrimeagen/harpoon',
-    config = function () require('harpoon').setup {} end,
+    'nanozuki/tabby.nvim',
+    config = function ()
+      require('tabby').setup()
+    end
   }
 
   -- Colour schemes
@@ -172,14 +213,14 @@ return require('packer').startup(function()
 
   -- }}}
 
+  -- LANGUAGE support {{{
+
+  -- Syntax knowledge, incl. tree-sitter {{{
+
   use {
     'vimwiki/vimwiki',
     opt = true
   }
-
-  -- LANGUAGE support {{{
-
-  -- Syntax knowledge, incl. tree-sitter {{{
 
   -- Syntax highlighting and suchlike
   use 'neovimhaskell/haskell-vim'
@@ -196,10 +237,8 @@ return require('packer').startup(function()
   use {
     'nvim-treesitter/nvim-treesitter',
     requires = { 'nvim-treesitter/nvim-treesitter-textobjects' },
-    cond = function() return vim.g.vscode == nil end,
-    run = function ()
-      vim.cmd 'TSUpdate'
-    end,
+    cond = is_not_vscode,
+    run = function () vim.cmd 'TSUpdate' end,
     config = function ()
       require('nvim-treesitter.configs').setup {
         highlight = { enable = true },
@@ -227,6 +266,26 @@ return require('packer').startup(function()
               ab = "@block.outer",
             }
           },
+          move = {
+            enable = true,
+            set_jump = true,
+            goto_next_start = {
+              ["]m"] = "@function.outer",
+              ["]]"] = "@class.outer",
+            },
+            goto_next_end = {
+              ["]M"] = "@function.outer",
+              ["]["] = "@class.outer",
+            },
+            goto_previous_start = {
+              ["[m"] = "@function.outer",
+              ["[["] = "@class.outer",
+            },
+            goto_previous_end = {
+              ["[M"] = "@function.outer",
+              ["[]"] = "@class.outer",
+            },
+          }
         },
         lsp_interop = {
           enable = true,
@@ -269,6 +328,7 @@ return require('packer').startup(function()
 
   use {
     'L3MON4D3/LuaSnip',
+    cond = is_not_vscode,
     config = function ()
       local types = require('luasnip.util.types')
       _G.luasnip = require('luasnip')
@@ -378,7 +438,7 @@ return require('packer').startup(function()
   use {
     'neoclide/coc.nvim',
     branch = 'release',
-    cond = function () return vim.g.vscode == nil end,
+    cond = is_not_vscode,
   }
 
   -- }}}

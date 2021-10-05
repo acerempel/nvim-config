@@ -1,6 +1,8 @@
 {
-  "suggest.autoTrigger": "none",
+  "suggest.autoTrigger": "trigger",
   "diagnostic.virtualText": true,
+  "diagnostic.virtualTextCurrentLineOnly": false,
+  "diagnostic.virtualTextPrefix": " ■ ",
   "git.branchCharacter": "⌥",
   "typescript.preferences.quoteStyle": "double",
   "javascript.preferences.quoteStyle": "double",
@@ -44,7 +46,6 @@
     "vue"
   ],
   "tailwindCSS.headwind.runOnSave": false,
-  "hover.floatConfig": { "border": true },
   "eslint.packageManager": "pnpm",
   "suggest.enablePreselect": true,
   "suggest.numberSelect": false,
@@ -57,6 +58,7 @@
   "coc.preferences.extensionUpdateCheck": "weekly",
   "list.source.files.args": ["--hidden", "--no-require-git", "--iglob=!.git/", "--files"],
   "codeLens.enable": true,
+  "Lua.diagnostics.globals": ["vim"],
   "languageserver": {
     "haskell": {
       "command": "haskell-language-server-wrapper",

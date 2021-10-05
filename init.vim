@@ -59,6 +59,8 @@ set lazyredraw
 set undofile undodir=~/.local/share/nvim/undo
 set noswapfile nobackup nowritebackup
 set history=10000
+set viewoptions=cursor,folds,slash,unix
+set sessionoptions=blank,buffers,curdir,help,resize,tabpages,terminal,winpos,winsize,slash,unix
 
 set shortmess=fnxoOtTc
 set signcolumn=yes
@@ -68,7 +70,8 @@ set wildmode=longest:full,full
 set wildignore=*.o,*.hi,*/.git/*,*/dist-newstyle/*,*/.stack-work/*,*/node_modules/*,*/elm-stuff/*
 
 " Remember info about open buffers on close -------------- "
-set shada^=% hidden
+set shada^=%
+set hidden
 
 set exrc secure
 
@@ -101,33 +104,20 @@ highlight FloatBorder guibg=#e4d8ca
 
 " AUTOCOMMANDS {{{
 
+augroup restore
+autocmd!
 " Return to last edit position when opening files -------- "
-autocmd BufReadPost *
-     \ if line("'\"") > 0 && line("'\"") <= line("$") |
-     \   exe "normal! g`\"" |
-     \ endif
-
-" If we are running inside VS Code
-if exists('g:vscode')
-  " Use VS Code's comment support
-  xmap gc  <Plug>VSCodeCommentary
-  nmap gc  <Plug>VSCodeCommentary
-  omap gc  <Plug>VSCodeCommentary
-  nmap gcc <Plug>VSCodeCommentaryLine
-  
-  lua require('plugins')
-  finish
-endif
-
-augroup packer
-  autocmd!
-  " Automatically enable changes to plugin configuration
-  autocmd BufWritePost plugins.lua PackerCompile
+" autocmd BufReadPost *
+"      \ if line("'\"") > 0 && line("'\"") <= line("$") |
+"      \   exe "normal! g`\"" |
+"      \ endif
 augroup END
 
-augroup terminal
-  au!
-  au TermOpen * tnoremap <buffer> <Esc> <c-\><c-n>
+augroup reload
+  autocmd!
+  " Automatically enable changes to plugin configuration
+  autocmd BufWritePost plugins.lua source <afile> | PackerCompile
+  autocmd BufWritePost $MYVIMRC source $MYVIMRC
 augroup END
 
 augroup YankHighlight
@@ -135,40 +125,7 @@ augroup YankHighlight
   autocmd TextYankPost * silent! lua vim.highlight.on_yank()
 augroup END
 
-augroup filetypes
-  autocmd!
-  autocmd FileType html,vimwiki setlocal shiftwidth=2 tabstop=2 softtabstop=2
-  autocmd FileType prose,vimwiki     setlocal nonumber fo+=t tw=72
-  autocmd FileType markdown setlocal nospell
-  autocmd FileType prose setlocal spell
-  autocmd FileType gitcommit      setlocal textwidth=67
-  autocmd FileType qf     setlocal wrap linebreak
-  autocmd FileType table setlocal tabstop=28 noexpandtab nolist
-  autocmd FileType cabal au BufWritePre <buffer=abuf> %!cabal-fmt | norm g'.
-  autocmd BufReadPost,BufNew *.wiki ++once packadd vimwiki
-augroup END
-
-function! SetTreeSitterFolding() abort
-  setlocal foldenable
-  setlocal foldmethod=expr
-  setlocal foldexpr=nvim_treesitter#foldexpr()
-endfunction
-
-augroup treesitter
-  au!
-  au FileType rust,javascript,typescript,javascriptreact,typescriptreact,lua,nix,php,html,css,scss,sass,vim call SetTreeSitterFolding()
-augroup END
-
 " }}}
-
-lua << ENDLUA
-  require('plugins')
-  if vim.g.vscode == nil then
-    require('mappings')
-    require('snippets')
-    require('pairs')
-  end
-ENDLUA
 
 " MAPPINGS {{{
 
@@ -181,62 +138,23 @@ noremap <silent> <Space> <Nop>
 " }}}
 
 " Moving around {{{
-noremap <C-J> <C-W>j
-noremap <C-K> <C-W>k
-noremap <C-H> <C-W>h
-noremap <C-L> <C-W>l
-
-noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
-noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
-
-nnoremap ; <Cmd>call luaeval("require'harpoon.ui'.nav_file(_A)", v:count1)<CR>
-nnoremap <Leader>bb <Cmd>call luaeval("require'harpoon.ui'.nav_file(_A)", v:count1)<CR>
-nnoremap <Leader>ba <Cmd>lua require'harpoon.mark'.add_file()<CR>
-nnoremap <Leader>be <Cmd>lua require'harpoon.ui'.toggle_quick_menu()<CR>
-
-nnoremap <silent> U <Cmd>UndotreeToggle<CR>
+noremap <C-j> <C-W>j
+noremap <C-k> <C-W>k
+noremap <C-h> <C-W>h
+noremap <C-l> <C-W>l
+noremap ` <C-W>w
+noremap ~ <C-W>W
 
 noremap Q @@
 noremap Z "_d
 noremap ZZ "_dd
 
-" imap <C-j> <Down>
-" imap <C-k> <Up>
-" imap <C-h> <Left>
-" imap <C-l> <Right>
+noremap gb go
 
 " Make Y editor command consistent with D, C, etc.
 noremap Y y$
-" }}}
 
-nnoremap <silent> [t :tabprevious<CR>
-nnoremap <silent> ]t :tabnext<CR>
-noremap <silent> <D-t> :tabnew<CR>
-nnoremap <silent> <Leader>td <Cmd>tcd %:h<CR>
-nnoremap <silent> <Leader>tn <Cmd>tabnew<CR>
-nnoremap <silent> <Leader>tc <Cmd>tabclose<CR>
-
-" }}}
-
-" Pandoc {{{
-augroup pandoc
-  au!
-  au FileType pandoc call PandocMappings()
-augroup END
-
-function! PandocMappings()
-  " TODO which-key these
-  nmap <buffer> <Leader>nn <Plug>AddVimFootnote
-  nmap <buffer> <Leader>ne <Plug>EditVimFootnote
-  nmap <buffer> <Leader>nr <Plug>ReturnFromFootnote
-  imap <buffer> <C-f> <Plug>AddVimFootnote
-endfunction
-" }}}
-
-" Telescope {{{
-cmap <C-R> <Plug>(TelescopeFuzzyCommandSearch)
-nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<cr>
-nnoremap <leader>fs <cmd>lua require('telescope.builtin').grep_string()<cr>
+noremap ' `
 " }}}
 
 " }}}
@@ -263,10 +181,139 @@ let php_html_in_heredoc=0
 let php_html_in_nowdoc=0
 " }}}
 
+" If attached to VS Code {{{
+if exists('g:vscode')
+  " Use VS Code's comment support
+  xmap gc  <Plug>VSCodeCommentary
+  nmap gc  <Plug>VSCodeCommentary
+  omap gc  <Plug>VSCodeCommentary
+  nmap gcc <Plug>VSCodeCommentaryLine
+
+  nnoremap <silent> za <Cmd>call VSCodeNotify('editor.toggleFold')<CR>
+  nnoremap <silent> zR <Cmd>call VSCodeNotify('editor.unfoldAll')<CR>
+  nnoremap <silent> zM <Cmd>call VSCodeNotify('editor.foldAll')<CR>
+  nnoremap <silent> zo <Cmd>call VSCodeNotify('editor.unfold')<CR>
+  nnoremap <silent> zO <Cmd>call VSCodeNotify('editor.unfoldRecursively')<CR>
+  nnoremap <silent> zc <Cmd>call VSCodeNotify('editor.fold')<CR>
+  nnoremap <silent> zC <Cmd>call VSCodeNotify('editor.foldRecursively')<CR>
+
+  nnoremap <silent> z1 <Cmd>call VSCodeNotify('editor.foldLevel1')<CR>
+  nnoremap <silent> z2 <Cmd>call VSCodeNotify('editor.foldLevel2')<CR>
+  nnoremap <silent> z3 <Cmd>call VSCodeNotify('editor.foldLevel3')<CR>
+  nnoremap <silent> z4 <Cmd>call VSCodeNotify('editor.foldLevel4')<CR>
+  nnoremap <silent> z5 <Cmd>call VSCodeNotify('editor.foldLevel5')<CR>
+  nnoremap <silent> z6 <Cmd>call VSCodeNotify('editor.foldLevel6')<CR>
+  nnoremap <silent> z7 <Cmd>call VSCodeNotify('editor.foldLevel7')<CR>
+
+  xnoremap <silent> zV <Cmd>call VSCodeNotify('editor.foldAllExcept')<CR>
+
+  nnoremap gD <Cmd>call VSCodeNotify('editor.action.revealDeclaration')<CR>
+  xnoremap gD <Cmd>call VSCodeNotify('editor.action.revealDeclaration')<CR>
+  nnoremap g] <Cmd>call VSCodeNotify('editor.action.referenceSearch.trigger')<CR>
+  xnoremap g] <Cmd>call VSCodeNotify('editor.action.referenceSearch.trigger')<CR>
+  nnoremap g} <Cmd>call VSCodeNotify('editor.action.goToReferences')<CR>
+  xnoremap g} <Cmd>call VSCodeNotify('editor.action.goToReferences')<CR>
+  nnoremap gO <Cmd>call VSCodeNotify('workbench.action.showAllSymbols')<CR>
+  nnoremap go <Cmd>call VSCodeNotify('workbench.action.gotoSymbol')<CR>
+  
+  " VSCode doesn't have commands for these apparently.
+  noremap zv <Nop>
+  noremap zr <Nop>
+  noremap zm <Nop>
+  
+  noremap ]d <Cmd>call VSCodeNotify('editor.action.marker.nextInFiles')<CR>
+  noremap [d <Cmd>call VSCodeNotify('editor.action.marker.prevInFiles')<CR>
+  
+  nnoremap gh <Cmd>call VSCodeNotify('editor.action.changeAll')<CR>
+  xnoremap gh <Cmd>call VSCodeNotifyVisual('editor.action.selectHighlights', v:false)<CR>
+  
+  " Allow remapping, since gj and gk are mapped to VSCode commands.
+  map <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
+  map <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
+  
+  " Matchparen does funny things inside VSCode – problem with its InsertLeave autocmd.
+  let g:matchup_matchparen_enabled = 0
+
+  finish
+endif
+" }}}
+
+" MAPPINGS (non-VSCode only) {{{
+
+nnoremap <silent> <Leader>td <Cmd>tcd %:h<CR>
+nnoremap <silent> <Leader>tn <Cmd>tabnew<CR>
+nnoremap <silent> <Leader>tc <Cmd>tabclose<CR>
+
+nnoremap ; <Cmd>call luaeval("require'harpoon.ui'.nav_file(_A)", v:count1)<CR>
+nnoremap <Leader>bb <Cmd>call luaeval("require'harpoon.ui'.nav_file(_A)", v:count1)<CR>
+nnoremap <Leader>ba <Cmd>lua require'harpoon.mark'.add_file()<CR>
+nnoremap <Leader>be <Cmd>lua require'harpoon.ui'.toggle_quick_menu()<CR>
+
+nnoremap <silent> U <Cmd>UndotreeToggle<CR>
+
+noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
+noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
+
+" }}}
+
+" AUTOCOMMANDS (non-VSCode only) {{{
+
+augroup terminal
+  au!
+  au TermOpen * tnoremap <buffer> <Esc> <c-\><c-n>
+augroup END
+
+augroup filetypes
+  autocmd!
+  autocmd FileType prose     setlocal nonumber fo+=t tw=72
+  autocmd FileType prose setlocal spell
+  autocmd FileType qf     setlocal wrap linebreak
+  autocmd FileType table setlocal tabstop=28 noexpandtab nolist
+  autocmd BufReadPost,BufNew *.wiki ++once packadd vimwiki
+augroup END
+
+function! SetTreeSitterFolding() abort
+  setlocal foldenable
+  setlocal foldmethod=expr
+  setlocal foldexpr=nvim_treesitter#foldexpr()
+endfunction
+
+augroup treesitter
+  au!
+  au FileType rust,javascript,typescript,javascriptreact,typescriptreact,lua,nix,php,html,css,scss,sass,vim call SetTreeSitterFolding()
+augroup END
+
+" }}}
+
+lua << ENDLUA
+  if vim.g.vscode == nil then
+    require('mappings')
+    require('snippets')
+    require('pairs')
+  end
+ENDLUA
+
+" Telescope {{{
+cmap <C-R> <Plug>(TelescopeFuzzyCommandSearch)
+nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<cr>
+nnoremap <leader>fs <cmd>lua require('telescope.builtin').grep_string()<cr>
+" }}}
+
+" }}}
+
 " COC mappings {{{
 lua << ENDLUA
 function keys(ks)
   vim.api.nvim_feedkeys(ks, 'n', true)
+end
+
+_G.check_back_space = function()
+  local col = vim.fn.col('.') - 1
+  if col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') then
+    return true
+  else
+    return false
+  end
 end
 
 _G.coc_tab = function ()
@@ -282,9 +329,13 @@ end
 _G.coc_map_config = {
   { 'K', 'doHover', 'Show documentation' },
   { 'gd', 'jumpDefinition', 'Go to definition' },
+  { 'go', '<Cmd>CocList symbols', 'Search workspace symbols' },
+  { 'gO', 'showOutline', 'Show document outline' },
   { '<Leader>kd', 'definitionHover', 'Show definition' },
   { 'gt', 'jumpTypeDefinition', 'Go to type definition' },
   { 'gD', 'jumpDeclaration', 'Go to declaration' },
+  { 'g]', '<Cmd>CocList references', 'Search references' },
+  { 'g}', 'jumpReferences', 'Go to references' },
   { '<Leader>kr', 'rename', 'Rename' },
   { '<Leader>kR', 'refactor', 'Refactor' },
   { '<Leader>dk', 'diagnosticInfo', 'Expand diagnostic under cursor' },
@@ -311,7 +362,12 @@ _G.coc_buf_maps = function (bufnr)
   local whichkey = require('which-key')
   local mappings = {}
   for _, map in ipairs(coc_map_config) do
-    local command = '<Cmd>call CocActionAsync("' .. map[2] .. '")<CR>'
+    local command = ''
+    if vim.startswith(map[2], '<Cmd>') then
+      command = map[2] .. '<CR>'
+    else
+      command = '<Cmd>call CocActionAsync("' .. map[2] .. '")<CR>'
+    end
     mappings[map[1]] = { command, map[3] }
   end
   whichkey.register(mappings, { buffer = bufnr })

@@ -27,9 +27,9 @@ local on_attach = function(client, bufnr)
         "<Cmd>lua vim.lsp.buf.hover()<CR>",
         "Show documentation for symbol"
       },
-      ["gO"] = {
+      ["go"] = {
         "<Cmd>lua require'telescope.builtin'.lsp_document_symbols()<CR>",
-        "Show document outline"
+        "Search document symbols"
       },
       ["gW"] = {
         "<Cmd>lua require'telescope.builtin'.lsp_workspace_symbols()<CR>",
@@ -51,13 +51,21 @@ local on_attach = function(client, bufnr)
         "<Cmd>lua require'telescope.builtin'.lsp_code_actions()<CR>",
         "Show available code actions"
       },
-      ["<Leader>kh"] = {
+      ["gh"] = {
         "<Cmd>lua vim.lsp.buf.document_highlight()<CR>",
         "Highlight occurrences"
       },
       ["gt"] = {
+        "<Cmd>lua vim.lsp.buf.type_definition()<CR>",
+        "Go to type definition"
+      },
+      ["g}"] = {
         "<Cmd>Trouble lsp_references<CR>",
-        "Show references"
+        "Show references to symbol"
+      },
+      ["g]"] = {
+        "<Cmd>lua require'telescope.builtin'.lsp_references<CR>",
+        "Search references to symbol"
       }
     },
     { buffer = bufnr }
@@ -72,11 +80,10 @@ local basic_lsp_config = {
   capabilities = capabilities,
 }
 
-
 local servers = {
-  "rust_analyzer", "tsserver", "hls",
-  "elmls", "intelephense", "html",
-  "cssls", "jsonls", "tailwindcss",
+  "rust_analyzer", "tsserver", "hls", "elmls",
+  "intelephense", "html", "cssls", "jsonls",
+  "tailwindcss",
 }
 
 for _, server in ipairs(servers) do

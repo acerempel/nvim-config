@@ -76,6 +76,30 @@ local stylesheet = snippet(
   }
 )
 
+local description = snippet(
+  {
+    trig = "description",
+    name = '<meta name="description" …>',
+  },
+  { text('<meta name="description" content="'), insert(1), text('">') }
+)
+
+local doctype = snippet(
+  { trig = "doctype", name = "<!DOCTYPE html>" },
+  { text({ '<!DOCTYPE html>', '' }) }
+)
+
+local html = snippet(
+  { trig = "html", name = "HTML document skeleton" },
+  {
+    text({ '<!DOCTYPE html>', '<html lang="' }), insert(1, 'en'),
+    text({ '">', '\t<head>', '\t\t<meta charset="utf-8">',
+      '\t\t<meta name="viewport" content="width=device-width, initial-scale=1">',
+      '\t\t<title>' }), insert(2, 'Good evening!'), text({ '</title>', '\t</head>',
+      '\t<body>', '\t\t' }), insert(3), text({ '\t</body>', '</html>' })
+  }
+)
+
 local php = snippet(
   { trig = '<?', name = "<?php … ?>", wordTrig = false },
   {
@@ -141,14 +165,25 @@ local js_for_of = snippet(
   }
 )
 
+local js_if = snippet(
+  { trig = "if", name = "if (…) {…}" },
+  { text('if ('), insert(1), text({ ') {', '\t' }), insert(2), text({ '', '}', '' }) }
+)
+
+local js_if_else = snippet(
+  { trig = "if-else", name = "if (…) {…} else {…}" },
+  { text('if ('), insert(1), text({ ') {', '\t' }), insert(2),
+    text({ '', '} else {', '\t' }), insert(3),
+    text({ '', '}', '' }) }
+)
+
 luasnip.snippets = {
   html = {
     tagpair,
     input, anchor,
+    description, doctype, html,
   },
   php = {
-    tagpair,
-    input, anchor,
     php, php_if,
   },
   xml = {
@@ -159,11 +194,15 @@ luasnip.snippets = {
     lua_if, lua_if_else,
   },
   javascript = {
-    js_for_of,
+    js_for_of, js_if, js_if_else,
   },
   typescript = {},
 }
 
 for _, snip in ipairs(luasnip.snippets.javascript) do
   table.insert(luasnip.snippets.typescript, snip)
+end
+
+for _, snip in ipairs(luasnip.snippets.html) do
+  table.insert(luasnip.snippets.php, snip)
 end
