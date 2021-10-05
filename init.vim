@@ -290,6 +290,7 @@ lua << ENDLUA
     require('mappings')
     require('snippets')
     require('pairs')
+    require('lsp')
   end
 ENDLUA
 

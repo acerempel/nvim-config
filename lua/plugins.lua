@@ -174,7 +174,7 @@ return require('packer').startup(function()
   use {
     'NTBBloodbath/galaxyline.nvim',
     requires = { 'yamatsum/nvim-nonicons' },
-    config = function () require('statusline').setup() end
+    config = function () require('statusline') end
   }
 
   use {
@@ -308,6 +308,10 @@ return require('packer').startup(function()
 
   -- Semantic knowledge, incl. LSP {{{
 
+  use 'nvim-lua/lsp-status.nvim'
+  use 'neovim/nvim-lspconfig'
+  use 'ray-x/lsp_signature.nvim'
+
   -- }}}
 
   -- Keystroke-saving, incl. completion {{{
@@ -364,7 +368,6 @@ return require('packer').startup(function()
 
   use {
     'hrsh7th/nvim-cmp',
-    disable = true,
     requires = {
       "hrsh7th/cmp-buffer",
       "saadparwaiz1/cmp_luasnip",
@@ -425,7 +428,7 @@ return require('packer').startup(function()
   use {
     'neoclide/coc.nvim',
     branch = 'release',
-    cond = is_not_vscode,
+    opt = true,
   }
 
   -- }}}
