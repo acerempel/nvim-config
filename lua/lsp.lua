@@ -1,7 +1,6 @@
 local lspconfig = require('lspconfig')
 local util = require('lspconfig.util')
 
-local lsp_signature = require('lsp_signature')
 local lsp_signature_config = {
   bind = true,
   doc_lines = 5,
@@ -12,14 +11,19 @@ local lsp_signature_config = {
 
 vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
   vim.lsp.handlers.hover,
-  { max_width = 80, border = 'single', }
+  { max_width = 72, border = 'single', }
 )
 
 local on_attach = function(client, bufnr)
-  lsp_signature.on_attach(lsp_signature_config)
-  vim.api.nvim_command [[
-    au CursorMoved <buffer> lua vim.lsp.buf.clear_references()
-  ]]
+  require('plugins').loader("lsp_signature.nvim symbols-outline.nvim")
+  require('lsp_signature').on_attach(lsp_signature_config)
+  vim.cmd(string.format([[
+    augroup lsp_buf
+    au!
+    au CursorMoved <buffer=%d> lua vim.lsp.buf.clear_references()
+    au InsertLeave,BufEnter,BufWritePost <buffer=%d> lua require('symbols-outline')._refresh()
+    augroup END
+  ]], bufnr, bufnr))
   local whichkey = require('which-key')
   whichkey.register(
     {
@@ -32,7 +36,7 @@ local on_attach = function(client, bufnr)
         "Search document symbols"
       },
       ["gO"] = {
-        "<Cmd>SymbolsOutline<CR>",
+        "<Cmd>lua require'symbols-outline'.toggle_outline()<CR>",
         "Show document outline"
       },
       ["gW"] = {
@@ -91,5 +95,9 @@ local servers = {
 }
 
 for _, server in ipairs(servers) do
+  local config = basic_lsp_config
+  if server == "intelephense" and vim.g.is_wordpress_project then
+    config.settings = { intelephense = { stubs = { "wordpress", "standard", "pcre", "http", "json", "mysql", "mysqli", "pdo_mysql" } } }
+  end
   lspconfig[server].setup(basic_lsp_config)
 end

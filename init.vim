@@ -12,10 +12,6 @@ if &shell =~# 'fish$'
     set shell=sh
 endif
 
-" ~~~~~~~~~~~~~~
-" ~~ SETTINGS ~~
-" ~~~~~~~~~~~~~~
-
 set mouse=a
 
 set incsearch inccommand=nosplit nohlsearch
@@ -60,7 +56,7 @@ set undofile undodir=~/.local/share/nvim/undo
 set noswapfile nobackup nowritebackup
 set history=10000
 set viewoptions=cursor,folds,slash,unix
-set sessionoptions=blank,buffers,curdir,help,resize,tabpages,terminal,winpos,winsize,slash,unix
+set sessionoptions=blank,buffers,curdir,resize,tabpages,terminal,winpos,winsize,slash,unix
 
 set shortmess=fnxoOtTc
 set signcolumn=yes
@@ -86,20 +82,15 @@ command! -nargs=+ Find execute 'silent grep! <args>'
 
 " COLOURS {{{
 set termguicolors
-let g:gruvbox_bold = 1
-let g:gruvbox_plugin_hi_groups = 1
-let g:gruvbox_filetype_hi_groups = 1
 set background=light
 
 hi default link LspReferenceText Folded
 hi default link LspReferenceRead StatusLine
 hi default link LspReferenceWrite Search
 
-colorscheme gruvbox8_hard
-
 highlight! link Conceal Normal
-highlight NormalFloat guibg=#e4d8ca
-highlight FloatBorder guibg=#e4d8ca
+" highlight NormalFloat guibg=#e4d8ca
+" highlight FloatBorder guibg=#e4d8ca
 " }}}
 
 " AUTOCOMMANDS {{{
@@ -118,14 +109,25 @@ augroup END
 
 " }}}
 
+" Packer lazy-loading {{{
+" let s:packer_commands = ["Install", "Status", "Sync", "Update", "Load", "Compile", "Profile"]
+" for command in s:packer_commands
+"   exe "command! -nargs=* Packer" .. command "exe \"lua require('packer').init()\" | Packer" .. command
+" endfor
+command! -nargs=* -complete=customlist,v:lua.require'packer'.plugin_complete PackerInstall lua require('plugins').install(<f-args>)
+command! -nargs=* -complete=customlist,v:lua.require'packer'.plugin_complete PackerUpdate lua require('plugins').update(<f-args>)
+command! -nargs=* -complete=customlist,v:lua.require'packer'.plugin_complete PackerSync lua require('plugins').sync(<f-args>)
+command! PackerClean lua require('plugins').clean()
+command! PackerCompile lua require('plugins').compile()
+command! -nargs=+ -complete=customlist,v:lua.require'packer'.loader_complete PackerLoad | lua require('plugins').loader(<q-args>)
+" }}}
+
 " MAPPINGS {{{
 
 " Leaders {{{
 let mapleader = " "
 let g:mapleader = " "
 let maplocalleader = ","
-
-noremap <silent> <Space> <Nop>
 " }}}
 
 " Moving around {{{
@@ -146,6 +148,7 @@ noremap gb go
 noremap Y y$
 
 noremap ' `
+inoremap <C-l> <Esc>
 " }}}
 
 " }}}
@@ -286,8 +289,6 @@ lua << ENDLUA
       return false
     end
   end
-
-  require('pairs')
 ENDLUA
 " }}}
 

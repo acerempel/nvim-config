@@ -1,4 +1,4 @@
-vim.cmd [[packadd packer.nvim]]
+local packer = require('packer')
 
 _G.term = function(s)
   return vim.api.nvim_replace_termcodes(s, true, true, true)
@@ -6,32 +6,58 @@ end
 
 _G.is_not_vscode = function() return vim.g.vscode == nil end
 
-return require('packer').startup(function()
+packer.init {
+  disable_commands = true,
+  log = { level = 'info' },
+}
+
+local use = packer.use
   -- Packer itself
-  use {  'wbthomason/packer.nvim', cmd = 'Packer*' }
+  use {  'wbthomason/packer.nvim' }
 
   -- ENHANCEMENTS to the basic Vim experience {{{
 
   -- Improvements to QuickFix and Location List
-  use 'romainl/vim-qf'
+  use { 'romainl/vim-qf', disable = true }
+  use 'kevinhwang91/nvim-bqf'
+  use { 'Olical/vim-enmasse', cmd = "EnMasse" }
 
   -- Cache lua require() calls
   use 'lewis6991/impatient.nvim'
 
-  use { 'tpope/vim-commentary', cond = is_not_vscode }
+  use {
+    'numToStr/Comment.nvim',
+    cond = is_not_vscode,
+    config = function()
+      require('Comment').setup {
+        mappings = { basic = true, extended = true },
+        toggler = { line = 'gcc', block = 'gCC' },
+        opleader = { line = 'gc', block = 'gC' },
+        pre_hook = function ()
+          require('ts_context_commentstring.internal').update_commentstring()
+        end,
+      }
+    end
+  }
+
+  use {
+    'JoosepAlviste/nvim-ts-context-commentstring',
+    requires = { 'nvim-treesitter/nvim-treesitter' },
+  }
+
   use 'andymass/vim-matchup'
 
   -- Fix performance issues with the CursorHold autocmd
   use {
     'antoinemadec/FixCursorHold.nvim',
-    run = function ()
+    setup = function ()
       vim.g.cursorhold_updatetime = 700
     end
   }
 
   -- Faster folds, I guess
   use { 'konfekt/fastfold', cond = is_not_vscode }
-  use { 'zhimsel/vim-stay', after = 'fastfold', cond = is_not_vscode }
+  use { 'zhimsel/vim-stay', after = { 'fastfold', 'auto-session' } }
   use {
     'rmagatti/auto-session', cond = is_not_vscode,
     config = function ()
@@ -47,7 +73,7 @@ return require('packer').startup(function()
   use 'tpope/vim-repeat'
   use 'tpope/vim-surround'
   -- Misc normal mode commands
-  use 'tpope/vim-unimpaired'
+  use { 'tpope/vim-unimpaired', opt = true }
   -- }}}
 
   -- Show what is otherwise hidden {{{
@@ -60,14 +86,20 @@ return require('packer').startup(function()
         layout = {
           height = { min = 4, max = 20 }
         },
+        plugins = {
+          registers = false,
+        },
         operators = {
-          gc = "Comment",
+          gc = "Comment: toggle (line)",
+          gC = "Comment: toggle (block)",
           Z = "Delete without register",
         },
       }
       require('mappings')
     end
   }
+
+  use 'tversteeg/registers.nvim'
 
   -- Nice interface for vim's tree-shaped undo
   use {  'mbbill/undotree', cmd = "UndotreeToggle" }
@@ -102,26 +134,20 @@ return require('packer').startup(function()
 
   use {
     'nvim-telescope/telescope.nvim',
-    cond = is_not_vscode,
+    module = 'telescope',
     requires = {
       'nvim-lua/popup.nvim',
       'nvim-lua/plenary.nvim',
       'nvim-telescope/telescope-fzy-native.nvim',
     },
-    after = { 'trouble.nvim', 'nvim-nonicons' },
     config = function ()
       local telescope = require('telescope')
       local actions = require('telescope.actions')
-      local trouble = require('trouble.providers.telescope')
       telescope.setup({
         defaults = {
           mappings = {
             i = {
               ["<Esc>"] = actions.close,
-              ["<C-w>"] = trouble.open_with_trouble,
-            },
-            n = {
-              ["<C-w>"] = trouble.open_with_trouble,
             },
           }
         }
@@ -138,8 +164,7 @@ return require('packer').startup(function()
 
   use {
     'folke/trouble.nvim',
-    cond = is_not_vscode,
-    after = { 'nvim-nonicons' },
+    cmd = "Trouble*",
     config = function ()
       require("trouble").setup {}
     end
@@ -148,7 +173,6 @@ return require('packer').startup(function()
   use {
     'sindrets/diffview.nvim',
     cmd = 'DiffviewOpen',
-    cond = is_not_vscode,
     config = function ()
       require('diffview').setup {}
     end
@@ -164,7 +188,7 @@ return require('packer').startup(function()
   }
 
   -- .editorconfig support
-  use 'editorconfig/editorconfig-vim'
+  use { 'editorconfig/editorconfig-vim', opt = true }
 
   use 'chrisbra/unicode.vim'
 
@@ -176,13 +200,20 @@ return require('packer').startup(function()
   use {
     'NTBBloodbath/galaxyline.nvim',
     requires = { 'yamatsum/nvim-nonicons' },
-    after = { 'nvim-nonicons', 'lsp-status.nvim', 'harpoon' },
-    config = function () require('statusline') end
+    after = { 'zenbones.nvim', 'nvim-gps' },
+    config = function () require('statusline') end,
+  }
+
+  use {
+    'SmiteshP/nvim-gps',
+    after = { 'nvim-nonicons' },
+    config = function () require('nvim-gps').setup() end,
   }
 
   use {
     'yamatsum/nvim-nonicons',
     cond = is_not_vscode,
+    after = { 'nvim-web-devicons' },
     requires = {'kyazdani42/nvim-web-devicons'}
   }
 
@@ -201,6 +232,17 @@ return require('packer').startup(function()
   use 'bluz71/vim-nightfly-guicolors'
   use 'ishan9299/nvim-solarized-lua'
   use 'folke/tokyonight.nvim'
+  use {
+    'mcchrish/zenbones.nvim',
+    requires = { 'rktjmp/lush.nvim' },
+    setup = function ()
+      vim.g.zenbones_lightness = 'bright'
+      vim.g.zenbones_dim_noncurrent_window = true
+    end,
+    config = function ()
+      vim.cmd [[colorscheme zenbones-lush]]
+    end,
+  }
 
   -- }}}
 
@@ -227,87 +269,20 @@ return require('packer').startup(function()
   -- Tree-sitter language grammars
   use {
     'nvim-treesitter/nvim-treesitter',
-    requires = { 'nvim-treesitter/nvim-treesitter-textobjects' },
     cond = is_not_vscode,
     run = function () vim.cmd 'TSUpdate' end,
     config = function ()
-      require('nvim-treesitter.configs').setup {
-        highlight = { enable = true },
-        incremental_selection = {
-          enable = true,
-          keymaps = {
-            init_selection = "gs",
-            node_incremental = "gn",
-            scope_incremental = "go",
-            node_decremental = "gN",
-          },
-        },
-        textobjects = {
-          select = {
-            enable = true,
-            keymaps = {
-              af = "@function.outer",
-              ['if'] = "@function.inner",
-              ic = "@call.inner",
-              ac = "@call.outer",
-              iC = "@class.inner",
-              aC = "@class.outer",
-              iP = "@parameter.inner",
-              ib = "@block.inner",
-              ab = "@block.outer",
-            }
-          },
-          move = {
-            enable = true,
-            set_jump = true,
-            goto_next_start = {
-              ["]m"] = "@function.outer",
-              ["]]"] = "@class.outer",
-            },
-            goto_next_end = {
-              ["]M"] = "@function.outer",
-              ["]["] = "@class.outer",
-            },
-            goto_previous_start = {
-              ["[m"] = "@function.outer",
-              ["[["] = "@class.outer",
-            },
-            goto_previous_end = {
-              ["[M"] = "@function.outer",
-              ["[]"] = "@class.outer",
-            },
-          }
-        },
-        lsp_interop = {
-          enable = true,
-          border = "rounded",
-          peek_definition_code = {
-            ["<Leader>kf"] = "@function.outer",
-          },
-        },
-        playground = {
-          enable = true,
-          disable = {},
-          updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
-          persist_queries = false, -- Whether the query persists across vim sessions
-          keybindings = {
-            toggle_query_editor = 'o',
-            toggle_hl_groups = 'i',
-            toggle_injected_languages = 't',
-            toggle_anonymous_nodes = 'a',
-            toggle_language_display = 'I',
-            focus_language = 'f',
-            unfocus_language = 'F',
-            update = 'R',
-            goto_node = '<cr>',
-            show_help = '?',
-          },
-        }
-      }
+      require('treesitter')
     end
   }
-
-  use 'nvim-treesitter/playground'
+  use {
+    'nvim-treesitter/playground',
+    requires = { 'nvim-treesitter/nvim-treesitter' },
+  }
+  use {
+    'nvim-treesitter/nvim-treesitter-textobjects',
+    requires = { 'nvim-treesitter/nvim-treesitter' },
+  }
 
   -- }}}
 
@@ -315,20 +290,31 @@ return require('packer').startup(function()
 
   use {
      'nvim-lua/lsp-status.nvim',
-     after = { 'nvim-nonicons' },
+     opt = true,
   }
   use {
      'neovim/nvim-lspconfig',
-     after = { 'lsp_signature.nvim' },
      config = function() require('lsp') end,
   }
   use {
      'ray-x/lsp_signature.nvim',
-     after = { 'nvim-nonicons' },
+     opt = true,
   }
   use {
     'simrat39/symbols-outline.nvim',
-    after = { 'nvim-nonicons' },
+    opt = true,
+    setup = function ()
+      vim.g.loaded_symbols_outline = 1
+    end,
+    config = function ()
+      require("symbols-outline").setup()
+      vim.cmd [[
+        augroup outline
+        au!
+        au FileType outline au BufLeave <buffer=abuf> lua require'symbols-outline.preview'.close()
+        augroup END
+      ]]
+    end,
   }
 
   -- }}}
@@ -336,8 +322,12 @@ return require('packer').startup(function()
   -- Keystroke-saving, incl. completion {{{
 
   use {
+    '~/Code/auto_pairs',
+    event = "InsertEnter *",
+  }
+
+  use {
     'L3MON4D3/LuaSnip',
-    cond = is_not_vscode,
     event = "InsertEnter *",
     config = function ()
       local types = require('luasnip.util.types')
@@ -395,7 +385,6 @@ return require('packer').startup(function()
       "hrsh7th/cmp-nvim-lsp",
       "hrsh7th/cmp-nvim-lua",
     },
-    after = { 'LuaSnip' },
     config = function ()
       local cmp = require('cmp')
       cmp.setup {
@@ -410,14 +399,20 @@ return require('packer').startup(function()
         },
         mapping = {
           -- Pears handles this now
-          -- ['<CR>'] = cmp.mapping.confirm({select = true}),
+          ['<CR>'] = cmp.mapping.confirm({ select = true }),
           ['<C-e>'] = cmp.mapping.close(),
+          ['<Esc>'] = cmp.mapping.abort(),
           ['<C-d>'] = cmp.mapping.scroll_docs(4),
           ['<C-u>'] = cmp.mapping.scroll_docs(-4),
           ['<C-Space>'] = cmp.mapping.complete(),
+          ['<C-n>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
+          ['<C-p>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
+          ['<Down>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
+          ['<Up>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
           ['<Tab>'] = function(fallback)
-              if vim.fn.pumvisible() == 1 then
-                vim.api.nvim_feedkeys(term('<C-n>'), 'n', true)
+              if cmp.visible() then
+                -- vim.api.nvim_feedkeys(term('<C-n>'), 'n', true)
+                cmp.select_next_item({ cmp.SelectBehavior.Insert })
               elseif check_back_space() then
                 fallback()
                 -- vim.api.nvim_feedkeys(term('<Tab>'), 'n', true)
@@ -426,8 +421,9 @@ return require('packer').startup(function()
               end
             end,
           ['<S-Tab>'] = function(fallback)
-              if vim.fn.pumvisible() == 1 then
-                vim.api.nvim_feedkeys(term('<C-p>'), 'n', true)
+              if cmp.visible() then
+                -- vim.api.nvim_feedkeys(term('<C-p>'), 'n', true)
+                cmp.select_next_item({ cmp.SelectBehavior.Insert })
               else
                 fallback()
                 -- vim.api.nvim_feedkeys(term('<S-Tab>'), 'n', true)
@@ -449,12 +445,13 @@ return require('packer').startup(function()
   use {
     'neoclide/coc.nvim',
     branch = 'release',
-    opt = true,
+    disable = true,
   }
 
   -- }}}
 
   -- }}}
-end)
+  
+return packer
 
 -- vim:foldmethod=marker

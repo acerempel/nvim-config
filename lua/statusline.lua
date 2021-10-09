@@ -3,7 +3,9 @@ local utils = require 'utils'
 local condition = require 'galaxyline.condition'
 local vcs = require 'galaxyline.providers.vcs'
 local fileinfo = require 'galaxyline.providers.fileinfo'
-local lspstatus = require 'lsp-status'
+-- local lspstatus = require 'lsp-status'
+local palette = require 'zenbones.palette'
+local gps = require 'nvim-gps'
 
 local gls = gl.section
 gl.short_line_list = {
@@ -19,17 +21,17 @@ gl.short_line_list = {
 }
 
 local colors = {
-    bg = '#282c34',
-    fg = '#abb2bf',
-    section_bg = '#38393f',
-    blue = '#61afef',
-    green = '#98c379',
-    purple = '#c678dd',
-    orange = '#e5c07b',
-    red = '#e06c75',
-    yellow = '#e5c07b',
-    darkgrey = '#2c323d',
-    middlegrey = '#8791A5',
+    bg = palette.bg.hex,
+    fg = palette.fg.hex,
+    section_bg = palette.bg_dim.hex,
+    blue = palette.water.hex,
+    green = palette.leaf.hex,
+    purple = palette.rose.hex,
+    orange = palette.water.hex,
+    red = palette.rose.hex,
+    yellow = palette.wood.hex,
+    darkgrey = palette.bg.hex,
+    middlegrey = palette.wood.hex,
 }
 local mode_colors = {
     ['n'] = colors.green,
@@ -122,10 +124,10 @@ local function file_name()
         return ''
     end
     if file_readonly() then
-        return file .. '  '
+        return file .. ' ⊟ '
     end
     if vim.bo.modifiable and vim.bo.modified then
-        return file .. '  '
+        return file .. ' ⊞ '
     end
     return file .. ' '
 end
@@ -214,7 +216,7 @@ local lsp_check_diagnostics = function()
         { severity = { min = vim.diagnostic.severity.INFO } }
     )
     if vim.tbl_isempty(diagnostics) and lspstatus.status() == ' ' then
-        return ' '
+        return ' ⊙'
     end
     return ''
 end
@@ -278,18 +280,18 @@ gls.left[4] = {
 --         highlight = {colors.fg, colors.bg}
 --     }
 -- }
-gls.left[8] = {
+--[[ gls.left[8] = {
     DiagnosticsCheck = {
         provider = { lsp_check_diagnostics },
         highlight = { colors.middlegrey, colors.bg },
     },
-}
+} --]]
 gls.left[9] = {
     DiagnosticError = {
         provider = function()
             return get_diagnostic_count(vim.diagnostic.severity.ERROR)
         end,
-        icon = '  ',
+        icon = ' ⊗ ',
         highlight = { colors.red, colors.bg },
         -- separator = ' ',
         -- separator_highlight = {colors.bg, colors.bg}
@@ -306,7 +308,7 @@ gls.left[11] = {
         provider = function()
             return get_diagnostic_count(vim.diagnostic.severity.WARN)
         end,
-        icon = '  ',
+        icon = ' ⚠ ',
         highlight = { colors.orange, colors.bg },
         -- separator = ' ',
         -- separator_highlight = {colors.bg, colors.bg}
@@ -323,19 +325,24 @@ gls.left[13] = {
         provider = function()
             return get_diagnostic_count(vim.diagnostic.severity.INFO)
         end,
-        icon = '  ',
+        icon = ' ⓘ ',
         highlight = { colors.blue, colors.bg },
         -- separator = ' ',
         -- separator_highlight = {colors.section_bg, colors.bg}
     },
 }
 gls.left[14] = {
-    LspStatus = {
-        provider = { lsp_status },
-        -- separator = ' ',
-        -- separator_highlight = {colors.bg, colors.bg},
-        highlight = { colors.middlegrey, colors.bg },
-    },
+    SyntaxLocation = {
+      provider = gps.get_location,
+      condition = gps.is_available,
+      highlight = { colors.middlegrey, colors.bg },
+    }
+    -- LspStatus = {
+    --     provider = { lsp_status },
+    --     -- separator = ' ',
+    --     -- separator_highlight = {colors.bg, colors.bg},
+    --     highlight = { colors.middlegrey, colors.bg },
+    -- },
 }
 
 -- Right side
@@ -390,7 +397,7 @@ gls.right[4] = {
 gls.right[5] = {
     Harpoon = {
         provider = function()
-            return require('harpoon.mark').status()
+            return require('harpoon.mark').status() .. ' '
         end,
         highlight = { colors.middlegrey, colors.bg },
     },
@@ -399,7 +406,7 @@ gls.right[6] = {
     GitBranch = {
         provider = {
             function()
-                return '  '
+                return '  '
             end,
             'GitBranch',
         },

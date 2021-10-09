@@ -41,17 +41,36 @@ whichkey.register(
       name = "Symbol under the cursor",
     },
     h = {
-      name = "Current hunk of git changes",
-      p = { "Preview diff" },
-      r = { "Restore from the index" },
-      s = { "Stage" },
-      u = { "Undo stage" },
+      name = "Git operations",
+      p = { "Preview hunk diff" },
+      r = { "Restore hunk from the index" },
+      R = { "Restore all hunks from the index" },
+      s = { "Stage hunk" },
+      S = { "Stage buffer" },
+      u = { "Undo stage hunk" },
+      U = { "Restore buffer from the index" },
       b = { "Show last commit affecting this line" },
       B = { "<Plug>(git-messenger)", "Show last commit affecting this line, more detail" },
     },
   },
   { prefix = "<Leader>" }
 )
+
+whichkey.register(
+  { h = {
+    name = "Git operations",
+    s = "Stage hunks",
+    r = "Restore hunks from the index",
+  } },
+  { prefix = "<Leader>", mode = "v" }
+)
+
+local textobjects = {
+  ih = { "Git change hunk" }
+}
+
+whichkey.register(textobjects, { mode = "o" })
+whichkey.register(textobjects, { mode = "x" })
 
 whichkey.register(
   {
@@ -61,19 +80,20 @@ whichkey.register(
         "<Cmd>lua vim.lsp.diagnostic.goto_prev({severity_limit='Warning'})<CR>",
         "Previous warning or error"
       },
-      j = {
+      e = {
         "<Cmd>lua vim.lsp.diagnostic.goto_prev({severity_limit='Error'})<CR>",
         "Previous error"
       },
       d = {
-        "<Plug>(coc-diagnostic-prev)",
+        "<Cmd>lua vim.lsp.diagnostic.goto_prev()<CR>",
         "Previous diagnostic"
       },
       c = { "Previous Git change" },
-      b = { "Previous buffer" },
-      B = { "First buffer" },
+      b = { "<Cmd>bprevious<CR>", "Previous buffer" },
+      B = { "<Cmd>bfirst<CR>", "First buffer" },
       t = { "<Cmd>tabprev<CR>", "Previous tab" },
       T = { "<Cmd>tabfirst<CR>", "First tab" },
+      z = { "Start of current fold" },
     },
     ["]"] = {
       name = "Next, after, below",
@@ -81,34 +101,42 @@ whichkey.register(
         "<Cmd>lua vim.lsp.diagnostic.goto_next({severity_limit='Warning'})<CR>",
         "Next warning or error"
       },
-      j = {
+      e = {
         "<Cmd>lua vim.lsp.diagnostic.goto_next({severity_limit='Error'})<CR>",
         "Next error"
       },
       d = {
-        "<Plug>(coc-diagnostic-next)",
+        "<Cmd>lua vim.lsp.diagnostic.goto_next()<CR>",
         "Next diagnostic"
       },
       c = { "Next Git change" },
-      b = { "Next buffer" },
-      B = { "Last buffer" },
+      b = { "<Cmd>bnext<CR>", "Next buffer" },
+      B = { "<Cmd>blast<CR>", "Last buffer" },
       t = { "<Cmd>tabnext<CR>", "Next tab" },
       T = { "<Cmd>tablast<CR>", "Last tab" },
+      z = { "End of current fold" },
     },
     g = {
       name = "Go to; jump around; select",
       s = { "Select syntax node under cursor" },
-      c = { "Comment" },
       t = { "Go to type definition" },
       r = { "Show references" },
       i = { "Go to implementation" },
       O = { "Show document outline" },
-      o = { "Go to nth byte" },
+      b = { "go", "Go to nth byte" },
     },
     Y = { "Yank till end of line" },
     Q = { "Re-run last used macro" },
     U = { "Show/hide undo tree" },
-    Z = { "Delete without register" },
+    ZZ = { "Delete line without register" },
+    z = {
+      name = "folds",
+      n = { "Turn off folding" },
+      N = { "Turn on folding" },
+      i = { "Toggle folding" },
+      j = { "To start of next fold" },
+      k = { "To end of previous fold" },
+    }
   }
 )
 
