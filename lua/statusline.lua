@@ -3,7 +3,6 @@ local utils = require 'utils'
 local condition = require 'galaxyline.condition'
 local vcs = require 'galaxyline.providers.vcs'
 local fileinfo = require 'galaxyline.providers.fileinfo'
--- local lspstatus = require 'lsp-status'
 local palette = require 'zenbones.palette'
 local gps = require 'nvim-gps'
 
@@ -132,24 +131,12 @@ local function file_name()
     return file .. ' '
 end
 
-local function split(str, sep)
-    local res = {}
-    local n = 1
-    for w in str:gmatch('([^' .. sep .. ']*)') do
-        res[n] = res[n] or w -- only set once (so the blank after a string is ignored)
-        if w == '' then
-            n = n + 1
-        end -- step forwards on a blank but not a string
-    end
-    return res
-end
-
 local function file_path()
     local fp = vim.fn.fnamemodify(vim.fn.expand '%', ':~:.:h')
-    local tbl = split(fp, '/')
+    local tbl = vim.split(fp, '/', { plain = true, trimempty = true })
     local len = #tbl
 
-    if len > 2 and not len == 3 and not tbl[0] == '~' then
+    if len > 2 and not len == 3 then
         return '…/' .. table.concat(tbl, '/', len - 1) .. '/' -- shorten filepath to last 2 folders
         -- alternative: only 1 containing folder using vim builtin function
         -- return '…/' .. vim.fn.fnamemodify(vim.fn.expand '%', ':p:h:t') .. '/'
@@ -202,7 +189,7 @@ end
 
 local lsp_status = function()
     if #vim.lsp.get_active_clients() > 0 then
-        return lspstatus.status()
+        return require('lsp-status').status()
     end
     return ''
 end
@@ -215,7 +202,7 @@ local lsp_check_diagnostics = function()
         0,
         { severity = { min = vim.diagnostic.severity.INFO } }
     )
-    if vim.tbl_isempty(diagnostics) and lspstatus.status() == ' ' then
+    if vim.tbl_isempty(diagnostics) and require('lsp-status').status() == ' ' then
         return ' ⊙'
     end
     return ''
@@ -252,7 +239,7 @@ gls.left[3] = {
     FilePath = {
         provider = file_path,
         condition = function()
-            return is_file() and checkwidth()
+            return is_file() and checkwidth() and vim.bo.buftype ~= 'help'
         end,
         highlight = { colors.middlegrey, colors.section_bg },
     },
@@ -336,13 +323,13 @@ gls.left[14] = {
       provider = gps.get_location,
       condition = gps.is_available,
       highlight = { colors.middlegrey, colors.bg },
-    }
-    -- LspStatus = {
-    --     provider = { lsp_status },
-    --     -- separator = ' ',
-    --     -- separator_highlight = {colors.bg, colors.bg},
-    --     highlight = { colors.middlegrey, colors.bg },
-    -- },
+    },
+    lspstatus = {
+        provider = { lsp_status },
+        separator = ' ',
+        -- separator_highlight = {colors.bg, colors.bg},
+        highlight = { colors.middlegrey, colors.bg },
+    },
 }
 
 -- Right side

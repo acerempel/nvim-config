@@ -82,7 +82,6 @@ command! -nargs=+ Find execute 'silent grep! <args>'
 
 " COLOURS {{{
 set termguicolors
-set background=light
 
 hi default link LspReferenceText Folded
 hi default link LspReferenceRead StatusLine
@@ -98,7 +97,7 @@ highlight! link Conceal Normal
 augroup reload
   autocmd!
   " Automatically enable changes to plugin configuration
-  autocmd BufWritePost plugins.lua source <afile> | PackerCompile
+  autocmd BufWritePost plugins.lua lua package.loaded.plugins = false; require('plugins').compile()
   autocmd BufWritePost $MYVIMRC source $MYVIMRC
 augroup END
 
@@ -119,6 +118,7 @@ command! -nargs=* -complete=customlist,v:lua.require'packer'.plugin_complete Pac
 command! -nargs=* -complete=customlist,v:lua.require'packer'.plugin_complete PackerSync lua require('plugins').sync(<f-args>)
 command! PackerClean lua require('plugins').clean()
 command! PackerCompile lua require('plugins').compile()
+command! PackerProfile lua require('plugins').profile_output()
 command! -nargs=+ -complete=customlist,v:lua.require'packer'.loader_complete PackerLoad | lua require('plugins').loader(<q-args>)
 " }}}
 
@@ -170,66 +170,27 @@ let g:vim_svelte_plugin_use_typescript = 1
 let g:vim_svelte_plugin_use_sass = 1
 let g:vim_svelte_plugin_use_foldexpr = 1
 
+" Don't load netrw, I don't need it
+let g:loaded_netrw       = 1
+let g:loaded_netrwPlugin = 1
+
 let php_html_in_strings=0
 let php_html_in_heredoc=0
 let php_html_in_nowdoc=0
+
+" Use matchup instead
+let g:loaded_matchit = 1
 " }}}
 
 " If attached to VS Code {{{
 if exists('g:vscode')
-  " Use VS Code's comment support
-  xmap gc  <Plug>VSCodeCommentary
-  nmap gc  <Plug>VSCodeCommentary
-  omap gc  <Plug>VSCodeCommentary
-  nmap gcc <Plug>VSCodeCommentaryLine
-
-  nnoremap <silent> za <Cmd>call VSCodeNotify('editor.toggleFold')<CR>
-  nnoremap <silent> zR <Cmd>call VSCodeNotify('editor.unfoldAll')<CR>
-  nnoremap <silent> zM <Cmd>call VSCodeNotify('editor.foldAll')<CR>
-  nnoremap <silent> zo <Cmd>call VSCodeNotify('editor.unfold')<CR>
-  nnoremap <silent> zO <Cmd>call VSCodeNotify('editor.unfoldRecursively')<CR>
-  nnoremap <silent> zc <Cmd>call VSCodeNotify('editor.fold')<CR>
-  nnoremap <silent> zC <Cmd>call VSCodeNotify('editor.foldRecursively')<CR>
-
-  nnoremap <silent> z1 <Cmd>call VSCodeNotify('editor.foldLevel1')<CR>
-  nnoremap <silent> z2 <Cmd>call VSCodeNotify('editor.foldLevel2')<CR>
-  nnoremap <silent> z3 <Cmd>call VSCodeNotify('editor.foldLevel3')<CR>
-  nnoremap <silent> z4 <Cmd>call VSCodeNotify('editor.foldLevel4')<CR>
-  nnoremap <silent> z5 <Cmd>call VSCodeNotify('editor.foldLevel5')<CR>
-  nnoremap <silent> z6 <Cmd>call VSCodeNotify('editor.foldLevel6')<CR>
-  nnoremap <silent> z7 <Cmd>call VSCodeNotify('editor.foldLevel7')<CR>
-
-  xnoremap <silent> zV <Cmd>call VSCodeNotify('editor.foldAllExcept')<CR>
-
-  nnoremap gD <Cmd>call VSCodeNotify('editor.action.revealDeclaration')<CR>
-  xnoremap gD <Cmd>call VSCodeNotify('editor.action.revealDeclaration')<CR>
-  nnoremap g] <Cmd>call VSCodeNotify('editor.action.referenceSearch.trigger')<CR>
-  xnoremap g] <Cmd>call VSCodeNotify('editor.action.referenceSearch.trigger')<CR>
-  nnoremap g} <Cmd>call VSCodeNotify('editor.action.goToReferences')<CR>
-  xnoremap g} <Cmd>call VSCodeNotify('editor.action.goToReferences')<CR>
-  nnoremap gO <Cmd>call VSCodeNotify('workbench.action.showAllSymbols')<CR>
-  nnoremap go <Cmd>call VSCodeNotify('workbench.action.gotoSymbol')<CR>
-  
-  " VSCode doesn't have commands for these apparently.
-  noremap zv <Nop>
-  noremap zr <Nop>
-  noremap zm <Nop>
-  
-  noremap ]d <Cmd>call VSCodeNotify('editor.action.marker.nextInFiles')<CR>
-  noremap [d <Cmd>call VSCodeNotify('editor.action.marker.prevInFiles')<CR>
-  
-  nnoremap gh <Cmd>call VSCodeNotify('editor.action.changeAll')<CR>
-  xnoremap gh <Cmd>call VSCodeNotifyVisual('editor.action.selectHighlights', v:false)<CR>
-  
-  " Allow remapping, since gj and gk are mapped to VSCode commands.
-  map <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
-  map <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
-  
-  " Matchparen does funny things inside VSCode – problem with its InsertLeave autocmd.
-  let g:matchup_matchparen_enabled = 0
-
+  source <sfile>:h/vscode.vim
   finish
 endif
+" }}}
+
+" {{{
+
 " }}}
 
 " MAPPINGS (non-VSCode only) {{{
@@ -248,6 +209,44 @@ nnoremap <silent> U <Cmd>UndotreeToggle<CR>
 noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
 noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
 
+noremap <silent> n <Cmd>execute('normal! ' . v:count1 . 'n')<CR>
+      \<Cmd>lua require('hlslens').start()<CR>
+noremap <silent> N <Cmd>execute('normal! ' . v:count1 . 'N')<CR>
+      \<Cmd>lua require('hlslens').start()<CR>
+noremap * *<Cmd>lua require('hlslens').start()<CR>
+noremap # #<Cmd>lua require('hlslens').start()<CR>
+noremap g* g*<Cmd>lua require('hlslens').start()<CR>
+noremap g# g#<Cmd>lua require('hlslens').start()<CR>
+
+" use : instead of <Cmd>
+nnoremap <silent> <leader>l :noh<CR>
+
+cnoremap <expr> <C-T> getcmdtype() == ':' ? "<C-\>eToggleTab()<CR>" : "<C-T>"
+cnoremap <expr> <C-S> getcmdtype() == ':' ? "<C-\>eToggleVsplit()<CR>" : "<C-S>"
+
+function! ToggleTab() abort
+  let line = getcmdline()
+  if match(line, "tab ") == 0
+    call setcmdpos(max([1, getcmdpos() - 4]))
+    return strpart(line, 4)
+  else
+    call setcmdpos(getcmdpos() + 4)
+    return "tab " .. line
+  endif
+endfunction
+
+function! ToggleVsplit() abort
+  let line = getcmdline()
+  let matched = matchstr(line, 'vert\%[ical] ')
+  if matched != ""
+    let match_len = strlen(matched)
+    call setcmdpos(max([1, getcmdpos() - match_len]))
+    return strpart(line, match_len)
+  else
+    call setcmdpos(getcmdpos() + 5)
+    return "vert " .. line
+  endif
+endfunction
 " }}}
 
 " AUTOCOMMANDS (non-VSCode only) {{{
@@ -259,8 +258,6 @@ augroup END
 
 augroup filetypes
   autocmd!
-  autocmd FileType prose     setlocal nonumber fo+=t tw=72
-  autocmd FileType prose setlocal spell
   autocmd FileType qf     setlocal wrap linebreak
   autocmd FileType table setlocal tabstop=28 noexpandtab nolist
   autocmd BufReadPost,BufNew *.wiki ++once packadd vimwiki
@@ -293,7 +290,7 @@ ENDLUA
 " }}}
 
 " Telescope {{{
-cmap <C-R> <Plug>(TelescopeFuzzyCommandSearch)
+" cmap <C-R> <Plug>(TelescopeFuzzyCommandSearch)
 nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<cr>
 nnoremap <leader>fs <cmd>lua require('telescope.builtin').grep_string()<cr>
 " }}}

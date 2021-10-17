@@ -15,7 +15,7 @@ vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
 )
 
 local on_attach = function(client, bufnr)
-  require('plugins').loader("lsp_signature.nvim symbols-outline.nvim")
+  require('plugins').loader("symbols-outline.nvim")
   require('lsp_signature').on_attach(lsp_signature_config)
   vim.cmd(string.format([[
     augroup lsp_buf
@@ -86,6 +86,9 @@ capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 local basic_lsp_config = {
   on_attach = on_attach,
   capabilities = capabilities,
+  settings = {
+    intelephense = { stubs = { "wordpress", "standard", "pcre", "http", "json", "mysql", "mysqli", "pdo_mysql" } }
+  }
 }
 
 local servers = {
@@ -96,8 +99,5 @@ local servers = {
 
 for _, server in ipairs(servers) do
   local config = basic_lsp_config
-  if server == "intelephense" and vim.g.is_wordpress_project then
-    config.settings = { intelephense = { stubs = { "wordpress", "standard", "pcre", "http", "json", "mysql", "mysqli", "pdo_mysql" } } }
-  end
   lspconfig[server].setup(basic_lsp_config)
 end

@@ -9,6 +9,7 @@ _G.is_not_vscode = function() return vim.g.vscode == nil end
 packer.init {
   disable_commands = true,
   log = { level = 'info' },
+  profile = { enable = true, threshold = 1 },
 }
 
 local use = packer.use
@@ -19,11 +20,29 @@ local use = packer.use
 
   -- Improvements to QuickFix and Location List
   use { 'romainl/vim-qf', disable = true }
-  use 'kevinhwang91/nvim-bqf'
+  use { 'kevinhwang91/nvim-bqf', disable = true }
+  use {
+    'https://gitlab.com/yorickpeterse/nvim-pqf.git',
+    config = function() require('pqf').setup() end,
+  }
+  use {
+    'stevearc/qf_helper.nvim',
+    config = function() require('qf_helper').setup() end,
+  }
   use { 'Olical/vim-enmasse', cmd = "EnMasse" }
 
   -- Cache lua require() calls
   use 'lewis6991/impatient.nvim'
+
+  use {
+    'dstein64/vim-startuptime',
+    cmd = 'StartupTime',
+  }
+
+  use {
+    'kevinhwang91/nvim-hlslens',
+    module = 'hlslens',
+  }
 
   use {
     'numToStr/Comment.nvim',
@@ -45,7 +64,23 @@ local use = packer.use
     requires = { 'nvim-treesitter/nvim-treesitter' },
   }
 
-  use 'andymass/vim-matchup'
+  use {
+    'andymass/vim-matchup',
+    event = 'CursorMoved,CursorMovedI *',
+    setup = function ()
+      vim.g.matchup_matchparen_offscreen = {
+        method = 'popup',
+        scrolloff = 1,
+      }
+      vim.g.matchup_matchparen_deferred = 1
+      vim.g.matchup_matchparen_deferred_fade_time = 450
+      vim.g.matchup_surround_enabled = 1
+      vim.g.matchup_matchpref = { html = { tagnameonly = 1 } }
+      if vim.g.vscode == 1 then
+        vim.g.matchup_matchparen_enabled = 0
+      end
+    end,
+  }
 
   -- Fix performance issues with the CursorHold autocmd
   use {
@@ -113,6 +148,11 @@ local use = packer.use
 
   -- GIT integration {{{
 
+  use {
+    'lambdalisue/gina.vim',
+    cmd = 'Gina',
+  }
+
   -- Show diff when writing a commit message
   use 'rhysd/committia.vim'
 
@@ -158,7 +198,7 @@ local use = packer.use
 
   use {
     'ThePrimeagen/harpoon',
-    cond = is_not_vscode,
+    module = 'harpoon',
     config = function () require('harpoon').setup {} end,
   }
 
@@ -175,15 +215,6 @@ local use = packer.use
     cmd = 'DiffviewOpen',
     config = function ()
       require('diffview').setup {}
-    end
-  }
-
-  -- Fancy startup screen with sessions and mru etc.
-  use {
-    'mhinz/vim-startify',
-    cond = is_not_vscode,
-    setup = function ()
-      vim.g.startify_custom_header_quotes = require('quotes')
     end
   }
 
@@ -218,29 +249,29 @@ local use = packer.use
   }
 
   use {
-    'nanozuki/tabby.nvim',
+    'alvarosevilla95/luatab.nvim',
     after = { 'nvim-nonicons' },
+    requires = { 'yamatsum/nvim-nonicons' },
     config = function ()
-      require('tabby').setup {
-        tabline = require("tabby.presets").tab_with_top_win,
-      }
+      vim.o.tabline = '%!v:lua.require\'luatab\'.tabline()'
     end
   }
 
   -- Colour schemes
-  use 'lifepillar/vim-gruvbox8'
-  use 'bluz71/vim-nightfly-guicolors'
-  use 'ishan9299/nvim-solarized-lua'
-  use 'folke/tokyonight.nvim'
+  use { 'lifepillar/vim-gruvbox8', opt = true }
+  use { 'bluz71/vim-nightfly-guicolors', opt = true }
+  use { 'ishan9299/nvim-solarized-lua', opt = true }
+  use { 'folke/tokyonight.nvim', opt = true }
   use {
     'mcchrish/zenbones.nvim',
     requires = { 'rktjmp/lush.nvim' },
     setup = function ()
+      vim.opt.background = 'light'
       vim.g.zenbones_lightness = 'bright'
       vim.g.zenbones_dim_noncurrent_window = true
     end,
     config = function ()
-      vim.cmd [[colorscheme zenbones-lush]]
+      vim.cmd [[colorscheme zenbones]]
     end,
   }
 
@@ -290,7 +321,7 @@ local use = packer.use
 
   use {
      'nvim-lua/lsp-status.nvim',
-     opt = true,
+     module = 'lsp-status',
   }
   use {
      'neovim/nvim-lspconfig',
@@ -298,7 +329,7 @@ local use = packer.use
   }
   use {
      'ray-x/lsp_signature.nvim',
-     opt = true,
+     module = 'lsp_signature',
   }
   use {
     'simrat39/symbols-outline.nvim',
@@ -380,10 +411,10 @@ local use = packer.use
     'hrsh7th/nvim-cmp',
     event = "InsertEnter *",
     requires = {
-      "hrsh7th/cmp-buffer",
-      "saadparwaiz1/cmp_luasnip",
-      "hrsh7th/cmp-nvim-lsp",
-      "hrsh7th/cmp-nvim-lua",
+      { "hrsh7th/cmp-buffer", opt = true, after = { 'nvim-cmp' } },
+      { "saadparwaiz1/cmp_luasnip", opt = true, after = { 'nvim-cmp', 'LuaSnip' } },
+      { "hrsh7th/cmp-nvim-lsp", module = "cmp_nvim_lsp", },
+      { "hrsh7th/cmp-nvim-lua", opt = true, after = { 'nvim-cmp' } },
     },
     config = function ()
       local cmp = require('cmp')
