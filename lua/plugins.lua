@@ -228,10 +228,29 @@ local use = packer.use
 
   -- Pretty status line
   use {
-    'NTBBloodbath/galaxyline.nvim',
+    'famiu/feline.nvim',
     requires = { 'yamatsum/nvim-nonicons' },
-    after = { 'zenbones.nvim', 'nvim-gps' },
-    config = function () require('statusline') end,
+    after = { 'nvim-nonicons', 'zenbones.nvim', 'nvim-gps' },
+    config = function ()
+      local palette = require('zenbones.palette')
+      require('feline').setup {
+        preset = 'default',
+        colors = {
+          bg = palette.bg_dim.hex,
+          fg = palette.fg.hex,
+          white = palette.fg1.hex,
+          black = palette.bg1.hex,
+          oceanblue = palette.wood.hex,
+          skyblue = palette.water.hex,
+          red = palette.rose.hex,
+          yellow = palette.blossom.hex,
+          cyan = palette.sky.hex,
+          green = palette.leaf1.hex,
+          orange = palette.blossom1.hex,
+          violet = palette.rose1.hex,
+        }
+      }
+    end,
   }
 
   use {
