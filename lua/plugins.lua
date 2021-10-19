@@ -242,6 +242,10 @@ local use = packer.use
   }
 
   use {
+    'nathom/filetype.nvim',
+  }
+
+  use {
     'yamatsum/nvim-nonicons',
     cond = is_not_vscode,
     after = { 'nvim-web-devicons' },
