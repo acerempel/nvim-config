@@ -230,33 +230,27 @@ local use = packer.use
   use {
     'famiu/feline.nvim',
     requires = { 'yamatsum/nvim-nonicons' },
-    after = { 'nvim-nonicons', 'zenbones.nvim', 'nvim-gps' },
+    after = { 'zenbones.nvim', 'nvim-gps' },
     config = function ()
-      local palette = require('zenbones.palette')
-      require('feline').setup {
-        preset = 'default',
-        colors = {
-          bg = palette.bg_dim.hex,
-          fg = palette.fg.hex,
-          white = palette.fg1.hex,
-          black = palette.bg1.hex,
-          oceanblue = palette.wood.hex,
-          skyblue = palette.water.hex,
-          red = palette.rose.hex,
-          yellow = palette.blossom.hex,
-          cyan = palette.sky.hex,
-          green = palette.leaf1.hex,
-          orange = palette.blossom1.hex,
-          violet = palette.rose1.hex,
-        }
-      }
+      require('statusline')
     end,
   }
 
   use {
     'SmiteshP/nvim-gps',
     after = { 'nvim-nonicons' },
-    config = function () require('nvim-gps').setup() end,
+    config = function ()
+      local icon = require('nvim-nonicons').get
+      require('nvim-gps').setup {
+        icons = {
+          ['tag-name'] = icon('field'),
+          ['class-name'] = icon('class'),
+          ['function-name'] = icon('globe'),
+          ['method-name'] = icon('interface'),
+        },
+        separator = ' → '
+      }
+    end,
   }
 
   use {
