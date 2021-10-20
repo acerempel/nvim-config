@@ -272,7 +272,7 @@ local use = packer.use
     setup = function ()
       vim.opt.background = 'light'
       vim.g.zenbones_lightness = 'bright'
-      vim.g.zenbones_dim_noncurrent_window = true
+      vim.g.zenbones_darken_noncurrent_window = true
     end,
     config = function ()
       vim.cmd [[colorscheme zenbones]]
