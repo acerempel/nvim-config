@@ -245,7 +245,7 @@ local use = packer.use
         icons = {
           ['tag-name'] = icon('field'),
           ['class-name'] = icon('class'),
-          ['function-name'] = icon('globe'),
+          ['function-name'] = 'ƒ ',
           ['method-name'] = icon('interface'),
         },
         separator = ' → '
