@@ -228,7 +228,7 @@ local use = packer.use
 
   -- Pretty status line
   use {
-    'famiu/feline.nvim',
+    '~/Code/feline.nvim',
     requires = { 'yamatsum/nvim-nonicons' },
     after = { 'zenbones.nvim', 'nvim-gps' },
     config = function ()
