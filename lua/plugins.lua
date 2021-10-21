@@ -149,8 +149,7 @@ local use = packer.use
   -- GIT integration {{{
 
   use {
-    'lambdalisue/gina.vim',
-    cmd = 'Gina',
+    'tpope/vim-fugitive',
   }
 
   -- Show diff when writing a commit message
