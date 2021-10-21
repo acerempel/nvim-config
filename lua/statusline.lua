@@ -66,10 +66,14 @@ M.active[1] = {
     {
         provider = 'file_info',
         hl = {
-            style = 'bold'
+            style = 'bold',
+            bg = 'bg1',
         },
         left_sep = 'block',
-        right_sep = 'slant_right_thin',
+        right_sep = {
+          str = 'slant_right_thin',
+          hl = { fg = 'fg' },
+        },
     },
     {
         provider = 'diagnostic_errors',
@@ -210,8 +214,6 @@ M.inactive[1] = {
 local palette = require('zenbones.palette')
 
 local colors = {
-  bg = palette.bg_dim.hex,
-  fg = palette.fg.hex,
   white = palette.fg1.hex,
   black = palette.bg1.hex,
   oceanblue = palette.wood.hex,
@@ -226,7 +228,9 @@ local colors = {
 
 setmetatable(colors, {
   __index = function (table, index)
-    local color = palette[index].hex
+    local palette_color = palette[index]
+    if palette_color == nil then return nil end
+    local color = palette_color.hex
     table[index] = color
     return color
   end,
