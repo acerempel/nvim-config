@@ -190,10 +190,6 @@ if exists('g:vscode')
 endif
 " }}}
 
-" {{{
-
-" }}}
-
 " MAPPINGS (non-VSCode only) {{{
 
 nnoremap <silent> <Leader>td <Cmd>tcd %:h<CR>
