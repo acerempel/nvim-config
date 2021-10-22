@@ -307,15 +307,10 @@ lua << ENDLUA
     end_line = vim.api.nvim_buf_get_lines(0, end_lno - 1, end_lno, true)[1]
     if vim.o.foldmethod == 'marker' then
       start_marker, end_marker = unpack(vim.split(vim.o.foldmarker, ',', { plain = true }))
-      if start_marker == "{{{" and end_marker == "}}}" then
-        local spat = '{{{%d?%s*$'
-        local epat = '}}}%d?%s*$'
-        start_line = start_line:gsub(spat, "")
-        end_line = end_line:gsub(epat, "")
-      else
-        start_line = str_remove(start_line, start_marker)
-        end_line = str_remove(end_line, end_marker)
-      end
+      start_marker = start_marker:gsub('%p', '%%%0') .. '%d?%s*$'
+      end_marker = end_marker:gsub('%p', '%%%0') .. '%d?%s*$'
+      start_line = start_line:gsub(start_marker, "")
+      end_line = end_line:gsub(end_marker, "")
       -- TODO: get commentstring using treesitter. Tricky 'cause the plugin uses the cursor position.
       comment_str = get_commentstring()
       if comment_str ~= '' then
