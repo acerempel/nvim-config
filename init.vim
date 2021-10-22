@@ -25,7 +25,7 @@ set autoindent nojoinspaces
 
 set list listchars=tab:↹·,nbsp:⎵,trail:·,extends:⇉,precedes:⇇
 set showbreak=↪︎
-set fillchars=vert:│,fold:—
+set fillchars=vert:│,fold:─
 set diffopt=filler,vertical,context:4
 set nowrap linebreak breakindent
 set foldlevelstart=2
@@ -308,7 +308,8 @@ lua << ENDLUA
     end
     start_line = start_line:match("^%s*.*%S") or start_line
     end_line = vim.trim(end_line)
-    return start_line .. ' … ' .. end_line
+    num_lines = end_lno - start_lno + 1
+    return start_line .. ' … ' .. end_line .. string.format(' │%d├', num_lines)
   end
 ENDLUA
 " }}}
