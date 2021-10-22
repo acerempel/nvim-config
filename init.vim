@@ -29,6 +29,7 @@ set fillchars=vert:│,fold:—
 set diffopt=filler,vertical,context:4
 set nowrap linebreak breakindent
 set foldlevelstart=2
+set foldtext=v:lua.foldtext()
 
 set linespace=6
 set foldminlines=6
@@ -285,6 +286,29 @@ lua << ENDLUA
     else
       return false
     end
+  end
+
+  _G.str_remove = function(str, thing)
+    istart, iend = str:find(thing, 1, true)
+    if istart == nil then return str end
+    before = str:sub(1, istart - 1)
+    after = str:sub(iend + 1, -1)
+    return before .. after
+  end
+
+  _G.foldtext = function()
+    start_lno = vim.v.foldstart
+    end_lno = vim.v.foldend
+    start_line = vim.api.nvim_buf_get_lines(0, start_lno - 1, start_lno, true)[1]
+    end_line = vim.api.nvim_buf_get_lines(0, end_lno - 1, end_lno, true)[1]
+    if vim.o.foldmethod == 'marker' then
+      start_marker, end_marker = unpack(vim.split(vim.o.foldmarker, ',', { plain = true }))
+      start_line = str_remove(start_line, start_marker)
+      end_line = str_remove(end_line, end_marker)
+    end
+    start_line = start_line:match("^%s*.*%S") or start_line
+    end_line = vim.trim(end_line)
+    return start_line .. ' … ' .. end_line
   end
 ENDLUA
 " }}}
