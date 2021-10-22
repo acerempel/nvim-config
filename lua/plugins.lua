@@ -317,6 +317,10 @@ local use = packer.use
     'nvim-treesitter/nvim-treesitter-textobjects',
     requires = { 'nvim-treesitter/nvim-treesitter' },
   }
+  use {
+    'RRethy/nvim-treesitter-textsubjects',
+    requires = { 'nvim-treesitter/nvim-treesitter' },
+  }
 
   -- }}}
 

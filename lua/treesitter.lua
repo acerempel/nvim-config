@@ -3,10 +3,10 @@ require('nvim-treesitter.configs').setup {
   incremental_selection = {
     enable = true,
     keymaps = {
-      init_selection = "gs",
-      node_incremental = "gn",
-      scope_incremental = "gm",
-      node_decremental = "gN",
+      init_selection = "-",
+      node_incremental = "-",
+      scope_incremental = "+",
+      node_decremental = "_",
     },
   },
   textobjects = {
@@ -73,5 +73,12 @@ require('nvim-treesitter.configs').setup {
   context_commentstring = {
     enable = true,
     enable_autocmd = false,
+  },
+  textsubjects = {
+    enable = true,
+    keymaps = {
+      [';'] = 'textsubjects-smart',
+      ['.'] = 'textsubjects-container-outer',
+    }
   },
 }
