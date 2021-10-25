@@ -27,7 +27,16 @@ local use = packer.use
   }
   use {
     'stevearc/qf_helper.nvim',
-    config = function() require('qf_helper').setup() end,
+    config = function()
+      require('qf_helper').setup {
+        quickfix = {
+          default_bindings = false,
+        },
+        loclist = {
+          default_bindings = false,
+        },
+      }
+    end,
   }
   use { 'Olical/vim-enmasse', cmd = "EnMasse" }
 
