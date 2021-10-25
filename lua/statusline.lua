@@ -20,20 +20,37 @@ mode_short_names = {
 }
 
 mode_long_names = {
-  n = 'Norm',
-  o = 'Oper',
-  v = 'V-ch',
-  V = 'V-ln',
-  ['\016'] = 'V-bk',
-  s = 'S-ch',
-  S = 'S-ln',
-  ['\013'] = 'S-bk',
-  R = 'Repl',
-  i = 'Ins ',
-  c = 'Cmd ',
-  r = 'More',
-  ['!'] = 'Shl ',
-  t = 'Term',
+  n = 'Normal ',
+  o = 'Operato',
+  v = 'V-char ',
+  V = 'V-line ',
+  ['\016'] = 'V-block',
+  s = 'S-char ',
+  S = 'S-line ',
+  ['\013'] = 'S-block',
+  R = 'Replace',
+  i = 'Insert ',
+  c = 'Command',
+  r = 'More   ',
+  ['!'] = 'Shell  ',
+  t = 'Termina',
+}
+
+mode_medium_names = {
+  n = 'NORM',
+  o = 'OPER',
+  v = 'V-CH',
+  V = 'V-LN',
+  ['\016'] = 'V-BK',
+  s = 'S-CH',
+  S = 'S-LN',
+  ['\013'] = 'S-BK',
+  R = 'REPL',
+  i = 'INS ',
+  c = 'CMD ',
+  r = 'MORE',
+  ['!'] = 'SHL ',
+  t = 'TERM',
 }
 
 local M = {
@@ -45,7 +62,7 @@ M.active[1] = {
     {
         provider = function()
           local mode = vim.api.nvim_get_mode().mode
-          return mode_long_names[mode]
+          return mode_medium_names[mode]
         end,
         short_provider = function()
           local mode = vim.api.nvim_get_mode().mode
@@ -61,18 +78,18 @@ M.active[1] = {
             }
         end,
         left_sep = 'block',
-        right_sep = { 'block', 'slant_right' },
+        right_sep = 'block',
     },
     {
         provider = 'file_info',
         hl = {
             style = 'bold',
-            bg = 'bg1',
+            bg = 'bg_dim',
         },
         left_sep = 'block',
         right_sep = {
-          str = 'slant_right_thin',
-          hl = { fg = 'fg' },
+          str = 'slant_right',
+          hl = { fg = 'bg_dim' },
         },
     },
     {
@@ -116,7 +133,7 @@ M.active[2] = {
         icon = icon('diff-added'),
         hl = {
             fg = 'green',
-            bg = 'black'
+            bg = 'bg_dim'
         },
         left_sep = {
           { str = 'slant_left', always_visible = true },
@@ -129,7 +146,7 @@ M.active[2] = {
         icon = icon('diff-modified'),
         hl = {
             fg = 'orange',
-            bg = 'black'
+            bg = 'bg_dim'
         },
         right_sep = 'block',
     },
@@ -138,7 +155,7 @@ M.active[2] = {
         icon = icon('diff-removed'),
         hl = {
             fg = 'red',
-            bg = 'black'
+            bg = 'bg_dim'
         },
         right_sep = 'block',
     },
@@ -147,16 +164,10 @@ M.active[2] = {
         icon = ' ',
         hl = {
             fg = 'white',
-            bg = 'black',
+            bg = 'bg_dim',
             style = 'bold'
         },
-        right_sep = {
-            str = ' ',
-            hl = {
-                fg = 'NONE',
-                bg = 'black'
-            }
-        },
+        right_sep = 'block',
         priority = 1,
         truncate_hide = true,
     },
@@ -164,7 +175,7 @@ M.active[2] = {
         provider = 'scroll_bar',
         hl = {
             fg = 'skyblue',
-            bg = 'black',
+            bg = 'bg_dim',
             style = 'bold',
         }
     },
