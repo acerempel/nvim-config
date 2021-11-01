@@ -2,25 +2,11 @@ local whichkey = require('which-key')
 
 whichkey.register(
   {
-    b = {
-      name = "Buffers",
-      f = {
-        "<cmd>lua require('telescope.builtin').buffers()<cr>",
-        "Fuzzy find"
-      },
-      a = { "Add to harpoon list" },
-      e = { "Edit harpoon list" },
-      b = { "Go to Nth harpooned buffer" },
-    },
     f = {
       name = "Find files",
       f = {
         "<cmd>lua require('telescope.builtin').find_files()<cr>",
         "Files beneath the current directory"
-      },
-      b = {
-        "<cmd>lua require('telescope.builtin').buffers()<cr>",
-        "Open buffers"
       },
       i = {
         "<cmd>lua require('telescope.builtin').file_browser()<cr>",
@@ -91,6 +77,29 @@ whichkey.register(textobjects, { mode = "x" })
 
 whichkey.register(
   {
+    [';'] = {
+      name = "Buffers",
+      f = {
+        "<cmd>lua require('telescope.builtin').buffers({ show_all_buffers = false, sort_lastused = true })<cr>",
+        "Fuzzy find"
+      },
+      d = {
+        "<cmd>lua require('telescope.builtin').buffers({ show_all_buffers = false, sort_lastused = true, cwd_only = true })<cr>",
+        "Fuzzy find within currend directory"
+      },
+      a = {
+        "<Cmd>lua require'harpoon.mark'.add_file()<CR>",
+        "Add to harpoon list"
+      },
+      e = {
+        "<Cmd>lua require'harpoon.ui'.toggle_quick_menu()<CR>",
+        "Edit harpoon list"
+      },
+      [';'] = {
+        "<Cmd>lua require'harpoon.ui'.nav_file(vim.v.count1)<CR>",
+        "Go to Nth harpooned buffer"
+      },
+    },
     ["["] = {
       name = "Previous, before, above",
       w = {

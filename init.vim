@@ -196,11 +196,6 @@ nnoremap <silent> <Leader>td <Cmd>tcd %:h<CR>
 nnoremap <silent> <Leader>tn <Cmd>tabnew<CR>
 nnoremap <silent> <Leader>tc <Cmd>tabclose<CR>
 
-nnoremap ; <Cmd>call luaeval("require'harpoon.ui'.nav_file(_A)", v:count1)<CR>
-nnoremap <Leader>bb <Cmd>call luaeval("require'harpoon.ui'.nav_file(_A)", v:count1)<CR>
-nnoremap <Leader>ba <Cmd>lua require'harpoon.mark'.add_file()<CR>
-nnoremap <Leader>be <Cmd>lua require'harpoon.ui'.toggle_quick_menu()<CR>
-
 nnoremap <silent> U <Cmd>UndotreeToggle<CR>
 
 noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
