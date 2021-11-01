@@ -62,11 +62,11 @@ M.active[1] = {
     {
         provider = function()
           local mode = vim.api.nvim_get_mode().mode
-          return mode_medium_names[mode]
+          return mode_medium_names[mode:sub(1,1)]
         end,
         short_provider = function()
           local mode = vim.api.nvim_get_mode().mode
-          return mode_short_names[mode]
+          return mode_short_names[mode:sub(1,1)]
         end,
         priority = -1,
         hl = function()
