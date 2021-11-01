@@ -40,7 +40,7 @@ noremap ]d <Cmd>call VSCodeNotify('editor.action.marker.nextInFiles')<CR>
 noremap [d <Cmd>call VSCodeNotify('editor.action.marker.prevInFiles')<CR>
 
 nnoremap gh <Cmd>call VSCodeNotify('editor.action.changeAll')<CR>
-xnoremap gh <Cmd>call VSCodeNotifyVisual('editor.action.selectHighlights', v:false)<CR>
+xnoremap gh <Cmd>call VSCodeNotifyVisual('editor.action.selectHighlights', v:true)<CR>
 
 " Allow remapping, since gj and gk are mapped to VSCode commands.
 map <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
@@ -48,3 +48,6 @@ map <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
 
 " no matchparen
 let g:loaded_matchparen = 1
+
+" Don't remember the buffers list, VSCode manages that
+set shada-=%

@@ -13,7 +13,7 @@ whichkey.register(
       b = { "Go to Nth harpooned buffer" },
     },
     f = {
-      name = "Find files from various lists",
+      name = "Find files",
       f = {
         "<cmd>lua require('telescope.builtin').find_files()<cr>",
         "Files beneath the current directory"
@@ -34,14 +34,19 @@ whichkey.register(
         "<cmd>lua require('telescope.builtin').oldfiles()<cr>",
         "Files from previous sessions"
       },
-      g = { "Live grep" },
-      s = { "Grep string" },
     },
     k = {
       name = "Symbol under the cursor",
     },
+    g = {
+      name = "Git: worktree actions",
+      b = {
+        "<cmd>lua require('telescope.builtin').git_branches()<CR>",
+        "Switch branch"
+      },
+    },
     h = {
-      name = "Git operations",
+      name = "Git: change-hunk actions",
       p = { "Preview hunk diff" },
       r = { "Restore hunk from the index" },
       R = { "Restore all hunks from the index" },
@@ -51,6 +56,18 @@ whichkey.register(
       U = { "Restore buffer from the index" },
       b = { "Show last commit affecting this line" },
       B = { "<Plug>(git-messenger)", "Show last commit affecting this line, more detail" },
+    },
+    [':'] = {
+      "<cmd>lua require('telescope.builtin').commands()<CR>",
+      "Run Ex command"
+    },
+    ['*'] = {
+      "<cmd>lua require('telescope.builtin').grep_string()<cr>",
+      "Search files for word under cursor"
+    },
+    ['/'] = {
+      "<cmd>lua require('telescope.builtin').live_grep()<cr>",
+      "Search files using regex"
     },
   },
   { prefix = "<Leader>" }
@@ -118,16 +135,13 @@ whichkey.register(
     },
     g = {
       name = "Go to; jump around; select",
-      s = { "Select syntax node under cursor" },
-      t = { "Go to type definition" },
-      r = { "Show references" },
-      i = { "Go to implementation" },
       O = { "Show document outline" },
       b = { "go", "Go to nth byte" },
     },
     Y = { "Yank till end of line" },
     Q = { "Re-run last used macro" },
     U = { "Show/hide undo tree" },
+    Z = { "Delete without register" },
     ZZ = { "Delete line without register" },
     z = {
       name = "folds",
@@ -142,11 +156,9 @@ whichkey.register(
 
 whichkey.register(
   {
-    g = {
-      n = { "Extend the selection to the enclosing node" },
-      m = { "Extend the selection to the enclosing scope" },
-      N = { "Intend the selection to the enclosed node" },
-    }
+    ['-'] = { "Extend the selection to the enclosing node" },
+    ['+'] = { "Extend the selection to the enclosing scope" },
+    ['_'] = { "Intend the selection to the enclosed node" },
   },
   { mode = "v" }
 )

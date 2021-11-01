@@ -15,7 +15,6 @@ vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
 )
 
 local on_attach = function(client, bufnr)
-  require('plugins').loader("symbols-outline.nvim")
   require('lsp_signature').on_attach(lsp_signature_config)
   vim.cmd(string.format([[
     augroup lsp_buf

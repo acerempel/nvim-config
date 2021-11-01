@@ -26,7 +26,7 @@ set autoindent nojoinspaces
 set list listchars=tab:↹·,nbsp:⎵,trail:·,extends:⇉,precedes:⇇
 set showbreak=↪︎
 set fillchars=vert:│,fold:─
-set diffopt=filler,vertical,context:4
+set diffopt=filler,vertical,context:3,internal,algorithm:histogram,closeoff,hiddenoff,indent-heuristic
 set nowrap linebreak breakindent
 set foldlevelstart=2
 set foldtext=v:lua.foldtext()
@@ -43,12 +43,12 @@ set shiftwidth=2 shiftround
 
 set backspace=indent,eol,start
 set virtualedit=block,onemore
-set nostartofline allowrevins
+set nostartofline
 
 set ignorecase smartcase gdefault
 
 set splitbelow splitright equalalways
-set switchbuf=useopen,usetab
+set switchbuf=uselast,useopen,usetab
 set guioptions-=L
 let no_buffers_menu = 0
 set lazyredraw
@@ -114,13 +114,13 @@ augroup END
 " for command in s:packer_commands
 "   exe "command! -nargs=* Packer" .. command "exe \"lua require('packer').init()\" | Packer" .. command
 " endfor
-command! -nargs=* -complete=customlist,v:lua.require'packer'.plugin_complete PackerInstall lua require('plugins').install(<f-args>)
-command! -nargs=* -complete=customlist,v:lua.require'packer'.plugin_complete PackerUpdate lua require('plugins').update(<f-args>)
-command! -nargs=* -complete=customlist,v:lua.require'packer'.plugin_complete PackerSync lua require('plugins').sync(<f-args>)
+command! -nargs=* -complete=customlist,v:lua.require'plugins'.plugin_complete PackerInstall lua require('plugins').install(<f-args>)
+command! -nargs=* -complete=customlist,v:lua.require'plugins'.plugin_complete PackerUpdate lua require('plugins').update(<f-args>)
+command! -nargs=* -complete=customlist,v:lua.require'plugins'.plugin_complete PackerSync lua require('plugins').sync(<f-args>)
 command! PackerClean lua require('plugins').clean()
 command! PackerCompile lua require('plugins').compile()
 command! PackerProfile lua require('plugins').profile_output()
-command! -nargs=+ -complete=customlist,v:lua.require'packer'.loader_complete PackerLoad | lua require('plugins').loader(<q-args>)
+command! -nargs=+ -complete=customlist,v:lua.require'plugins'.loader_complete PackerLoad | lua require('plugins').loader(<q-args>)
 " }}}
 
 " MAPPINGS {{{
@@ -274,6 +274,12 @@ augroup END
 
 " Misc lua config {{{
 lua << ENDLUA
+  _G.term = function(s)
+    return vim.api.nvim_replace_termcodes(s, true, true, true)
+  end
+
+  _G.is_not_vscode = function() return vim.g.vscode == nil end
+
   _G.check_back_space = function()
     local col = vim.fn.col('.') - 1
     if col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') then
@@ -320,12 +326,6 @@ lua << ENDLUA
     return start_line .. end_line .. string.format(' │%d├', num_lines)
   end
 ENDLUA
-" }}}
-
-" Telescope {{{
-" cmap <C-R> <Plug>(TelescopeFuzzyCommandSearch)
-nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<cr>
-nnoremap <leader>fs <cmd>lua require('telescope.builtin').grep_string()<cr>
 " }}}
 
 " COC mappings {{{

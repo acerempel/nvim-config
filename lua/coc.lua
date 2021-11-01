@@ -49,7 +49,7 @@ M.coc_buf_maps = function (bufnr)
   end
   local whichkey = require('which-key')
   local mappings = {}
-  for _, map in ipairs(coc_map_config) do
+  for _, map in ipairs(M.coc_map_config) do
     local command = ''
     if vim.startswith(map[2], '<Cmd>') then
       command = map[2] .. '<CR>'
@@ -80,9 +80,9 @@ M.setup_coc_maps = function()
   )
   local bufs = vim.api.nvim_list_bufs()
   for _, buf in ipairs(bufs) do
-    local ft = vim.api.nvim_buf_get_option(bufnr, 'filetype')
+    local ft = vim.api.nvim_buf_get_option(buf, 'filetype')
     if filetypes[ft] then
-      coc_buf_maps(buf)
+      M.coc_buf_maps(buf)
     end
   end
 end

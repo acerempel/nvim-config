@@ -195,27 +195,15 @@ M.inactive[1] = {
     {
         provider = 'file_info',
         hl = {
-            fg = 'white',
+            fg = 'bg_dim',
             bg = 'skyblue',
             style = 'bold'
         },
-        left_sep = {
-            str = ' ',
-            hl = {
-                fg = 'NONE',
-                bg = 'oceanblue'
-            }
-        },
+        left_sep = 'block',
         right_sep = {
-            {
-                str = ' ',
-                hl = {
-                    fg = 'NONE',
-                    bg = 'oceanblue'
-                }
-            },
+            'block',
             'slant_right'
-        }
+        },
     },
     -- Empty component to fix the highlight till the end of the statusline
     {
