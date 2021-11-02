@@ -50,6 +50,11 @@ use {
   module = 'hlslens',
 }
 
+-- More and better text-objects
+use {
+  'wellle/targets.vim'
+}
+
 use {
   'joosepalviste/nvim-ts-context-commentstring',
   module = 'ts_context_commentstring',
