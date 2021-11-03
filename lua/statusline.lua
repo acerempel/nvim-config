@@ -210,7 +210,7 @@ M.inactive[1] = {
     }
 }
 
-local palette = require('zenbones.palette')
+local palette = require('zenbones.palette')[vim.o.background]
 
 local colors = {
   white = palette.fg1.hex,
