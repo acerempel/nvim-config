@@ -129,6 +129,9 @@ command! -nargs=+ -complete=customlist,v:lua.require'plugins'.loader_complete Pa
 let mapleader = " "
 let g:mapleader = " "
 let maplocalleader = ","
+map <Space> <Nop>
+map , <Nop>
+map ; <Nop>
 " }}}
 
 " Moving around {{{
