@@ -108,8 +108,14 @@ use {
   end
 }
 
+use {
+  'nathom/filetype.nvim',
+}
+
 -- Cache lua require() calls
-use 'lewis6991/impatient.nvim'
+use {
+  'lewis6991/impatient.nvim',
+}
 
 -- Faster folds, I guess
 use { 'konfekt/fastfold', cond = is_not_vscode }
@@ -307,10 +313,6 @@ use {
 }
 
 use {
-  'nathom/filetype.nvim',
-}
-
-use {
   'yamatsum/nvim-nonicons',
   cond = is_not_vscode,
   after = { 'nvim-web-devicons' },
@@ -335,7 +337,7 @@ use {
     vim.g.zenbones_darken_noncurrent_window = true
   end,
   config = function ()
-    vim.cmd [[colorscheme zenbones]]
+    vim.api.nvim_command [[colorscheme zenbones]]
   end,
 }
 
