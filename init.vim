@@ -142,6 +142,12 @@ noremap <C-l> <C-W>l
 noremap ` <C-W>w
 noremap ~ <C-W>W
 
+inoremap <expr> <C-E> pumvisible() ? "<C-E>" : "<End>"
+inoremap <C-A> <Home>
+" Normally <C-F> re-indents the current line, but I've never used that
+inoremap <C-F> <Right>
+inoremap <C-B> <Left>
+
 noremap Q @@
 noremap Z "_d
 noremap ZZ "_dd
