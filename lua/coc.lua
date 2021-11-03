@@ -6,9 +6,9 @@ local M = {}
 
 M.coc_tab = function ()
   if vim.fn.pumvisible() == 1 then
-    keys(term('<C-n>'))
-  elseif check_back_space() then
-    keys(term('<Tab>'))
+    keys(require('util').term('<C-n>'))
+  elseif require('util').check_back_space() then
+    keys(require('util').term('<Tab>'))
   else
     vim.fn['coc#start']()
   end
@@ -90,7 +90,7 @@ end
 vim.cmd [[
 " inoremap <silent><expr> <TAB>
 "       \ pumvisible() ? "\<C-n>" :
-"       \ <SID>check_back_space() ? "\<TAB>" :
+"       \ v:lua.require'util'.check_back_space() ? "\<TAB>" :
 "       \ coc#refresh()
 inoremap <Tab> <Cmd>lua require('coc').coc_tab()<CR>
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-Tab>"

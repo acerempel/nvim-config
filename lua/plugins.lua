@@ -1,5 +1,6 @@
 vim.api.nvim_command('packadd packer.nvim')
 local packer = require('packer')
+local is_not_vscode = "vim.g.vscode == nil"
 
 packer.init {
   disable_commands = true,
@@ -474,16 +475,16 @@ use {
     })
     _G.mapping_ctrl_n = function ()
       if luasnip.choice_active() then
-        return term('<Cmd>lua luasnip.change_choice(1)<CR>')
+        return require('util').term('<Cmd>lua luasnip.change_choice(1)<CR>')
       else
-        return term('<C-n>')
+        return require('util').term('<C-n>')
       end
     end
     _G.mapping_ctrl_p = function ()
       if luasnip.choice_active() then
-        return term('<Cmd>lua luasnip.change_choice(-1)<CR>')
+        return require('util').term('<Cmd>lua luasnip.change_choice(-1)<CR>')
       else
-        return term('<C-p>')
+        return require('util').term('<C-p>')
       end
     end
     vim.api.nvim_set_keymap("i", "<C-n>", "v:lua.mapping_ctrl_n()", { expr = true, noremap = true })
@@ -512,6 +513,7 @@ use {
   },
   config = function ()
     local cmp = require('cmp')
+    local util = require('util')
     cmp.setup {
       snippet = {
         expand = function(args)
@@ -535,22 +537,22 @@ use {
         ['<Up>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
         ['<Tab>'] = function(fallback)
           if cmp.visible() then
-            -- vim.api.nvim_feedkeys(term('<C-n>'), 'n', true)
+            -- vim.api.nvim_feedkeys(require('util').term('<C-n>'), 'n', true)
             cmp.select_next_item({ cmp.SelectBehavior.Insert })
-          elseif check_back_space() then
+          elseif util.check_back_space() then
             fallback()
-            -- vim.api.nvim_feedkeys(term('<Tab>'), 'n', true)
+            -- vim.api.nvim_feedkeys(require('util').term('<Tab>'), 'n', true)
           else
             cmp.complete()
           end
         end,
         ['<S-Tab>'] = function(fallback)
           if cmp.visible() then
-            -- vim.api.nvim_feedkeys(term('<C-p>'), 'n', true)
+            -- vim.api.nvim_feedkeys(require('util').term('<C-p>'), 'n', true)
             cmp.select_next_item({ cmp.SelectBehavior.Insert })
           else
             fallback()
-            -- vim.api.nvim_feedkeys(term('<S-Tab>'), 'n', true)
+            -- vim.api.nvim_feedkeys(require('util').term('<S-Tab>'), 'n', true)
           end
         end,
       },
