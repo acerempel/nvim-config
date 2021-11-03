@@ -85,7 +85,7 @@ whichkey.register(
       },
       d = {
         "<cmd>lua require('telescope.builtin').buffers({ show_all_buffers = false, sort_lastused = true, cwd_only = true })<cr>",
-        "Fuzzy find within currend directory"
+        "Fuzzy find within current directory"
       },
       a = {
         "<Cmd>lua require'harpoon.mark'.add_file()<CR>",

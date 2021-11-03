@@ -158,7 +158,8 @@ noremap gb go
 noremap Y y$
 
 noremap ' `
-inoremap <C-l> <Esc>
+tnoremap <Esc> <c-\><c-n>
+
 " }}}
 
 " }}}
@@ -251,11 +252,6 @@ endfunction
 " }}}
 
 " AUTOCOMMANDS (non-VSCode only) {{{
-
-augroup terminal
-  au!
-  au TermOpen * tnoremap <buffer> <Esc> <c-\><c-n>
-augroup END
 
 augroup filetypes
   autocmd!
