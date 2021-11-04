@@ -275,6 +275,9 @@ use {
             ["<Esc>"] = actions.close,
             ["<Tab>"] = actions.toggle_selection,
           },
+          n = {
+            ["<Tab>"] = actions.toggle_selection,
+          },
         }
       }
     })
