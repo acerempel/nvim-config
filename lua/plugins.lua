@@ -124,6 +124,8 @@ use {
   end
 }
 
+use 'tpope/vim-repeat'
+
 use {
   'nathom/filetype.nvim',
 }
@@ -150,7 +152,6 @@ use {
 --}}}
 
 -- Editing-oriented normal mode commands {{{
-use 'tpope/vim-repeat'
 use 'tpope/vim-surround'
 use {
   'numToStr/Comment.nvim',
