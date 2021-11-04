@@ -54,10 +54,6 @@ local on_attach = function(client, bufnr)
         "<Cmd>lua vim.lsp.buf.rename()<CR>",
         "Rename symbol"
       },
-      ["<Leader>ka"] = {
-        "<Cmd>lua require'telescope.builtin'.lsp_code_actions()<CR>",
-        "Show available code actions"
-      },
       ["gh"] = {
         "<Cmd>lua vim.lsp.buf.document_highlight()<CR>",
         "Highlight occurrences"
@@ -67,13 +63,17 @@ local on_attach = function(client, bufnr)
         "Go to type definition"
       },
       ["g}"] = {
-        "<Cmd>Trouble lsp_references<CR>",
+        "<Cmd>lua vim.lsp.buf.references()<CR>",
         "Show references to symbol"
       },
       ["g]"] = {
-        "<Cmd>lua require'telescope.builtin'.lsp_references<CR>",
+        "<Cmd>lua require'telescope.builtin'.lsp_references()<CR>",
         "Search references to symbol"
-      }
+      },
+      ['z='] = {
+        "<Cmd>lua require'telescope.builtin'.lsp_code_actions(require'telescope.themes'.get_cursor())<CR>",
+        "Code actions"
+      },
     },
     { buffer = bufnr }
   )
