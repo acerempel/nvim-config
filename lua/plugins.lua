@@ -28,6 +28,18 @@ use {
   cond = is_not_vscode,
   config = function() require('pqf').setup() end,
 }
+
+use {
+  'romainl/vim-qf',
+  cond = is_not_vscode,
+  event = "QuickFixCmdPost",
+  ft = "qf",
+  setup = function ()
+    vim.g.qf_mapping_ack_style = 1
+    vim.g.qf_nowrap = 0
+  end
+}
+
 use {
   'stevearc/qf_helper.nvim',
   ft = 'qf',
@@ -43,6 +55,10 @@ use {
   end,
 }
 use { 'Olical/vim-enmasse', cmd = "EnMasse" }
+use {
+  'gabrielpoca/replacer.nvim',
+  module = 'replacer',
+}
 --}}}
 
 -- Existing commands improved {{{
