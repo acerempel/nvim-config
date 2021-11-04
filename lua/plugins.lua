@@ -246,6 +246,17 @@ use {
 -- EXTRA FEATURES {{{
 
 use {
+  'haya14busa/vim-metarepeat',
+  keys = 'g.',
+}
+
+use {
+  "chrisbra/NrrwRgn",
+  cmd = { "NarrowRegion", "NarrowWindow", "NR", "NW", "NRV", },
+  keys = { "<Leader>nr" },
+}
+
+use {
   'nvim-telescope/telescope.nvim',
   module = 'telescope',
   cmd = 'Telescope',
@@ -298,6 +309,19 @@ use { 'editorconfig/editorconfig-vim', opt = true }
 
 use 'chrisbra/unicode.vim'
 
+use {
+  'tpope/vim-eunuch',
+  cmd = { 'Delete', 'Unlink', 'Move', 'Rename', 'Chmod', 'Mkdir', 'Cfind', 'Clocate', 'Lfind', 'Llocate', 'Wall', 'SudoWrite', 'SudoEdit', },
+}
+
+use {
+  "tpope/vim-scriptease",
+  cmd = {
+    "Messages", --view messages in quickfix list
+    "Verbose", -- view verbose output in preview window.
+    "Time", -- measure how long it takes to run some stuff.
+  },
+}
 -- }}}
 
 -- AESTHETICS {{{
