@@ -20,6 +20,10 @@ whichkey.register(
         "<cmd>lua require('telescope.builtin').oldfiles()<cr>",
         "Files from previous sessions"
       },
+      r = {
+        "<Cmd>lua require('telescope').extensions.frecency.frecency()<CR>",
+        "Frequently & recently used files"
+      }
     },
     k = {
       name = "Symbol under the cursor",

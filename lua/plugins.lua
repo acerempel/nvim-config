@@ -286,6 +286,15 @@ use {
 }
 
 use {
+  'nvim-telescope/telescope-frecency.nvim',
+  requires = {
+    'telescope.nvim',
+    { 'tami5/sqlite.lua', setup = function () vim.g.sqlite_clib_path = '/usr/lib/libsqlite3.dylib' end }
+  },
+  config = function () require('telescope').load_extension("frecency") end,
+}
+
+use {
   'ThePrimeagen/harpoon',
   module = 'harpoon',
   config = function () require('harpoon').setup {} end,
