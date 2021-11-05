@@ -20,20 +20,20 @@ mode_short_names = {
 }
 
 mode_long_names = {
-  n = 'Normal ',
-  o = 'Operato',
-  v = 'V-char ',
-  V = 'V-line ',
-  ['\016'] = 'V-block',
-  s = 'S-char ',
-  S = 'S-line ',
-  ['\013'] = 'S-block',
-  R = 'Replace',
-  i = 'Insert ',
-  c = 'Command',
-  r = 'More   ',
-  ['!'] = 'Shell  ',
-  t = 'Termina',
+  n = ' Normal ',
+  o = 'Operator',
+  v = ' V-char ',
+  V = ' V-line ',
+  ['\016'] = ' V-block',
+  s = ' S-char ',
+  S = ' S-line ',
+  ['\013'] = ' S-block',
+  R = 'Replace ',
+  i = ' Insert ',
+  c = 'Command ',
+  r = '  More  ',
+  ['!'] = ' Shell  ',
+  t = 'Terminal',
 }
 
 mode_medium_names = {
@@ -172,22 +172,27 @@ M.active[2] = {
         truncate_hide = true,
     },
     {
+        provider = 'position',
+        hl = {
+            fg = 'skyblue',
+            bg = 'bg_dim',
+        },
+        left_sep = {
+          {
+            str = 'slant_left_thin',
+            hl = { fg = 'skyblue', bg = 'bg_dim', },
+          },
+          'block',
+        },
+        right_sep = 'block',
+    },
+    {
         provider = 'scroll_bar',
         hl = {
             fg = 'skyblue',
             bg = 'bg_dim',
             style = 'bold',
         }
-    },
-    {
-        provider = 'line_percentage',
-        hl = {
-            fg = 'black',
-            bg = 'skyblue',
-            style = 'bold',
-        },
-        left_sep = 'block',
-        right_sep = 'block',
     },
 }
 
@@ -237,7 +242,7 @@ setmetatable(colors, {
 
 require('feline').setup {
   components = M,
-  colors = colors,
+  theme = colors,
   force_inactive = {
     filetypes = {},
     buftypes = {},
