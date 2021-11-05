@@ -351,6 +351,7 @@ use {
 use {
   'SmiteshP/nvim-gps',
   after = { 'nvim-nonicons' },
+  module = 'nvim-gps',
   config = function ()
     local icon = require('nvim-nonicons').get
     require('nvim-gps').setup {
