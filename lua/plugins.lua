@@ -564,7 +564,7 @@ use {
   requires = {
     { "hrsh7th/cmp-buffer", opt = true, after = { 'nvim-cmp' } },
     { "saadparwaiz1/cmp_luasnip", opt = true, after = { 'nvim-cmp', 'LuaSnip' } },
-    { "hrsh7th/cmp-nvim-lsp", module = "cmp_nvim_lsp", },
+    { "hrsh7th/cmp-nvim-lsp", module = "cmp_nvim_lsp", after = { 'nvim-cmp' } },
     { "hrsh7th/cmp-nvim-lua", opt = true, after = { 'nvim-cmp' } },
   },
   config = function ()
