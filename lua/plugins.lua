@@ -374,7 +374,7 @@ use {
 }
 
 use {
-  'alvarosevilla95/luatab.nvim',
+  '~/Code/luatab.nvim',
   after = { 'nvim-nonicons' },
   config = function ()
     vim.o.tabline = '%!v:lua.require\'luatab\'.tabline()'
