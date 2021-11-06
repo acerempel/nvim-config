@@ -167,22 +167,21 @@ M.active[2] = {
             bg = 'bg_dim',
             style = 'bold'
         },
-        right_sep = 'block',
-        priority = 1,
-        truncate_hide = true,
-    },
-    {
-        provider = 'position',
-        hl = {
-            fg = 'skyblue',
-            bg = 'bg_dim',
-        },
-        left_sep = {
+        right_sep = {
+          'block',
           {
             str = 'slant_left_thin',
             hl = { fg = 'skyblue', bg = 'bg_dim', },
           },
-          'block',
+        },
+        priority = 1,
+        truncate_hide = true,
+    },
+    {
+        provider = '%2l/%-3L',
+        hl = {
+            fg = 'skyblue',
+            bg = 'bg_dim',
         },
         right_sep = 'block',
     },
