@@ -184,6 +184,7 @@ M.active[2] = {
             bg = 'bg_dim',
         },
         right_sep = 'block',
+        left_sep = 'block',
     },
     {
         provider = 'scroll_bar',
@@ -198,6 +199,7 @@ M.active[2] = {
 M.inactive[1] = {
     {
         provider = 'file_info',
+        enabled = function() return vim.bo.buftype ~= 'quickfix' end,
         hl = {
             fg = 'bg_dim',
             bg = 'skyblue',
@@ -209,9 +211,67 @@ M.inactive[1] = {
             'slant_right'
         },
     },
-    -- Empty component to fix the highlight till the end of the statusline
     {
-    }
+      provider = function() return vim.fn.win_gettype() end,
+      enabled = function() return vim.bo.buftype == 'quickfix' end,
+      hl = {
+          fg = 'bg_dim',
+          bg = 'skyblue',
+          style = 'bold'
+      },
+      left_sep = 'block',
+      right_sep = {
+          'block',
+          {
+            str = 'slant_right',
+            hl = { fg = 'skyblue', bg = 'bg_dim' },
+          }
+      },
+    },
+    {
+      provider = function()
+        local which = vim.fn.win_gettype()
+        local title
+        if which == "quickfix" then
+          title = vim.fn.getqflist({ title = 1 }).title
+        elseif which == "loclist" then
+          title = vim.fn.getloclist(0, { title = 1 }).title
+        else
+          title = vim.api.nvim_buf_get_name(0)
+        end
+        return title
+      end,
+      enabled = function() return vim.bo.buftype == 'quickfix' end,
+      hl = {
+          style = 'bold',
+          bg = 'bg_dim',
+      },
+      left_sep = 'block',
+      right_sep = {
+        'block',
+        'slant_right',
+      },
+    },
+}
+
+M.inactive[2] = {
+    {
+        provider = '%2l/%-3L',
+        hl = {
+            fg = 'skyblue',
+            bg = 'bg_dim',
+        },
+        right_sep = 'block',
+        left_sep = 'block',
+    },
+    {
+        provider = 'scroll_bar',
+        hl = {
+            fg = 'skyblue',
+            bg = 'bg_dim',
+            style = 'bold',
+        }
+    },
 }
 
 local palette = require('zenbones.palette')[vim.o.background]
@@ -243,7 +303,21 @@ require('feline').setup {
   components = M,
   theme = colors,
   force_inactive = {
-    filetypes = {},
-    buftypes = {},
+    filetypes = {
+      '^NvimTree$',
+      '^packer$',
+      '^fugitive$',
+      '^fugitiveblame$',
+    },
+    buftypes = {
+      '^quickfix$',
+      '^terminal$',
+      '^help$',
+    },
+  },
+  disable = {
+    filetypes = {
+      '^TelescopePrompt$',
+    },
   },
 }
