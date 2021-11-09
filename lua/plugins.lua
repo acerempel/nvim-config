@@ -286,6 +286,7 @@ use {
 
 use {
   'nvim-telescope/telescope-frecency.nvim',
+  after = { 'telescope.nvim' },
   requires = {
     'telescope.nvim',
     { 'tami5/sqlite.lua', setup = function () vim.g.sqlite_clib_path = '/usr/lib/libsqlite3.dylib' end }
