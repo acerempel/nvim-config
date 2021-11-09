@@ -1,6 +1,5 @@
 vim.api.nvim_command('packadd packer.nvim')
 local packer = require('packer')
-local is_not_vscode = "vim.g.vscode == nil"
 
 packer.init {
   disable_commands = true,
