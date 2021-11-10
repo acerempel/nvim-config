@@ -171,10 +171,6 @@ let g:sneak#label = exists('g:vscode') ? 0 : 1
 
 let g:clever_f_fix_key_direction = 1
 
-let g:far#source = 'rgnvim'
-
-let g:haddock_browser="/Applications/Safari.app/Contents/MacOS/Safari"
-
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
 let g:vim_svelte_plugin_use_typescript = 1
