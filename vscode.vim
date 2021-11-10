@@ -39,8 +39,8 @@ noremap zm <Nop>
 noremap ]d <Cmd>call VSCodeNotify('editor.action.marker.nextInFiles')<CR>
 noremap [d <Cmd>call VSCodeNotify('editor.action.marker.prevInFiles')<CR>
 
-nnoremap gh <Cmd>call VSCodeNotify('editor.action.changeAll')<CR>
-xnoremap gh <Cmd>call VSCodeNotifyVisual('editor.action.selectHighlights', v:true)<CR>
+nnoremap gh <Cmd>call VSCodeNotify('editor.action.changeAll')<Bar>startinsert<CR>
+xnoremap gh <Cmd>call VSCodeNotifyVisual('editor.action.selectHighlights', v:true)<Bar>startinsert<CR>
 
 " Allow remapping, since gj and gk are mapped to VSCode commands.
 map <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
