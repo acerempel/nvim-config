@@ -476,6 +476,9 @@ use {
   config = function() require('lsp') end,
 }
 use {
+  'williamboman/nvim-lsp-installer',
+}
+use {
   'ray-x/lsp_signature.nvim',
   module = 'lsp_signature',
 }

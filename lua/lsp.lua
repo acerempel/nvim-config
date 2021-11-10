@@ -97,6 +97,56 @@ local servers = {
 }
 
 for _, server in ipairs(servers) do
-  local config = basic_lsp_config
   lspconfig[server].setup(basic_lsp_config)
 end
+
+local runtime_path = vim.split(package.path, ';')
+table.insert(runtime_path, "lua/?.lua")
+table.insert(runtime_path, "lua/?/init.lua")
+
+local lua_config = {
+  settings = {
+    Lua = {
+      runtime = {
+        -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+        version = 'LuaJIT',
+        -- Setup your lua path
+        path = runtime_path,
+      },
+      diagnostics = {
+        -- Get the language server to recognize the `vim` global
+        globals = {'vim'},
+      },
+      workspace = {
+        -- Make the server aware of Neovim runtime files
+        library = vim.api.nvim_get_runtime_file("", true),
+      },
+      -- Do not send telemetry data containing a randomized but unique identifier
+      telemetry = {
+        enable = false,
+      },
+    },
+  },
+}
+
+local lsp_installer = require("nvim-lsp-installer")
+
+-- Provide settings first!
+lsp_installer.settings({
+    ui = {
+        icons = {
+            server_installed = "✓",
+            server_pending = "➜",
+            server_uninstalled = "✗"
+        }
+    }
+})
+
+lsp_installer.on_server_ready(function (server)
+  local local_config = {}
+  if server.name == 'sumneko_lua' then
+    local_config = lua_config
+  end
+  local config = vim.tbl_deep_extend("force", basic_lsp_config, local_config)
+  server:setup(config)
+end)
