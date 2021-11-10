@@ -295,6 +295,12 @@ use {
 }
 
 use {
+  'jvgrootveld/telescope-zoxide',
+  after = { 'telescope.nvim' },
+  config = function () require'telescope'.load_extension('zoxide') end
+}
+
+use {
   'ThePrimeagen/harpoon',
   module = 'harpoon',
   config = function () require('harpoon').setup {} end,

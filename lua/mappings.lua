@@ -25,6 +25,13 @@ whichkey.register(
         "Frequently & recently used files"
       }
     },
+    d = {
+      name = "Directories",
+      r = {
+        "<Cmd>lua require('telescope').extensions.zoxide.list({})<CR>",
+        "Frequently used directories"
+      },
+    },
     k = {
       name = "Symbol under the cursor",
     },
