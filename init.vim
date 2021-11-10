@@ -167,7 +167,7 @@ tnoremap <Esc> <c-\><c-n>
 " Misc plugin settings {{{
 let g:sneak#s_next = 1
 let g:sneak#absolute_dir = 1
-let g:sneak#label = 1
+let g:sneak#label = exists('g:vscode') ? 0 : 1
 
 let g:clever_f_fix_key_direction = 1
 
