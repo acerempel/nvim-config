@@ -1,5 +1,14 @@
 local whichkey = require('which-key')
 
+local harpoons = {}
+
+for i = 1, 9, 1 do
+  harpoons[tostring(i)] = {
+    string.format("<cmd>lua require'harpoon.ui'.nav_file(%d)<CR>", i),
+    "Go to Nth harpooned buffer"
+  }
+end
+
 whichkey.register(
   {
     f = {
@@ -24,6 +33,29 @@ whichkey.register(
         "<Cmd>lua require('telescope').extensions.frecency.frecency()<CR>",
         "Frequently & recently used files"
       }
+    },
+    b = {
+      name = "Buffers",
+      b = {
+        "<cmd>lua require('telescope.builtin').buffers({ show_all_buffers = false, sort_lastused = true })<cr>",
+        "Fuzzy find"
+      },
+      d = {
+        "<cmd>lua require('telescope.builtin').buffers({ show_all_buffers = false, sort_lastused = true, cwd_only = true })<cr>",
+        "Fuzzy find within current directory"
+      },
+      a = {
+        "<Cmd>lua require'harpoon.mark'.add_file()<CR>",
+        "Add to harpoon list"
+      },
+      e = {
+        "<Cmd>lua require'harpoon.ui'.toggle_quick_menu()<CR>",
+        "Edit harpoon list"
+      },
+      [';'] = {
+        "<Cmd>lua require'harpoon.ui'.nav_file(vim.v.count1)<CR>",
+        "Go to Nth harpooned buffer"
+      },
     },
     d = {
       name = "Directories",
@@ -88,7 +120,7 @@ whichkey.register(
 )
 
 local textobjects = {
-  ih = { "Git change hunk" }
+  ih = { "Git change-hunk" }
 }
 
 whichkey.register(textobjects, { mode = "o" })
@@ -96,29 +128,7 @@ whichkey.register(textobjects, { mode = "x" })
 
 whichkey.register(
   {
-    [';'] = {
-      name = "Buffers",
-      f = {
-        "<cmd>lua require('telescope.builtin').buffers({ show_all_buffers = false, sort_lastused = true })<cr>",
-        "Fuzzy find"
-      },
-      d = {
-        "<cmd>lua require('telescope.builtin').buffers({ show_all_buffers = false, sort_lastused = true, cwd_only = true })<cr>",
-        "Fuzzy find within current directory"
-      },
-      a = {
-        "<Cmd>lua require'harpoon.mark'.add_file()<CR>",
-        "Add to harpoon list"
-      },
-      e = {
-        "<Cmd>lua require'harpoon.ui'.toggle_quick_menu()<CR>",
-        "Edit harpoon list"
-      },
-      [';'] = {
-        "<Cmd>lua require'harpoon.ui'.nav_file(vim.v.count1)<CR>",
-        "Go to Nth harpooned buffer"
-      },
-    },
+    [';'] = harpoons,
     ["["] = {
       name = "Previous, before, above",
       w = {
