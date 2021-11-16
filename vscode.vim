@@ -20,7 +20,7 @@ nnoremap <silent> z5 <Cmd>call VSCodeNotify('editor.foldLevel5')<CR>
 nnoremap <silent> z6 <Cmd>call VSCodeNotify('editor.foldLevel6')<CR>
 nnoremap <silent> z7 <Cmd>call VSCodeNotify('editor.foldLevel7')<CR>
 
-xnoremap <silent> zV <Cmd>call VSCodeNotify('editor.foldAllExcept')<CR>
+xnoremap <silent> zV <Cmd>call VSCodeNotifyVisual('editor.foldAllExcept', v:false)<CR>
 
 nnoremap gD <Cmd>call VSCodeNotify('editor.action.revealDeclaration')<CR>
 xnoremap gD <Cmd>call VSCodeNotify('editor.action.revealDeclaration')<CR>
@@ -31,13 +31,25 @@ xnoremap g} <Cmd>call VSCodeNotify('editor.action.goToReferences')<CR>
 nnoremap gO <Cmd>call VSCodeNotify('workbench.action.showAllSymbols')<CR>
 nnoremap go <Cmd>call VSCodeNotify('workbench.action.gotoSymbol')<CR>
 
-" VSCode doesn't have commands for these apparently.
-noremap zv <Nop>
-noremap zr <Nop>
-noremap zm <Nop>
+nnoremap <Leader>jd <Cmd>call VSCodeNotify('workbench.action.view.problems')<CR>
+nnoremap <Leader>jo <Cmd>call VSCodeNotify('workbench.action.output.toggleOutput')<CR>
+nnoremap <Leader>jt <Cmd>call VSCodeNotify('workbench.action.terminal.toggleTerminal')<CR>
 
-noremap ]d <Cmd>call VSCodeNotify('editor.action.marker.nextInFiles')<CR>
-noremap [d <Cmd>call VSCodeNotify('editor.action.marker.prevInFiles')<CR>
+" VSCode doesn't have commands for these apparently.
+nnoremap zv <Nop>
+nnoremap zr <Nop>
+nnoremap zm <Nop>
+
+nnoremap ]d <Cmd>call VSCodeNotify('editor.action.marker.nextInFiles')<CR>
+nnoremap [d <Cmd>call VSCodeNotify('editor.action.marker.prevInFiles')<CR>
+nnoremap ]c <Cmd>call VSCodeNofity('workbench.editor.action.nextChange')<CR>
+nnoremap [c <Cmd>call VSCodeNofity('workbench.editor.action.prevChange')<CR>
+nnoremap ]v <Cmd>call VSCodeNofity('editor.action.dirtydiff.next')<CR>
+nnoremap [v <Cmd>call VSCodeNofity('editor.action.dirtydiff.prev')<CR>
+nnoremap zk <Cmd>call VSCodeNotify('editor.gotoPreviousFold')<CR>
+nnoremap zj <Cmd>call VSCodeNotify('editor.gotoPreviousFold')<CR>
+nnoremap g<Tab> <Cmd>call VSCodeNotify('workbench.action.openPreviousRecentlyUsedEditor')<CR>
+nnoremap g<S-Tab> <Cmd>call VSCodeNotify('workbench.action.openNextRecentlyUsedEditor')<CR>
 
 nnoremap gh <Cmd>call VSCodeNotify('editor.action.changeAll')<Bar>startinsert<CR>
 xnoremap gh <Cmd>call VSCodeNotifyVisual('editor.action.selectHighlights', v:true)<Bar>startinsert<CR>
