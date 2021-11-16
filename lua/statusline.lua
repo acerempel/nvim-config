@@ -206,7 +206,7 @@ M.active[2] = {
 M.inactive[1] = {
     {
         provider = 'file_info',
-        enabled = function() return vim.bo.buftype ~= 'quickfix' end,
+        enabled = function() return vim.bo.buftype ~= 'quickfix' and vim.bo.buftype ~= "terminal" end,
         hl = {
             fg = 'bg_dim',
             bg = 'skyblue',
@@ -243,12 +243,14 @@ M.inactive[1] = {
           title = vim.fn.getqflist({ title = 1 }).title
         elseif which == "loclist" then
           title = vim.fn.getloclist(0, { title = 1 }).title
+        elseif vim.bo.buftype == 'terminal' then
+          title = vim.b.term_title
         else
           title = vim.api.nvim_buf_get_name(0)
         end
         return title
       end,
-      enabled = function() return vim.bo.buftype == 'quickfix' end,
+      enabled = function() return vim.bo.buftype == 'quickfix' or vim.bo.buftype == 'terminal' end,
       hl = {
           style = 'bold',
           bg = 'bg_dim',
