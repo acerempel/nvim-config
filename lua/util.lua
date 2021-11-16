@@ -15,4 +15,10 @@ M.check_back_space = function()
   end
 end
 
+M.get_line_to_cursor = function ()
+  local line = vim.api.nvim_get_current_line()
+  local _, col = unpack(vim.api.nvim_win_get_cursor())
+  return line:sub(1, col)
+end
+
 return M
