@@ -98,24 +98,31 @@ M.active[1] = {
         priority = -3,
         truncate_hide = true,
         left_sep = 'block',
+        icon = '⊗'
     },
     {
         provider = 'diagnostic_warnings',
         hl = { fg = 'yellow' },
         priority = -4,
         truncate_hide = true,
+        left_sep = 'block',
+        icon = '⚠'
     },
     {
         provider = 'diagnostic_hints',
         hl = { fg = 'cyan' },
         priority = -5,
         truncate_hide = true,
+        left_sep = 'block',
+        icon = '¶'
     },
     {
         provider = 'diagnostic_info',
         hl = { fg = 'skyblue' },
         priority = -6,
         truncate_hide = true,
+        left_sep = 'block',
+        icon = 'ℹ'
     },
     {
         provider = function() return require('nvim-gps').get_location() end,
