@@ -24,15 +24,14 @@ use 'tpope/vim-apathy'
 -- Improvements to QuickFix and Location List{{{
 use {
   'https://gitlab.com/yorickpeterse/nvim-pqf.git',
-  cond = is_not_vscode,
+  as = "pqf",
+  opt = true,
   config = function() require('pqf').setup() end,
 }
 
 use {
   'romainl/vim-qf',
-  cond = is_not_vscode,
-  event = "QuickFixCmdPost",
-  ft = "qf",
+  opt = true,
   setup = function ()
     vim.g.qf_mapping_ack_style = 1
     vim.g.qf_nowrap = 0
@@ -135,13 +134,13 @@ use {
 }
 
 -- Faster folds, I guess
-use { 'konfekt/fastfold', cond = is_not_vscode }
+use { 'konfekt/fastfold', opt = true }
 -- }}}
 
 -- Session management {{{
-use { 'zhimsel/vim-stay', cond = is_not_vscode, after = { 'fastfold', 'auto-session' } }
+use { 'zhimsel/vim-stay', opt = true, after = { 'fastfold', 'auto-session' } }
 use {
-  'rmagatti/auto-session', cond = is_not_vscode,
+  'rmagatti/auto-session', opt = true,
   config = function ()
     require('auto-session').setup {
       auto_session_suppress_dirs = { vim.fn.expand('~') }
@@ -154,7 +153,7 @@ use {
 use 'tpope/vim-surround'
 use {
   'numToStr/Comment.nvim',
-  cond = is_not_vscode,
+  opt = true,
   after = { 'which-key.nvim' },
   config = function()
     require('Comment').setup {
@@ -184,7 +183,7 @@ use {
 -- Show available keybindings as you type
 use {
   'folke/which-key.nvim',
-  cond = is_not_vscode,
+  opt = true,
   config = function ()
     require('which-key').setup {
       layout = {
@@ -206,7 +205,7 @@ use {
   end
 }
 
-use { 'tversteeg/registers.nvim', cond = is_not_vscode, }
+use { 'tversteeg/registers.nvim', opt = true, }
 
 -- Nice interface for vim's tree-shaped undo
 use {  'mbbill/undotree', cmd = "UndotreeToggle" }
@@ -222,7 +221,7 @@ use 'justinmk/vim-sneak'
 
 use {
   'tpope/vim-fugitive',
-  cond = is_not_vscode,
+  opt = true,
 }
 
 -- Show diff when writing a commit message
@@ -234,7 +233,7 @@ use {
   requires = {
     'nvim-lua/plenary.nvim'
   },
-  cond = is_not_vscode,
+  opt = true,
   config = function()
     require('gitsigns').setup{}
   end
@@ -286,10 +285,15 @@ use {
 
 use {
   'nvim-telescope/telescope-frecency.nvim',
+  as = 'telescope-frecency',
   after = { 'telescope.nvim' },
   requires = {
     'telescope.nvim',
-    { 'tami5/sqlite.lua', setup = function () vim.g.sqlite_clib_path = '/usr/lib/libsqlite3.dylib' end }
+    {
+      'tami5/sqlite.lua',
+      module = "sqlite",
+      setup = function () vim.g.sqlite_clib_path = '/usr/lib/libsqlite3.dylib' end
+    }
   },
   config = function () require('telescope').load_extension("frecency") end,
 }
@@ -369,8 +373,8 @@ use {
 -- Pretty status line
 use {
   '~/Code/feline.nvim',
-  requires = { 'yamatsum/nvim-nonicons' },
-  after = { 'zenbones.nvim', 'nvim-gps' },
+  after = { 'zenbones.nvim', },
+  opt = true,
   config = function ()
     require('statusline')
   end,
@@ -378,16 +382,15 @@ use {
 
 use {
   'SmiteshP/nvim-gps',
-  after = { 'nvim-nonicons' },
   module = 'nvim-gps',
   config = function ()
     local icon = require('nvim-nonicons').get
     require('nvim-gps').setup {
       icons = {
-        ['tag-name'] = icon('field'),
+        ['tag-name'] = '∆ ',
         ['class-name'] = icon('class'),
         ['function-name'] = 'ƒ ',
-        ['method-name'] = icon('interface'),
+        ['method-name'] = '∂ ',
       },
       separator = ' → '
     }
@@ -396,9 +399,12 @@ use {
 
 use {
   'yamatsum/nvim-nonicons',
-  cond = is_not_vscode,
-  after = { 'nvim-web-devicons' },
-  requires = {'kyazdani42/nvim-web-devicons'}
+  opt = true,
+  wants = { 'nvim-web-devicons' },
+  requires = {
+    'kyazdani42/nvim-web-devicons',
+    config = function() require('nvim-web-devicons').setup() end,
+  }
 }
 
 use {
@@ -413,6 +419,8 @@ use {
 use {
   'mcchrish/zenbones.nvim',
   requires = { 'rktjmp/lush.nvim' },
+  wants = "lush.nvim",
+  opt = true,
   setup = function ()
     vim.opt.background = 'light'
     vim.g.zenbones_lightness = 'bright'
@@ -484,7 +492,6 @@ use {
 use {
   'nvim-treesitter/playground',
   cmd = 'TSPlaygroundToggle',
-  cond = is_not_vscode,
   requires = { 'nvim-treesitter/nvim-treesitter' },
   config = function ()
     require('nvim-treesitter.configs').setup {
@@ -528,7 +535,7 @@ use {
 }
 use {
   'neovim/nvim-lspconfig',
-  cond = is_not_vscode,
+  opt = true,
   config = function() require('lsp') end,
 }
 use {
