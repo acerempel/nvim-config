@@ -584,10 +584,6 @@ use {
     vim.api.nvim_set_keymap("s", "<C-n>", "v:lua.mapping_ctrl_n()", { expr = true, noremap = true })
     vim.api.nvim_set_keymap("i", "<C-p>", "v:lua.mapping_ctrl_p()", { expr = true, noremap = true })
     vim.api.nvim_set_keymap("s", "<C-p>", "v:lua.mapping_ctrl_p()", { expr = true, noremap = true })
-    vim.api.nvim_set_keymap("i", "<C-j>", "<Plug>luasnip-expand-or-jump", {})
-    vim.api.nvim_set_keymap("s", "<C-j>", "<Plug>luasnip-expand-or-jump", {})
-    vim.api.nvim_set_keymap("i", "<C-k>", "<Plug>luasnip-jump-prev", {})
-    vim.api.nvim_set_keymap("s", "<C-k>", "<Plug>luasnip-jump-prev", {})
     require('snippets')
   end
 }
@@ -628,26 +624,30 @@ use {
         ['<C-p>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
         ['<Down>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
         ['<Up>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
-        ['<Tab>'] = function(fallback)
+        ['<Tab>'] = cmp.mapping(function(fallback)
           if cmp.visible() then
             -- vim.api.nvim_feedkeys(require('util').term('<C-n>'), 'n', true)
             cmp.select_next_item({ cmp.SelectBehavior.Insert })
+          elseif luasnip.expand_or_locally_jumpable() then
+            luasnip.expand_or_jump()
           elseif util.check_back_space() then
             fallback()
             -- vim.api.nvim_feedkeys(require('util').term('<Tab>'), 'n', true)
           else
             cmp.complete()
           end
-        end,
-        ['<S-Tab>'] = function(fallback)
+        end, { 'i', 's' }),
+        ['<S-Tab>'] = cmp.mapping(function(fallback)
           if cmp.visible() then
             -- vim.api.nvim_feedkeys(require('util').term('<C-p>'), 'n', true)
-            cmp.select_next_item({ cmp.SelectBehavior.Insert })
+            cmp.select_prev_item({ cmp.SelectBehavior.Insert })
+          elseif luasnip.jumpable(-1) then
+            luasnip.jump(-1)
           else
             fallback()
             -- vim.api.nvim_feedkeys(require('util').term('<S-Tab>'), 'n', true)
           end
-        end,
+        end, { 'i', 's' }),
       },
       sources = {
         { name = 'nvim_lsp' },
