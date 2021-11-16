@@ -252,7 +252,6 @@ endfunction
 augroup filetypes
   autocmd!
   autocmd FileType table setlocal tabstop=28 noexpandtab nolist
-  autocmd BufReadPost,BufNew *.wiki ++once packadd vimwiki
 augroup END
 
 function! SetTreeSitterFolding() abort
