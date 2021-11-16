@@ -301,6 +301,28 @@ use {
 }
 
 use {
+  'rmagatti/session-lens',
+  after = { 'telescope.nvim', 'auto-session' },
+  config = function ()
+    require('session-lens').setup {
+      path_display = 'shorten',
+    }
+  end
+}
+
+use {
+  'AckslD/nvim-neoclip.lua',
+  as = "neoclip",
+  requires = { 'tami5/sqlite.lua' },
+  config = function ()
+    require('neoclip').setup {
+      history = 100,
+      enable_persistant_history = true,
+    }
+  end
+}
+
+use {
   'ThePrimeagen/harpoon',
   module = 'harpoon',
   config = function () require('harpoon').setup {} end,
