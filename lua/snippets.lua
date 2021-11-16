@@ -6,6 +6,7 @@ local insert = luasnip.insert_node
 local choice = luasnip.choice_node
 local func = luasnip.function_node
 local node = luasnip.snippet_node
+local dyn = luasnip.dynamic_node
 
 local tagpair = snippet(
   {
@@ -15,14 +16,14 @@ local tagpair = snippet(
     regTrig = true,
   },
   {
-    luasnip.function_node(function (args)
-      return '<' .. args[#args].captures[1] .. '>'
+    luasnip.function_node(function (_args, snip)
+      return '<' .. snip.captures[1] .. '>'
     end, {}),
     luasnip.text_node({ '', '\t' }),
-    luasnip.insert_node(1),
+    luasnip.insert_node(0),
     luasnip.text_node({ '', '' }),
-    luasnip.function_node(function (args)
-      return '</' .. args[#args].captures[1] .. '>'
+    luasnip.function_node(function (_args, snip)
+      return '</' .. snip.captures[1] .. '>'
     end, {}),
   }
 )
@@ -96,7 +97,7 @@ local html = snippet(
     text({ '">', '\t<head>', '\t\t<meta charset="utf-8">',
       '\t\t<meta name="viewport" content="width=device-width, initial-scale=1">',
       '\t\t<title>' }), insert(2, 'Good evening!'), text({ '</title>', '\t</head>',
-      '\t<body>', '\t\t' }), insert(3), text({ '\t</body>', '</html>' })
+      '\t<body>', '\t\t' }), insert(0), text({ '', '\t</body>', '</html>' })
   }
 )
 
@@ -110,71 +111,155 @@ local php = snippet(
 )
 
 local php_if = snippet(
-  'php-if',
+  'if',
+  {
+    text('if ('), insert(1), text({ ') {', '\t' }),
+    insert(0), text({ '', '}' })
+  }
+)
+
+local php_phpif = snippet(
+  'phpif',
   {
     text('<?php if ( '), insert(1), text(' ) : ?>'),
-    text({ '', '\t' }), insert(2),
+    text({ '', '\t' }), insert(0),
     text({ '', '<?php endif; ?>' }),
   }
 )
 
 local lua_pairs = snippet(
-  'for-pairs',
+  'forpairs',
   {
     text('for '), insert(1, 'key'), text(', '), insert(2, 'value'),
     text(' in pairs('), insert(3), text({ ') do', '', '\t' }),
-    insert(4), text({ '', 'end' })
+    insert(0), text({ '', 'end' })
   }
 )
 
 local lua_ipairs = snippet(
-  'for-ipairs',
+  'foripairs',
   {
     text('for '), insert(1, 'index'), text(', '), insert(2, 'value'),
     text(' in ipairs('), insert(3), text({ ') do', '\t' }),
-    insert(4), text({ '', 'end' })
+    insert(0), text({ '', 'end' })
+  }
+)
+
+local lua_pcall = snippet(
+  { trig = 'pcall' },
+  {
+    text('local '), insert(1, 'err'), text(', '), insert(2, 'result'),
+    text(' = pcall('), insert(3), text(', '), insert(4), text(')')
   }
 )
 
 local lua_if = snippet(
-  'if',
+  { trig = 'if', name = 'if …' },
   {
     text('if '), insert(1), text({ ' then', '\t' }),
-    insert(2), text({ '', 'end', '' })
+    insert(0), text({ '', 'end' })
   }
 )
 
 local lua_if_else = snippet(
-  'if-else',
+  { trig = 'ifelse', name = "if … else …" },
   {
     text('if '), insert(1), text({ ' then', '\t' }),
     insert(2), text({ '', 'else', '\t' }),
-    insert(3), text({ '', 'end', '' })
+    insert(0), text({ '', 'end' })
+  }
+)
+
+local lua_if_elseif = snippet(
+  { trig = 'ifelseif', name = 'if … elseif …' },
+  {
+    text('if '), insert(1), text({ ' then', '\t' }),
+    insert(2), text({ '', 'elseif ' }),
+    insert(3), text({' then', '\t' }),
+    insert(0), text({ '', 'end' })
+  }
+)
+
+local lua_func = snippet(
+  'function',
+  {
+    text('function '), insert(1), text('('), insert(2), text({ ')', '\t' }),
+    insert(0), text({ '', 'end' })
+  }
+)
+
+---@param trigger string
+---@return string
+--[[ local function get_line_before_trigger(trigger)
+  -- local line = vim.api.nvim_get_current_line()
+  local line = luasnip.get_active_snip().env.TM_CURRENT_LINE
+  local _, col = unpack(vim.api.nvim_win_get_cursor())
+  return line:sub(1, col - #trigger)
+end --]]
+
+--[[ local function func_preamble()
+  local line_before_trigger = get_line_before_trigger('function')
+  if line_before_trigger:match('^%s*$') then
+    return node(nil, { text('local function '), insert(1) })
+  elseif line_before_trigger:match('^%s*local%s+$') then
+    return node(nil, { text('function '), insert(1) })
+  else
+    return node(nil, { text('function') })
+  end
+end
+
+local lua_func_dyn = snippet(
+  { trig = 'function', name = "local function f() … end" },
+  {
+    dyn(1, func_preamble, {}),
+    text('('), insert(2), text({ ')', '\t' }),
+    insert(0), text({ '', 'end' })
+  }
+)
+--]]
+local lua_require = snippet(
+  'require',
+  {
+    text("require('"), insert(1), text("')")
+  }
+)
+
+local lua_local_require = snippet(
+  { trig = 'localrequire',
+    name = 'local mod = require(\'mod\')',
+  },
+  {
+    text('local '), func(function(nodes)
+      local components = vim.split(nodes[1][1], '.', { plain = true, trimempty = true })
+      return components[#components]
+    end, { 1 }),
+    text(" = require('"), insert(1, "mod"), text("')")
   }
 )
 
 local js_for_of = snippet(
-  'for-of',
+  { trig = 'forof', name = "for-of loop" },
   {
     text('for ('),
     choice(1, { text('const'), text('let'), text('var') }),
     text(' '), insert(2, 'item'),
     text(' of '), insert(3),
-    text({ ') {', '\t' }), insert(4),
-    text({ '', '}', '' }), insert(0),
+    text({ ') {', '\t' }), insert(0),
+    text({ '', '}' })
   }
 )
 
 local js_if = snippet(
   { trig = "if", name = "if (…) {…}" },
-  { text('if ('), insert(1), text({ ') {', '\t' }), insert(2), text({ '', '}', '' }) }
+  { text('if ('), insert(1), text({ ') {', '\t' }),
+    insert(0), text({ '', '}', }) }
 )
 
 local js_if_else = snippet(
-  { trig = "if-else", name = "if (…) {…} else {…}" },
+  { trig = "ifelse", name = "if (…) {…} else {…}" },
   { text('if ('), insert(1), text({ ') {', '\t' }), insert(2),
-    text({ '', '} else {', '\t' }), insert(3),
-    text({ '', '}', '' }) }
+    text({ '', '} else {', '\t' }), insert(0),
+    text({ '', '}' }) }
 )
 
 luasnip.snippets = {
@@ -182,16 +267,22 @@ luasnip.snippets = {
     tagpair,
     input, anchor,
     description, doctype, html,
+    stylesheet,
   },
   php = {
-    php, php_if,
+    php, php_if, php_phpif,
   },
   xml = {
     tagpair,
   },
   lua = {
     lua_pairs, lua_ipairs,
-    lua_if, lua_if_else,
+    lua_if, lua_if_else, lua_if_elseif,
+    lua_pcall,
+    lua_require, lua_local_require,
+    lua_func,
+    snippet({ trig = 'elseif', name = 'elseif … then' },
+      { text('elseif '), insert(1), text({ ' then', '\t' }), insert(0) })
   },
   javascript = {
     js_for_of, js_if, js_if_else,
