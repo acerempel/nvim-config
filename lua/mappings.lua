@@ -42,6 +42,10 @@ whichkey.register(
         "Switch branch"
       },
     },
+    S = {
+      "<Cmd>lua require('session-lens').search_session()<CR>",
+      "Find session"
+    },
     h = {
       name = "Git: change-hunk actions",
       p = { "Preview hunk diff" },
@@ -65,6 +69,10 @@ whichkey.register(
     ['/'] = {
       "<cmd>lua require('telescope.builtin').live_grep()<cr>",
       "Search files using regex"
+    },
+    r = {
+      "<cmd>lua require('telescope').extensions.neoclip.default()<CR>",
+      "Yank history"
     },
   },
   { prefix = "<Leader>" }
