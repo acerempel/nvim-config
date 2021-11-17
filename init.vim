@@ -46,6 +46,7 @@ set virtualedit=block,onemore
 set nostartofline
 
 set ignorecase smartcase gdefault
+set completeopt=menu
 
 set splitbelow splitright equalalways
 set switchbuf=uselast,useopen,usetab
@@ -107,6 +108,10 @@ augroup YankHighlight
   autocmd TextYankPost * silent! lua vim.highlight.on_yank()
 augroup END
 
+augroup omnifunc
+  autocmd!
+  autocmd FileType * if &omnifunc == "" | setlocal omnifunc=syntaxcomplete#Complete | endif
+augroup END
 " }}}
 
 " Packer lazy-loading {{{

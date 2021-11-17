@@ -224,6 +224,11 @@ use {
   opt = true,
 }
 
+use {
+  'tpope/vim-rhubarb',
+  opt = true
+}
+
 -- Show diff when writing a commit message
 use 'rhysd/committia.vim'
 
@@ -684,6 +689,9 @@ use {
         { name = 'luasnip' },
         { name = 'buffer' },
       },
+      enabled = function ()
+        return vim.bo.buftype ~= 'prompt' and vim.bo.filetype ~= 'gitcommit'
+      end,
       experimental = {
         ghost_text = true,
       },
