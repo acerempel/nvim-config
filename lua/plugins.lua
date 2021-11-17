@@ -338,6 +338,21 @@ use {
 }
 
 use {
+  'romgrk/barbar.nvim',
+  as = 'barbar',
+  opt = true,
+  setup = function ()
+    vim.g.bufferline = {
+      animation = false,
+      auto_hide = true,
+      tabpages = true,
+      icon_close_tab = '✗',
+      icon_pinned = '',
+    }
+  end
+}
+
+use {
   '~/Code/trouble.nvim',
   cmd = "Trouble*",
   config = function ()
@@ -428,14 +443,6 @@ use {
     'kyazdani42/nvim-web-devicons',
     config = function() require('nvim-web-devicons').setup() end,
   }
-}
-
-use {
-  '~/Code/luatab.nvim',
-  after = { 'nvim-nonicons' },
-  config = function ()
-    vim.o.tabline = '%!v:lua.require\'luatab\'.tabline()'
-  end
 }
 
 -- Colour schemes

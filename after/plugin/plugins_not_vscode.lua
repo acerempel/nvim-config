@@ -4,6 +4,7 @@ if vim.g.vscode == nil then
     "which-key.nvim", "registers.nvim", "vim-fugitive", "vim-rhubarb",
     "gitsigns.nvim", "nvim-nonicons", "zenbones.nvim",
     "nvim-lspconfig", "auto_pairs", "LuaSnip", "nvim-cmp",
+    "barbar",
   }
   require('packer.load')(plugins, {}, _G.packer_plugins, false)
 end

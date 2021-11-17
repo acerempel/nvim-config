@@ -40,7 +40,10 @@ whichkey.register(
         "<cmd>lua require('telescope.builtin').buffers({ show_all_buffers = false, sort_lastused = true })<cr>",
         "Fuzzy find"
       },
-      d = {
+      d = { "<cmd>BufferClose<CR>", "Delete bufffer" },
+      p = { "<cmd>BufferPin<CR>", "Pin buffer" },
+      j = { "<cmd>BufferPick<CR>", "Jump to buffer" },
+      c = {
         "<cmd>lua require('telescope.builtin').buffers({ show_all_buffers = false, sort_lastused = true, cwd_only = true })<cr>",
         "Fuzzy find within current directory"
       },
@@ -144,7 +147,7 @@ whichkey.register(
         "Previous diagnostic"
       },
       c = { "Previous Git change" },
-      b = { "<Cmd>bprevious<CR>", "Previous buffer" },
+      b = { "<Cmd>BufferPrevious<CR>", "Previous buffer" },
       B = { "<Cmd>bfirst<CR>", "First buffer" },
       t = { "<Cmd>tabprev<CR>", "Previous tab" },
       T = { "<Cmd>tabfirst<CR>", "First tab" },
@@ -165,8 +168,8 @@ whichkey.register(
         "Next diagnostic"
       },
       c = { "Next Git change" },
-      b = { "<Cmd>bnext<CR>", "Next buffer" },
-      B = { "<Cmd>blast<CR>", "Last buffer" },
+      b = { "<Cmd>BufferNext<CR>", "Next buffer" },
+      B = { "<Cmd>BufferLast<CR>", "Last buffer" },
       t = { "<Cmd>tabnext<CR>", "Next tab" },
       T = { "<Cmd>tablast<CR>", "Last tab" },
       z = { "End of current fold" },
