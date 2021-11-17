@@ -36,7 +36,6 @@ set foldminlines=6
 set concealcursor=nc
 
 set scrolloff=2 sidescrolloff=4 sidescroll=1
-set nostartofline
 
 set expandtab tabstop=2 softtabstop=2
 set shiftwidth=2 shiftround
