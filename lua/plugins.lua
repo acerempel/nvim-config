@@ -338,10 +338,28 @@ use {
 }
 
 use {
-  'folke/trouble.nvim',
+  '~/Code/trouble.nvim',
   cmd = "Trouble*",
   config = function ()
-    require("trouble").setup {}
+    require("trouble").setup {
+      fold_closed = "▶",
+      fold_open = "▼",
+      padding = false,
+      signs = {
+        error = "⨷ ",
+        warning = "⚠ ",
+        hint = "¶ ",
+        information = "ℹ ",
+        other = " ",
+      },
+      auto_jump = { "lsp_definitions", "lsp_references", "lsp_implementations" },
+      action_keys = {
+        open_split = "s",
+        open_vsplit = "v",
+        open_tab = "t",
+      },
+      indent_lines = false,
+    }
   end
 }
 
