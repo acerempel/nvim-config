@@ -1,14 +1,22 @@
 vim.opt_local.wrap = true
 vim.opt_local.linebreak = true
 
-function map(lhs, rhs)
+local function map(lhs, rhs)
   vim.api.nvim_buf_set_keymap(0, '', lhs, rhs, { noremap = true })
 end
 
-map('{', '<Cmd>lua require("qf_helper").navigate(-vim.v.count1, { by_file = true })<CR>')
-map('}', '<Cmd>lua require("qf_helper").navigate(+vim.v.count1, { by_file = true })<CR>')
-map('(', '<Cmd>lua require("qf_helper").navigate(-vim.v.count1)<CR>')
-map(')', '<Cmd>lua require("qf_helper").navigate(+vim.v.count1)<CR>')
+if vim.fn.win_gettype() == "quickfix" then
+  map('{', '<Cmd>cpfile<CR>')
+  map('}', '<Cmd>cnfile<CR>')
+  map('(', '<Cmd>cprev<CR>')
+  map(')', '<Cmd>cnext<CR>')
+else
+  map('{', '<Cmd>lpfile<CR>')
+  map('}', '<Cmd>lnfile<CR>')
+  map('(', '<Cmd>lprev<CR>')
+  map(')', '<Cmd>lnext<CR>')
+end
+
 map('t', '<C-W><CR><C-W>T')
 map('s', '<C-W><CR>')
 map('v', '<C-W><CR><C-W>L<C-W>p<C-W>J<C-W>p')

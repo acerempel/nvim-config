@@ -152,6 +152,10 @@ whichkey.register(
       t = { "<Cmd>tabprev<CR>", "Previous tab" },
       T = { "<Cmd>tabfirst<CR>", "First tab" },
       z = { "Start of current fold" },
+      q = { "<Cmd>cbefore<CR>", "Previous quickfix item" },
+      Q = { "<Cmd>cfirst<CR>", "First quickfix item" },
+      l = { "<Cmd>lbefore<CR>", "Previous loclist item" },
+      L = { "<Cmd>lfirst<CR>", "First loclist item" },
     },
     ["]"] = {
       name = "Next, after, below",
@@ -173,6 +177,10 @@ whichkey.register(
       t = { "<Cmd>tabnext<CR>", "Next tab" },
       T = { "<Cmd>tablast<CR>", "Last tab" },
       z = { "End of current fold" },
+      q = { "<Cmd>cafter<CR>", "Next quickfix item" },
+      Q = { "<Cmd>clast<CR>", "Last quickfix item" },
+      l = { "<Cmd>lafter<CR>", "Next loclist item" },
+      L = { "<Cmd>llast<CR>", "Last loclist item" },
     },
     g = {
       name = "Go to; jump around; select",
