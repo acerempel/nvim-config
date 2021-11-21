@@ -306,6 +306,13 @@ use {
 }
 
 use {
+  'cljoly/telescope-repo.nvim',
+  as = 'telescope-repo',
+  after = { 'telescope.nvim' },
+  config = function () require('telescope').load_extension('repo') end,
+}
+
+use {
   'AckslD/nvim-neoclip.lua',
   as = "neoclip",
   requires = { 'tami5/sqlite.lua' },
