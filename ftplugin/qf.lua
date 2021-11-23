@@ -10,11 +10,17 @@ if vim.fn.win_gettype() == "quickfix" then
   map('}', '<Cmd>cnfile<CR>')
   map('(', '<Cmd>cprev<CR>')
   map(')', '<Cmd>cnext<CR>')
+  map('<D-]>', '<Cmd>cnewer<CR>')
+  map('<D-[>', '<Cmd>colder<CR>')
+  map('<C-I>', '<Cmd>cnewer<CR>')
+  map('<C-O>', '<Cmd>colder<CR>')
 else
   map('{', '<Cmd>lpfile<CR>')
   map('}', '<Cmd>lnfile<CR>')
   map('(', '<Cmd>lprev<CR>')
   map(')', '<Cmd>lnext<CR>')
+  map('<C-I>', '<Cmd>lnewer<CR>')
+  map('<C-O>', '<Cmd>lolder<CR>')
 end
 
 map('t', '<C-W><CR><C-W>T')
