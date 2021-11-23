@@ -151,6 +151,10 @@ inoremap <C-A> <Home>
 inoremap <C-F> <Right>
 inoremap <C-B> <Left>
 
+" I want this to be remapped, because I map gd to LSP functionality when
+" applicable.
+nmap <CR> gd
+
 noremap Q @@
 noremap Z "_d
 noremap ZZ "_dd
@@ -273,6 +277,9 @@ augroup END
 " Misc lua config {{{
 lua << ENDLUA
 _G.is_not_vscode = function () return vim.g.vscode == nil end
+require('help_float').setup {
+  auto_close = false,
+}
 ENDLUA
 " }}}
 
