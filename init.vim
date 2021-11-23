@@ -55,7 +55,8 @@ set lazyredraw
 
 set undofile undodir=~/.local/share/nvim/undo
 set noswapfile nobackup nowritebackup
-set history=10000
+set history=10000 shada^=%
+set jumpoptions=stack
 set viewoptions=cursor,folds,slash,unix
 set sessionoptions=blank,buffers,curdir,resize,tabpages,terminal,winpos,winsize,slash,unix
 
@@ -66,8 +67,6 @@ set wildchar=<Tab>
 set wildmode=longest:full,full
 set wildignore=*.o,*.hi,*/.git/*,*/dist-newstyle/*,*/.stack-work/*,*/node_modules/*,*/elm-stuff/*
 
-" Remember info about open buffers on close -------------- "
-set shada^=%
 set hidden
 
 set exrc secure
