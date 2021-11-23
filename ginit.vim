@@ -1,6 +1,6 @@
 if exists(':Gui') == 3
   GuiFont JetBrains\ Mono:h13
-  GuiPopupmenu 1
+  GuiPopupmenu 0
   GuiTabline 0
   GuiLinespace 0
   GuiScrollBar 1
@@ -40,7 +40,18 @@ noremap <D-,> <Cmd>edit $MYVIMRC<CR>
 noremap <D-o> <Cmd>lua require('telescope.builtin').file_browser()<CR>
 inoremap <D-o> <Cmd>lua require('telescope.builtin').file_browser()<CR>
 noremap <D-t> <Cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>
-noremap <S-D-T> <Cmd>lua vim.ui.input({ prompt = "Query: " }, function(input) if input then require('telescope.builtin').lsp_workspace_symbols({ query = input }) else return end)<CR>
-noremap <S-D-t> <Cmd>lua vim.ui.input({ prompt = "Query: " }, function(input) if input then require('telescope.builtin').lsp_workspace_symbols({ query = input }) else return end)<CR>
+lua <<END
+_G.workspace_query_input = function(input)
+  if input then
+    require('telescope.builtin').lsp_workspace_symbols({ query = input })
+  else
+    return
+  end
+end
+END
+noremap <S-D-T> <Cmd>lua vim.ui.input({ prompt = "Query: " }, workspace_query_input)<CR>
+noremap <S-D-t> <Cmd>lua vim.ui.input({ prompt = "Query: " }, workspace_query_input)<CR>
 noremap <S-D-]> <Cmd>BufferNext<CR>
 noremap <S-D-[> <Cmd>BufferPrevious<CR>
+noremap <D-[> <C-O>
+noremap <D-]> <C-I>
