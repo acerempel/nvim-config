@@ -561,6 +561,9 @@ use {
   opt = true,
   config = function() require('lsp') end,
 }
+
+use { 'b0o/SchemaStore.nvim' }
+
 use {
   'williamboman/nvim-lsp-installer',
 }

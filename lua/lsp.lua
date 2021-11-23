@@ -86,7 +86,10 @@ local basic_lsp_config = {
   on_attach = on_attach,
   capabilities = capabilities,
   settings = {
-    intelephense = { stubs = { "wordpress", "standard", "pcre", "http", "json", "mysql", "mysqli", "pdo_mysql" } }
+    intelephense = { stubs = { "wordpress", "standard", "pcre", "http", "json", "mysql", "mysqli", "pdo_mysql" } },
+    json = {
+      schemas = require("schemastore").json.schemas(),
+    },
   }
 }
 
