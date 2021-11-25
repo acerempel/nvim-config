@@ -277,9 +277,7 @@ augroup END
 " Misc lua config {{{
 lua << ENDLUA
 _G.is_not_vscode = function () return vim.g.vscode == nil end
-require('help_float').setup {
-  auto_close = false,
-}
+require('help_float').setup {}
 ENDLUA
 " }}}
 
