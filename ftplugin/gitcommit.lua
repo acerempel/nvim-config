@@ -15,3 +15,4 @@ api.nvim_buf_set_keymap(0, 'i', '<Tab>', tab_rhs, { noremap = true, expr = true 
 api.nvim_buf_set_keymap(0, 'i', '<S-Tab>', s_tab_rhs, { noremap = true, expr = true })
 api.nvim_buf_set_keymap(0, 'i', '<CR>', cr_rhs, { expr = true })
 api.nvim_buf_set_keymap(0, 'i', '<Esc>', esc_rhs, { noremap = true, expr = true })
+api.nvim_buf_set_keymap(0, 'i', '<D-CR>', '<Cmd>stopinsert<Bar>wq<CR>', { noremap = true })
