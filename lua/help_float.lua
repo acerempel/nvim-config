@@ -3,8 +3,8 @@ local M = {}
 local buf_set_option = vim.api.nvim_buf_set_option
 
 local auto_close = true
-local win = nil
-local win_config = {
+local win, win_config
+local default_win_config = {
   relative = "cursor",
   width = 67, height = 10,
   row = 0, col = 0,
@@ -13,34 +13,80 @@ local win_config = {
   noautocmd = true,
 }
 
-M.open = function()
-  M.close()
-  local word = vim.fn.expand('<cword>')
+local taglist_buf
+
+local function create_buf()
   -- Unlisted, not scratch
   local buf = vim.api.nvim_create_buf(false, false)
   buf_set_option(buf, 'buftype', 'help')
   buf_set_option(buf, 'filetype', 'help')
+  return buf
+end
+
+local did_setup
+
+local function ensure_setup()
+  return did_setup or M.setup()
+end
+
+M.open = function()
+  ensure_setup()
+  M.close()
+
+  local word = vim.fn.expand('<cword>')
+  -- Sometimes a keyword that could reference a help tag is enclosed in
+  -- backticks – ignore those.
+  local match = word:match('^`([^`]*)`$')
+  if match ~= nil then word = match
+  else
+    -- Ignore trailing punctuation for option names (because the delimiters,
+    -- single quotes, are keyword characters too, unlike bars) – note the lack
+    -- of $ at the end of the pattern.
+    match = word:match("^'(%w+)'")
+    if match ~= nil then word = match end
+  end
+
+  local tags = vim.api.nvim_buf_call(taglist_buf, function()
+    return vim.fn.taglist('\\V\\^' .. word .. '\\$')
+  end)
+  local nonempty, tag = next(tags)
+  if not nonempty then
+    vim.api.nvim_err_writeln('No help for ' .. word)
+    return
+  end
+
+  local buf = vim.fn.bufadd(tag.filename)
+  vim.fn.bufload(buf)
+
+  local prev_shortmess = vim.o.shortmess
+  vim.opt.shortmess:append('F')
   win = vim.api.nvim_open_win(buf, false, win_config)
+  vim.o.shortmess = prev_shortmess
+
   if win == 0 then
     vim.api.nvim_err_writeln('Could not open window')
     win = nil
     return
   end
-  local exists, _ = pcall(function()
-    vim.api.nvim_buf_call(buf, function ()
-      vim.api.nvim_command("help " .. word)
-    end)
-  end)
-  if not exists then
-    M.close()
-    vim.api.nvim_err_writeln('No help for ' .. word)
-    return
-  end
+
   if auto_close then
     vim.api.nvim_command(
       'autocmd help_float CursorMoved,CursorMovedI,InsertEnter,BufLeave,WinClosed <buffer> ++once lua require"help_float".close()'
     )
   end
+
+  vim.api.nvim_win_set_option(win, 'scrolloff', 0)
+  vim.api.nvim_win_set_option(win, 'sidescrolloff', 0)
+
+  local cmd = tag.cmd
+  if cmd:sub(1,1) == '/' then
+    cmd = 'silent keeppatterns normal! /\\V' .. cmd:sub(2, -1) .. '\r'
+  end
+
+  vim.api.nvim_win_call(win, function()
+    vim.api.nvim_command(cmd)
+    vim.api.nvim_command('normal! zt')
+  end)
 end
 
 M.close = function()
@@ -64,12 +110,17 @@ M.setup = function (options)
     augroup END
   ]]
 
-  if options.win_config ~= nil then
-    win_config = vim.tbl_extend(win_config, options.win_config, "force")
+  if options == nil then
+    options = {}
   end
+  win_config = vim.tbl_extend("force", default_win_config, options.win_config or {})
   if options.auto_close ~= nil then
     auto_close = options.auto_close
   end
+
+  taglist_buf = create_buf()
+
+  did_setup = true
 end
 
 return M
