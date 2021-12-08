@@ -1,5 +1,4 @@
 local lspconfig = require('lspconfig')
-local util = require('lspconfig.util')
 
 local lsp_signature_config = {
   bind = true,
@@ -11,11 +10,12 @@ local lsp_signature_config = {
 
 vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
   vim.lsp.handlers.hover,
-  { max_width = 72, border = 'single', }
+  { max_width = 72, }
 )
 
 local on_attach = function(client, bufnr)
   require('lsp_signature').on_attach(lsp_signature_config)
+  require('packer').loader('telescope.nvim')
   vim.cmd(string.format([[
     augroup lsp_buf
     au!
@@ -31,7 +31,7 @@ local on_attach = function(client, bufnr)
         "Show documentation for symbol"
       },
       ["go"] = {
-        "<Cmd>lua require'telescope.builtin'.lsp_document_symbols()<CR>",
+        "<Cmd>lua vim.lsp.buf.document_symbol()<CR>",
         "Search document symbols"
       },
       ["gO"] = {
@@ -39,7 +39,7 @@ local on_attach = function(client, bufnr)
         "Show document outline"
       },
       ["gW"] = {
-        "<Cmd>lua require'telescope.builtin'.lsp_workspace_symbols()<CR>",
+        "<Cmd>lua vim.lsp.buf.workspace_symbol()<CR>",
         "Show all workspace symbols"
       },
       ["gd"] = {
@@ -62,16 +62,12 @@ local on_attach = function(client, bufnr)
         "<Cmd>lua vim.lsp.buf.type_definition()<CR>",
         "Go to type definition"
       },
-      ["g}"] = {
-        "<Cmd>lua vim.lsp.buf.references()<CR>",
-        "Show references to symbol"
-      },
       ["g]"] = {
-        "<Cmd>lua require'telescope.builtin'.lsp_references()<CR>",
+        "<Cmd>lua vim.lsp.buf.references()<CR>",
         "Search references to symbol"
       },
       ['z='] = {
-        "<Cmd>lua require'telescope.builtin'.lsp_code_actions(require'telescope.themes'.get_cursor())<CR>",
+        "<Cmd>lua vim.lsp.buf.code_action()<CR>",
         "Code actions"
       },
     },
@@ -94,7 +90,7 @@ local basic_lsp_config = {
 }
 
 local servers = {
-  "rust_analyzer", "tsserver", "hls", "elmls",
+  "rust_analyzer", "tsserver",
   "intelephense", "html", "cssls", "jsonls",
   "tailwindcss", "vimls",
 }

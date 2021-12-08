@@ -9,7 +9,7 @@ packer.init {
 
 local use = packer.use
 -- Packer itself
-use {  'wbthomason/packer.nvim', opt = true }
+use { 'wbthomason/packer.nvim', opt = true }
 
 -- Miscellaneous {{{
 use {
@@ -51,10 +51,20 @@ use {
   module = 'hlslens',
 }
 
--- More and better text-objects
+-- Cool marks
 use {
-  'wellle/targets.vim'
+  'chentau/marks.nvim',
+  config = function ()
+    require('marks').setup {
+      default_mappings = true,
+      signs = true,
+      mappings = {},
+    }
+  end
 }
+
+-- More and better text-objects
+use { 'wellle/targets.vim' }
 
 use {
   'joosepalviste/nvim-ts-context-commentstring',
@@ -124,12 +134,15 @@ use { 'konfekt/fastfold', opt = true }
 -- }}}
 
 -- Session management {{{
-use { 'zhimsel/vim-stay', opt = true, after = { 'fastfold', 'auto-session' } }
+-- use { 'zhimsel/vim-stay', opt = true, after = { 'fastfold', 'auto-session' } }
+use { 'farmergreg/vim-lastplace' }
 use {
   'rmagatti/auto-session', opt = true,
   config = function ()
+    vim.opt.shada:remove('%')
     require('auto-session').setup {
-      auto_session_suppress_dirs = { vim.fn.expand('~') }
+      log_level = 'info',
+      auto_session_suppress_dirs = { '~/', '~/Code', '~/Documents' },
     }
   end
 }
@@ -137,6 +150,7 @@ use {
 
 -- Editing-oriented normal mode commands {{{
 use 'tpope/vim-surround'
+
 use {
   'numToStr/Comment.nvim',
   opt = true,
@@ -199,8 +213,9 @@ use {  'mbbill/undotree', cmd = "UndotreeToggle" }
 -- }}}
 
 -- Moving around {{{
-use 'rhysd/clever-f.vim'
-use 'justinmk/vim-sneak'
+-- use 'rhysd/clever-f.vim'
+-- use 'justinmk/vim-sneak'
+use 'ggandor/lightspeed.nvim'
 -- }}}
 
 -- GIT integration {{{
@@ -230,6 +245,14 @@ use {
   end
 }
 
+use {
+  'rhysd/git-messenger.vim',
+  keys = "<Plug>(git-messenger)",
+  setup = function ()
+    vim.g.git_messenger_no_default_mappings = true
+  end,
+}
+
 -- }}}
 
 -- EXTRA FEATURES {{{
@@ -249,29 +272,51 @@ use {
   'nvim-telescope/telescope.nvim',
   module = 'telescope',
   cmd = 'Telescope',
+  wants = { 'harpoon' },
   requires = {
     'nvim-lua/popup.nvim',
     'nvim-lua/plenary.nvim',
-    'nvim-telescope/telescope-fzy-native.nvim',
+    { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' },
   },
   config = function ()
     local telescope = require('telescope')
     local actions = require('telescope.actions')
+    local themes = require('telescope.themes')
     telescope.setup({
       defaults = {
         mappings = {
           i = {
             ["<Esc>"] = actions.close,
-            ["<Tab>"] = actions.toggle_selection,
-          },
-          n = {
-            ["<Tab>"] = actions.toggle_selection,
+            ["<C-q>"] = actions.smart_send_to_qflist + actions.open_qflist,
+            ["<D-CR>"] = actions.smart_send_to_qflist + actions.open_qflist,
+            ["<S-D-CR>"] = actions.smart_send_to_loclist + actions.open_loclist,
+            ["<C-Space>"] = actions.complete_tag,
+            ["<C-u>"] = false,
+            ["<C-d>"] = false,
           },
         }
-      }
+      },
+      extensions = {
+        ["ui-select"] = themes.get_cursor(),
+        lsp_handlers = {
+          location = { telescope = themes.get_ivy({ layout_config = { height = 12 } }) },
+        },
+      },
     })
-    telescope.load_extension('fzy_native')
+    telescope.load_extension('fzf')
+    telescope.load_extension('ui-select')
+    telescope.load_extension('lsp_handlers')
+    telescope.load_extension('zoxide')
+    telescope.load_extension('repo')
+    telescope.load_extension('harpoon')
   end
+}
+
+use {
+  'gbrlsnchs/telescope-lsp-handlers.nvim',
+  'nvim-telescope/telescope-ui-select.nvim',
+  'jvgrootveld/telescope-zoxide',
+  'cljoly/telescope-repo.nvim',
 }
 
 use {
@@ -290,12 +335,6 @@ use {
 }
 
 use {
-  'jvgrootveld/telescope-zoxide',
-  after = { 'telescope.nvim' },
-  config = function () require'telescope'.load_extension('zoxide') end
-}
-
-use {
   'rmagatti/session-lens',
   after = { 'telescope.nvim', 'auto-session' },
   config = function ()
@@ -303,13 +342,6 @@ use {
       path_display = 'shorten',
     }
   end
-}
-
-use {
-  'cljoly/telescope-repo.nvim',
-  as = 'telescope-repo',
-  after = { 'telescope.nvim' },
-  config = function () require('telescope').load_extension('repo') end,
 }
 
 use {
@@ -504,6 +536,17 @@ use {
   end,
 }
 
+use {
+  '~/Code/intero-neovim',
+  setup = function ()
+    vim.g.intero_backend = {
+      command = 'cabal repl',
+      options = '',
+      cwd = vim.fn.getcwd(),
+    }
+  end
+}
+
 -- Tree-sitter language grammars
 use {
   'nvim-treesitter/nvim-treesitter',
@@ -537,6 +580,7 @@ use {
         },
       }
     }
+    require('nvim-treesitter.install').compilers = { "gcc" }
   end,
 }
 use {
@@ -666,14 +710,12 @@ use {
       },
       completion = {
         autocomplete = false,
-        completeopt = 'menu,menuone,noselect',
+        completeopt = 'menu,menuone',
       },
       mapping = {
         ['<CR>'] = cmp.mapping.confirm({ select = true }),
         ['<C-e>'] = cmp.mapping.close(),
         ['<Esc>'] = cmp.mapping.abort(),
-        ['<C-d>'] = cmp.mapping.scroll_docs(4),
-        ['<C-u>'] = cmp.mapping.scroll_docs(-4),
         ['<C-Space>'] = cmp.mapping.complete(),
         ['<C-n>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
         ['<C-p>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),

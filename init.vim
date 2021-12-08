@@ -45,7 +45,7 @@ set virtualedit=block,onemore
 set nostartofline
 
 set ignorecase smartcase gdefault
-set completeopt=menu
+set completeopt-=preview
 
 set splitbelow splitright equalalways
 set switchbuf=uselast,useopen,usetab
@@ -57,8 +57,8 @@ set undofile undodir=~/.local/share/nvim/undo
 set noswapfile nobackup nowritebackup
 set history=10000 shada^=%
 set jumpoptions=stack
-set viewoptions=cursor,folds,slash,unix
-set sessionoptions=blank,buffers,curdir,resize,tabpages,terminal,winpos,winsize,slash,unix
+set viewoptions=curdir,cursor,folds
+set sessionoptions=blank,buffers,curdir,folds,help,tabpages,terminal,winpos,winsize
 
 set shortmess=fnxoOtTc
 set signcolumn=yes
@@ -126,6 +126,16 @@ command! PackerProfile lua require('plugins').profile_output()
 command! -nargs=+ -complete=customlist,v:lua.require'plugins'.loader_complete PackerLoad | lua require('plugins').loader(<q-args>)
 " }}}
 
+" Abbreviations {{{
+cnoreabbrev ps PackerSync
+cnoreabbrev pi PackerInstall
+cnoreabbrev pp PackerProfile
+
+" Otherwise it's short for :langnoremap
+cnoreabbrev ln lnext
+cnoreabbrev tel Telescope
+" }}}
+
 " MAPPINGS {{{
 
 " Leaders {{{
@@ -134,7 +144,7 @@ let g:mapleader = " "
 let maplocalleader = ","
 map <Space> <Nop>
 map , <Nop>
-map ; <Nop>
+noremap ; :
 " }}}
 
 " Moving around {{{
@@ -150,6 +160,8 @@ inoremap <C-A> <Home>
 " Normally <C-F> re-indents the current line, but I've never used that
 inoremap <C-F> <Right>
 inoremap <C-B> <Left>
+snoremap <C-E> <Esc>`>a
+snoremap <C-A> <Esc>`<i
 
 " I want this to be remapped, because I map gd to LSP functionality when
 " applicable.

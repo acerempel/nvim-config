@@ -1,6 +1,20 @@
 local whichkey = require('which-key')
 
-local harpoons = {}
+local harpoons = {
+  name = "Buffers: harpoon",
+  a = {
+    "<Cmd>lua require'harpoon.mark'.add_file()<CR>",
+    "Add to harpoon list"
+  },
+  e = {
+    "<Cmd>lua require'harpoon.ui'.toggle_quick_menu()<CR>",
+    "Edit harpoon list"
+  },
+  [','] = {
+    "<Cmd>lua require('telescope').extensions.marks()<CR>",
+    "Fuzzy find"
+  }
+}
 
 for i = 1, 9, 1 do
   harpoons[tostring(i)] = {
@@ -34,30 +48,18 @@ whichkey.register(
         "Frequently & recently used files"
       }
     },
-    b = {
+    j = {
       name = "Buffers",
-      b = {
-        "<cmd>lua require('telescope.builtin').buffers({ show_all_buffers = false, sort_lastused = true })<cr>",
+      j = {
+        "<cmd>lua require('telescope.builtin').buffers({ sort_mru = true, ignore_current_buffer = true })<cr>",
         "Fuzzy find"
       },
       d = { "<cmd>BufferClose<CR>", "Delete bufffer" },
       p = { "<cmd>BufferPin<CR>", "Pin buffer" },
-      j = { "<cmd>BufferPick<CR>", "Jump to buffer" },
+      k = { "<cmd>BufferPick<CR>", "Jump to buffer" },
       c = {
-        "<cmd>lua require('telescope.builtin').buffers({ show_all_buffers = false, sort_lastused = true, cwd_only = true })<cr>",
+        "<cmd>lua require('telescope.builtin').buffers({ sort_mru = true, ignore_current_buffer = true, cwd_only = true })<cr>",
         "Fuzzy find within current directory"
-      },
-      a = {
-        "<Cmd>lua require'harpoon.mark'.add_file()<CR>",
-        "Add to harpoon list"
-      },
-      e = {
-        "<Cmd>lua require'harpoon.ui'.toggle_quick_menu()<CR>",
-        "Edit harpoon list"
-      },
-      [';'] = {
-        "<Cmd>lua require'harpoon.ui'.nav_file(vim.v.count1)<CR>",
-        "Go to Nth harpooned buffer"
       },
     },
     d = {
@@ -105,7 +107,7 @@ whichkey.register(
       "<cmd>lua require('telescope.builtin').live_grep()<cr>",
       "Search files using regex"
     },
-    r = {
+    y = {
       "<cmd>lua require('telescope').extensions.neoclip.default()<CR>",
       "Yank history"
     },
@@ -131,7 +133,7 @@ whichkey.register(textobjects, { mode = "x" })
 
 whichkey.register(
   {
-    [';'] = harpoons,
+    [','] = harpoons,
     ["["] = {
       name = "Previous, before, above",
       w = {
@@ -147,8 +149,8 @@ whichkey.register(
         "Previous diagnostic"
       },
       c = { "Previous Git change" },
-      b = { "<Cmd>BufferPrevious<CR>", "Previous buffer" },
-      B = { "<Cmd>bfirst<CR>", "First buffer" },
+      j = { "<Cmd>BufferPrevious<CR>", "Previous buffer" },
+      J = { "<Cmd>bfirst<CR>", "First buffer" },
       t = { "<Cmd>tabprev<CR>", "Previous tab" },
       T = { "<Cmd>tabfirst<CR>", "First tab" },
       z = { "Start of current fold" },
@@ -172,8 +174,8 @@ whichkey.register(
         "Next diagnostic"
       },
       c = { "Next Git change" },
-      b = { "<Cmd>BufferNext<CR>", "Next buffer" },
-      B = { "<Cmd>BufferLast<CR>", "Last buffer" },
+      j = { "<Cmd>BufferNext<CR>", "Next buffer" },
+      J = { "<Cmd>BufferLast<CR>", "Last buffer" },
       t = { "<Cmd>tabnext<CR>", "Next tab" },
       T = { "<Cmd>tablast<CR>", "Last tab" },
       z = { "End of current fold" },

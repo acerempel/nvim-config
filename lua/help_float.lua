@@ -78,13 +78,13 @@ M.open = function()
   vim.api.nvim_win_set_option(win, 'scrolloff', 0)
   vim.api.nvim_win_set_option(win, 'sidescrolloff', 0)
 
-  local cmd = tag.cmd
-  if cmd:sub(1,1) == '/' then
-    cmd = 'silent keeppatterns normal! /\\V' .. cmd:sub(2, -1) .. '\r'
-  end
-
   vim.api.nvim_win_call(win, function()
-    vim.api.nvim_command(cmd)
+    local cmd = tag.cmd
+    if cmd:sub(1,1) == '/' then
+      vim.fn.search('\\V' .. cmd:sub(2, -1), 'w')
+    else
+      vim.api.nvim_command(cmd)
+    end
     vim.api.nvim_command('normal! zt')
   end)
 end
