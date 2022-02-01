@@ -9,7 +9,11 @@ lua require('impatient')
 
 " Fish isn't sufficiently posixy for vim's use.
 if &shell =~# 'fish$'
-    set shell=sh
+    set shell=/bin/zsh
+endif
+
+if $SHELL =~# 'fish$'
+    let $SHELL = "/bin/zsh"
 endif
 
 set mouse=a
@@ -70,6 +74,8 @@ set wildignore=*.o,*.hi,*/.git/*,*/dist-newstyle/*,*/.stack-work/*,*/node_module
 set hidden
 
 set exrc secure
+
+set guifont=Iosevka:h14
 
 if executable('rg')
     set grepprg=rg\ --vimgrep

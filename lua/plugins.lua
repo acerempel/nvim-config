@@ -17,6 +17,13 @@ use {
   cmd = 'StartupTime',
 }
 
+use {
+  'ms-jpq/chadtree',
+  branch = 'chad',
+  run = 'python3 -m chadtree deps',
+  opt = true,
+}
+
 -- Set 'path', 'includeexpr', etc. to reasonable values
 use 'tpope/vim-apathy'
 --}}}
@@ -363,18 +370,17 @@ use {
 }
 
 use {
-  'romgrk/barbar.nvim',
-  as = 'barbar',
+  'akinsho/bufferline.nvim',
+  as = 'bufferline',
   opt = true,
-  setup = function ()
-    vim.g.bufferline = {
-      animation = false,
-      auto_hide = true,
-      tabpages = true,
-      icon_close_tab = '✗',
-      icon_pinned = '',
+  requires = 'kyazdani42/nvim-web-devicons',
+  config = function()
+    require('bufferline').setup {
+      buffer_close_icon = '✖︎ ',
+      diagnostics = "coc",
+      show_buffer_icons = false,
     }
-  end
+  end,
 }
 
 use {
@@ -606,6 +612,27 @@ use {
   config = function() require('lsp') end,
 }
 
+use {
+  'neoclide/coc.nvim',
+  as = 'coc',
+  branch = 'master',
+  run = 'yarn install --frozen-lockfile',
+  opt = true,
+}
+
+use {
+  'junegunn/fzf',
+  run = ":call fzf#install()",
+  opt = true,
+}
+
+use {
+  'yuki-yano/fzf-preview.vim',
+  as = 'fzf-preview',
+  branch = 'release/remote',
+  opt = true,
+}
+
 use { 'b0o/SchemaStore.nvim' }
 
 use {
@@ -688,85 +715,6 @@ use {
 }
 
 -- Autocomplete
-
-use {
-  'hrsh7th/nvim-cmp',
-  cond = is_not_vscode,
-  event = "InsertEnter *",
-  requires = {
-    { "hrsh7th/cmp-buffer", opt = true, after = { 'nvim-cmp' } },
-    { "saadparwaiz1/cmp_luasnip", opt = true, after = { 'nvim-cmp', 'LuaSnip' } },
-    { "hrsh7th/cmp-nvim-lsp", module = "cmp_nvim_lsp", after = { 'nvim-cmp' } },
-    { "hrsh7th/cmp-nvim-lua", opt = true, after = { 'nvim-cmp' } },
-  },
-  config = function ()
-    local cmp = require('cmp')
-    local util = require('util')
-    cmp.setup {
-      snippet = {
-        expand = function(args)
-          require('luasnip').lsp_expand(args.body)
-        end
-      },
-      completion = {
-        autocomplete = false,
-        completeopt = 'menu,menuone',
-      },
-      mapping = {
-        ['<CR>'] = cmp.mapping.confirm({ select = true }),
-        ['<C-e>'] = cmp.mapping.close(),
-        ['<Esc>'] = cmp.mapping.abort(),
-        ['<C-Space>'] = cmp.mapping.complete(),
-        ['<C-n>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
-        ['<C-p>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
-        ['<Down>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
-        ['<Up>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
-        ['<Tab>'] = cmp.mapping(function(fallback)
-          if cmp.visible() then
-            -- vim.api.nvim_feedkeys(require('util').term('<C-n>'), 'n', true)
-            cmp.select_next_item({ cmp.SelectBehavior.Insert })
-          elseif luasnip.expand_or_locally_jumpable() then
-            luasnip.expand_or_jump()
-          elseif util.check_back_space() then
-            fallback()
-            -- vim.api.nvim_feedkeys(require('util').term('<Tab>'), 'n', true)
-          else
-            cmp.complete()
-          end
-        end, { 'i', 's' }),
-        ['<S-Tab>'] = cmp.mapping(function(fallback)
-          if cmp.visible() then
-            -- vim.api.nvim_feedkeys(require('util').term('<C-p>'), 'n', true)
-            cmp.select_prev_item({ cmp.SelectBehavior.Insert })
-          elseif luasnip.jumpable(-1) then
-            luasnip.jump(-1)
-          else
-            fallback()
-            -- vim.api.nvim_feedkeys(require('util').term('<S-Tab>'), 'n', true)
-          end
-        end, { 'i', 's' }),
-      },
-      sources = {
-        { name = 'nvim_lsp' },
-        { name = 'nvim_lua' },
-        { name = 'luasnip' },
-        { name = 'buffer' },
-      },
-      enabled = function ()
-        return vim.bo.buftype ~= 'prompt' and vim.bo.filetype ~= 'gitcommit'
-      end,
-      experimental = {
-        ghost_text = true,
-      },
-    }
-  end
-}
-
-use {
-  'neoclide/coc.nvim',
-  branch = 'release',
-  disable = true,
-}
 
 -- }}}
 

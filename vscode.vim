@@ -42,10 +42,10 @@ nnoremap zm <Nop>
 
 nnoremap ]d <Cmd>call VSCodeNotify('editor.action.marker.nextInFiles')<CR>
 nnoremap [d <Cmd>call VSCodeNotify('editor.action.marker.prevInFiles')<CR>
-nnoremap ]c <Cmd>call VSCodeNofity('workbench.editor.action.nextChange')<CR>
-nnoremap [c <Cmd>call VSCodeNofity('workbench.editor.action.prevChange')<CR>
-nnoremap ]v <Cmd>call VSCodeNofity('editor.action.dirtydiff.next')<CR>
-nnoremap [v <Cmd>call VSCodeNofity('editor.action.dirtydiff.prev')<CR>
+nnoremap ]c <Cmd>call VSCodeNotify('workbench.editor.action.nextChange')<CR>
+nnoremap [c <Cmd>call VSCodeNotify('workbench.editor.action.prevChange')<CR>
+nnoremap ]v <Cmd>call VSCodeNotify('editor.action.dirtydiff.next')<CR>
+nnoremap [v <Cmd>call VSCodeNotify('editor.action.dirtydiff.prev')<CR>
 nnoremap zk <Cmd>call VSCodeNotify('editor.gotoPreviousFold')<CR>
 nnoremap zj <Cmd>call VSCodeNotify('editor.gotoPreviousFold')<CR>
 nnoremap g<Tab> <Cmd>call VSCodeNotify('workbench.action.openPreviousRecentlyUsedEditor')<CR>
@@ -53,6 +53,11 @@ nnoremap g<S-Tab> <Cmd>call VSCodeNotify('workbench.action.openNextRecentlyUsedE
 
 nnoremap gh <Cmd>call VSCodeNotify('editor.action.changeAll')<Bar>startinsert<CR>
 xnoremap gh <Cmd>call VSCodeNotifyVisual('editor.action.selectHighlights', v:true)<Bar>startinsert<CR>
+
+nnoremap - <Cmd>call VSCodeNotify('editor.action.smartSelect.expand')<CR>
+xnoremap - <Cmd>call VSCodeNotifyVisual('editor.action.smartSelect.expand')<CR>
+xnoremap _ <Cmd>call VSCodeNotifyVisual('editor.action.smartSelect.shrink')<CR>
+nnoremap _ <Cmd>call VSCodeNotify('editor.action.smartSelect.shrink')<CR>
 
 " Allow remapping, since gj and gk are mapped to VSCode commands.
 map <silent> <expr> j (v:count == 0 ? 'gj' : 'j')

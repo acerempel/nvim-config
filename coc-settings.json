@@ -1,11 +1,17 @@
 {
+  "coc.preferences.formatOnType": true,
   "suggest.autoTrigger": "trigger",
   "diagnostic.virtualText": true,
   "diagnostic.virtualTextCurrentLineOnly": false,
   "diagnostic.virtualTextPrefix": " ■ ",
+  "diagnostic.virtualTextLineSeparator": " ∣ ",
+  "diagnostic.errorSign": "⊗",
+  "diagnostic.infoSign": "⦿",
+  "diagnostic.hintSign": "⊙",
   "git.branchCharacter": "⌥",
   "typescript.preferences.quoteStyle": "double",
   "javascript.preferences.quoteStyle": "double",
+  "typescript.referencesCodeLens.enable": false,
   "html.suggest.ionic": false,
   "html.suggest.angular1": false,
   "html.autoClosingTags": true,
@@ -49,32 +55,27 @@
   "eslint.packageManager": "pnpm",
   "suggest.enablePreselect": true,
   "suggest.numberSelect": false,
-  "suggest.maxCompleteItemCount": 10,
+  "suggest.maxCompleteItemCount": 7,
   "suggest.snippetsSupport": true,
   "suggest.acceptSuggestionOnCommitCharacter": true,
+  "suggest.triggerCompletionWait": 50,
+  "signature.floatConfig": {"maxWidth": 51, "maxHeight": 22},
   "diagnostic.refreshOnInsertMode": false,
-  "diagnostic.infoSign": "--",
+  "list.indicator": "❯",
   "list.selectedSignText": "➤",
   "coc.preferences.extensionUpdateCheck": "weekly",
-  "list.source.files.args": ["--hidden", "--no-require-git", "--iglob=!.git/", "--files"],
+  "list.source.files.args": ["-H", "-tf", "-tl", "-E.git", "-cnever"],
+  "list.source.files.command": "fd",
   "codeLens.enable": true,
   "Lua.diagnostics.globals": ["vim"],
+  "rust-analyzer.assist.importGranularity": "module",
+  "rust-analyzer.lens.implementations": false,
   "languageserver": {
     "haskell": {
       "command": "haskell-language-server-wrapper",
       "args": ["--lsp"],
       "filetypes": ["haskell", "lhaskell"],
-      "rootPatterns": ["cabal.project", "cabal.project.*", "stack.yaml", "*.cabal"]
-    },
-    "elmLS": {
-      "command": "./node_modules/@elm-tooling/elm-language-server/out/index.js",
-      "filetypes": ["elm"],
-      "rootPatterns": ["elm.json"],
-      "initializationOptions": {
-        "elmPath": "./node_modules/elm/bin/elm",
-        "elmFormatPath": "./node_modules/elm-format/bin/elm-format",
-        "elmTestPath": "./node_modules/elm-test/bin/elm-test"
-      }
+      "rootPatterns": ["cabal.project", "stack.yaml", "*.cabal"]
     }
   }
 }

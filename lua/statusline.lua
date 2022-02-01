@@ -93,36 +93,10 @@ M.active[1] = {
         },
     },
     {
-        provider = 'diagnostic_errors',
-        hl = { fg = 'red' },
+        provider = function() return vim.fn['coc#status']() end,
         priority = -3,
         truncate_hide = true,
         left_sep = 'block',
-        icon = '⊗'
-    },
-    {
-        provider = 'diagnostic_warnings',
-        hl = { fg = 'yellow' },
-        priority = -4,
-        truncate_hide = true,
-        left_sep = 'block',
-        icon = '⚠'
-    },
-    {
-        provider = 'diagnostic_hints',
-        hl = { fg = 'cyan' },
-        priority = -5,
-        truncate_hide = true,
-        left_sep = 'block',
-        icon = '¶'
-    },
-    {
-        provider = 'diagnostic_info',
-        hl = { fg = 'skyblue' },
-        priority = -6,
-        truncate_hide = true,
-        left_sep = 'block',
-        icon = 'ℹ'
     },
     {
         provider = function() return require('nvim-gps').get_location() end,
@@ -137,7 +111,7 @@ M.active[1] = {
 M.active[2] = {
     {
         provider = 'git_diff_added',
-        icon = icon('diff-added'),
+        icon = '+',
         hl = {
             fg = 'green',
             bg = 'bg_dim'
@@ -150,7 +124,7 @@ M.active[2] = {
     },
     {
         provider = 'git_diff_changed',
-        icon = icon('diff-modified'),
+        icon = '~',
         hl = {
             fg = 'orange',
             bg = 'bg_dim'
@@ -159,7 +133,7 @@ M.active[2] = {
     },
     {
         provider = 'git_diff_removed',
-        icon = icon('diff-removed'),
+        icon = '–',
         hl = {
             fg = 'red',
             bg = 'bg_dim'

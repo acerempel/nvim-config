@@ -3,8 +3,12 @@ if vim.g.vscode == nil then
     "plenary.nvim", "pqf", "vim-qf", "fastfold", "auto-session",
     "which-key.nvim", "registers.nvim", "vim-fugitive", "vim-rhubarb",
     "gitsigns.nvim", "nvim-nonicons", "zenbones.nvim",
-    "nvim-lspconfig", "auto_pairs", "LuaSnip", "nvim-cmp",
-    "barbar",
+    "auto_pairs",
+    "bufferline",
+    "coc",
+    "fzf",
+    "fzf-preview",
+    "chadtree",
   }
   require('packer.load')(plugins, {}, _G.packer_plugins, false)
 end
