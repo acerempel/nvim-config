@@ -17,13 +17,6 @@ use {
   cmd = 'StartupTime',
 }
 
-use {
-  'ms-jpq/chadtree',
-  branch = 'chad',
-  run = 'python3 -m chadtree deps',
-  opt = true,
-}
-
 -- Set 'path', 'includeexpr', etc. to reasonable values
 use 'tpope/vim-apathy'
 --}}}
@@ -431,9 +424,34 @@ use {
 
 -- Pretty status line
 use {
-  '~/Code/feline.nvim', as = 'feline',
+  'nvim-lualine/lualine.nvim', as = 'lualine',
   opt = true,
-  config = function () require('statusline') end,
+  config = function ()
+    local function diff_source()
+      local gitsigns = vim.b.gitsigns_status_dict
+      if gitsigns then
+        return {
+          added = gitsigns.added,
+          modified = gitsigns.changed,
+          removed = gitsigns.removed
+        }
+      end
+    end
+    local gps = require('nvim-gps')
+    require('lualine').setup {
+      options = {
+        theme = 'newpaper',
+      },
+      sections = {
+        lualine_a = { {'filename', path = 1, symbols = { modified = ' ⊕', readonly = ' ⊖', unnamed = '‹no name›' }}, 'filetype' },
+        lualine_b = { {'diff', source = diff_source}, {'b:gitsigns_head', icon = ''} },
+        lualine_c = { {gps.get_location, cond = gps.is_available} },
+        lualine_x = { function () return vim.fn['coc#status']() end },
+        lualine_y = {'progress'},
+        lualine_z = {'mode'},
+      }
+    }
+  end
 }
 
 use {
@@ -465,18 +483,13 @@ use {
 
 -- Colour schemes
 use {
-  'mcchrish/zenbones.nvim',
-  requires = { 'rktjmp/lush.nvim' },
-  wants = "lush.nvim",
+  'yorik1984/newpaper.nvim', as = 'newpaper',
   opt = true,
-  setup = function ()
-    vim.opt.background = 'light'
-    vim.g.zenbones_lightness = 'bright'
-    vim.g.zenbones_darken_noncurrent_window = true
-  end,
   config = function ()
-    vim.api.nvim_command [[colorscheme zenbones]]
-  end,
+    require('newpaper').setup {
+      style = 'light',
+    }
+  end
 }
 
 -- }}}
@@ -660,6 +673,7 @@ use {
 use {
   'L3MON4D3/LuaSnip',
   event = "InsertEnter *",
+  disable = true,
   cond = is_not_vscode,
   config = function ()
     local types = require('luasnip.util.types')
