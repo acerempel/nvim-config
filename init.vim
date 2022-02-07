@@ -270,6 +270,9 @@ function! ToggleVsplit() abort
     return "vert " .. line
   endif
 endfunction
+
+nnoremap <C-tab> <Cmd>lua require('back-forward').back()<CR>
+nnoremap <S-C-tab> <Cmd>lua require('back-forward').forward()<CR>
 " }}}
 
 " AUTOCOMMANDS (non-VSCode only) {{{

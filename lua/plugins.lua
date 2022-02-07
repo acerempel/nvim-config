@@ -352,18 +352,6 @@ use {
 }
 
 use {
-  'AckslD/nvim-neoclip.lua',
-  as = "neoclip",
-  requires = { 'tami5/sqlite.lua' },
-  config = function ()
-    require('neoclip').setup {
-      history = 100,
-      enable_persistant_history = true,
-    }
-  end
-}
-
-use {
   'ThePrimeagen/harpoon',
   module = 'harpoon',
   config = function () require('harpoon').setup {} end,
@@ -384,7 +372,9 @@ use {
 }
 
 use {
-  '~/Code/trouble.nvim',
+  'acerempel/trouble.nvim',
+  disable = true,
+  branch = 'something',
   cmd = "Trouble*",
   config = function ()
     require("trouble").setup {
@@ -441,12 +431,9 @@ use {
 
 -- Pretty status line
 use {
-  '~/Code/feline.nvim',
-  after = { 'zenbones.nvim', },
+  '~/Code/feline.nvim', as = 'feline',
   opt = true,
-  config = function ()
-    require('statusline')
-  end,
+  config = function () require('statusline') end,
 }
 
 use {
@@ -495,6 +482,8 @@ use {
 -- }}}
 
 -- Syntax knowledge, incl. tree-sitter {{{
+
+use { 'ledger/vim-ledger', as = 'ledger', }
 
 use {
   'vimwiki/vimwiki',
@@ -557,10 +546,9 @@ use {
 use {
   'nvim-treesitter/nvim-treesitter',
   run = function () vim.cmd 'TSUpdate' end,
-  config = function ()
-    require('treesitter')
-  end
+  config = function () require('treesitter') end
 }
+
 use {
   'nvim-treesitter/playground',
   cmd = 'TSPlaygroundToggle',

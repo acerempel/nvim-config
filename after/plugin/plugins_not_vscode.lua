@@ -1,14 +1,26 @@
 if vim.g.vscode == nil then
   local plugins = {
-    "plenary.nvim", "pqf", "vim-qf", "fastfold", "auto-session",
-    "which-key.nvim", "registers.nvim", "vim-fugitive", "vim-rhubarb",
-    "gitsigns.nvim", "nvim-nonicons", "zenbones.nvim",
+    "nvim-nonicons",
+    "zenbones.nvim",
+    "which-key.nvim", "registers.nvim",
     "auto_pairs",
-    "bufferline",
-    "coc",
     "fzf",
-    "fzf-preview",
-    "chadtree",
   }
   require('packer.load')(plugins, {}, _G.packer_plugins, false)
+end
+
+if vim.g.simplicity == nil and vim.g.vscode == nil then
+  local plugins = {
+    "feline",
+    "plenary.nvim", "pqf", "vim-qf", "fastfold", "auto-session",
+    "vim-fugitive", "vim-rhubarb",
+    "gitsigns.nvim",
+    "coc",
+    "fzf-preview",
+    "chadtree",
+    "bufferline",
+  }
+  require('packer.load')(plugins, {}, _G.packer_plugins, false)
+else
+  vim.api.nvim_command("set laststatus=0")
 end
