@@ -365,34 +365,6 @@ use {
 }
 
 use {
-  'acerempel/trouble.nvim',
-  disable = true,
-  branch = 'something',
-  cmd = "Trouble*",
-  config = function ()
-    require("trouble").setup {
-      fold_closed = "▶",
-      fold_open = "▼",
-      padding = false,
-      signs = {
-        error = "⨷ ",
-        warning = "⚠ ",
-        hint = "¶ ",
-        information = "ℹ ",
-        other = " ",
-      },
-      auto_jump = { "lsp_definitions", "lsp_references", "lsp_implementations" },
-      action_keys = {
-        open_split = "s",
-        open_vsplit = "v",
-        open_tab = "t",
-      },
-      indent_lines = false,
-    }
-  end
-}
-
-use {
   'sindrets/diffview.nvim',
   cmd = 'DiffviewOpen',
   config = function ()
@@ -604,16 +576,6 @@ use {
 -- Semantic knowledge, incl. LSP {{{
 
 use {
-  'nvim-lua/lsp-status.nvim',
-  module = 'lsp-status',
-}
-use {
-  'neovim/nvim-lspconfig',
-  opt = true,
-  config = function() require('lsp') end,
-}
-
-use {
   'neoclide/coc.nvim',
   as = 'coc',
   branch = 'master',
@@ -635,30 +597,6 @@ use {
 }
 
 use { 'b0o/SchemaStore.nvim' }
-
-use {
-  'williamboman/nvim-lsp-installer',
-}
-use {
-  'ray-x/lsp_signature.nvim',
-  module = 'lsp_signature',
-}
-use {
-  'simrat39/symbols-outline.nvim',
-  module = 'symbols-outline',
-  setup = function ()
-    vim.g.loaded_symbols_outline = 1
-  end,
-  config = function ()
-    require("symbols-outline").setup()
-    vim.cmd [[
-    augroup outline
-    au!
-    au FileType outline au BufLeave <buffer=abuf> lua require'symbols-outline.preview'.close()
-    augroup END
-    ]]
-  end,
-}
 
 -- }}}
 
