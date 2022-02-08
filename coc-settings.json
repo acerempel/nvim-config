@@ -63,6 +63,11 @@
   "diagnostic.refreshOnInsertMode": false,
   "list.indicator": "❯",
   "list.selectedSignText": "➤",
+  "list.insertMappings": {
+    "<C-p>": "do:previous",
+    "<C-n>": "do:next",
+    "∆": "toggle"
+  },
   "coc.preferences.extensionUpdateCheck": "weekly",
   "list.source.files.args": ["-H", "-tf", "-tl", "-E.git", "-cnever"],
   "list.source.files.command": "fd",
