@@ -47,10 +47,12 @@ nmap <S-D-O> gO
 nmap <D-t> gW
 nmap <D-.> z=
 xmap <D-.> z=
+nnoremap <S-D-v> <Cmd>G<CR><C-w>L56<C-w><Bar>
 noremap <S-D-]> <Cmd>BufferLineCycleNext<CR>
 noremap <S-D-[> <Cmd>BufferLineCyclePrev<CR>
 noremap <S-D-}> <Cmd>BufferLineCycleNext<CR>
 noremap <S-D-{> <Cmd>BufferLineCyclePrev<CR>
+nnoremap <C-tab> <Cmd>lua require'telescope.builtin'.buffers()<CR>
 nmap <D-[> <C-O>
 nmap <D-]> <C-I>
 inoremap <D-[> <C-D>

@@ -187,6 +187,17 @@ tnoremap <Esc> <c-\><c-n>
 
 " }}}
 
+" Nomodifiable {{{
+augroup nomodifiable
+  au!
+  au BufWinEnter * if !&modifiable | call NomodifiableMappings() | endif
+augroup END
+function! NomodifiableMappings() abort
+  nnoremap <buffer> <nowait> u <C-u>
+  nnoremap <buffer> <nowait> d <C-d>
+  if &ft != 'man' | nnoremap <buffer> <nowait> q <Cmd>close<CR> | endif
+endfunction
+" }}}
 " }}}
 
 " Misc plugin settings {{{

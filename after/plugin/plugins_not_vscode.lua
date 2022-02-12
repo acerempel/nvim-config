@@ -1,11 +1,12 @@
 if vim.g.vscode == nil then
   local plugins = {
     "nvim-nonicons",
-    "newpaper",
+    "lush", "zenbones",
     "lualine",
-    "which-key.nvim", "registers.nvim",
+    "registers.nvim",
     "auto_pairs",
     "fzf",
+    "bufferline",
   }
   require('packer.load')(plugins, {}, _G.packer_plugins, false)
 else
@@ -14,12 +15,15 @@ end
 
 if vim.g.simplicity == nil and vim.g.vscode == nil then
   local plugins = {
-    "plenary.nvim", "pqf", "vim-qf", "fastfold", "auto-session",
+    "plenary.nvim", "pqf", "vim-qf", "fastfold",
+    "telescope",
     "vim-fugitive", "vim-rhubarb",
     "gitsigns.nvim",
     "coc",
     "fzf-preview",
-    "bufferline",
+    "which-key",
+    "Comment",
+    "vim-matchup",
   }
   require('packer.load')(plugins, {}, _G.packer_plugins, false)
 end

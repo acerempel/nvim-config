@@ -38,7 +38,6 @@ use {
   end
 }
 
-use { 'Olical/vim-enmasse', cmd = "EnMasse" }
 use {
   'gabrielpoca/replacer.nvim',
   module = 'replacer',
@@ -54,6 +53,7 @@ use {
 -- Cool marks
 use {
   'chentau/marks.nvim',
+  disable = true,
   config = function ()
     require('marks').setup {
       default_mappings = true,
@@ -65,48 +65,6 @@ use {
 
 -- More and better text-objects
 use { 'wellle/targets.vim' }
-
-use {
-  'joosepalviste/nvim-ts-context-commentstring',
-  module = 'ts_context_commentstring',
-  requires = { 'nvim-treesitter/nvim-treesitter' },
-  config = function ()
-    require('nvim-treesitter.configs').setup {
-      context_commentstring = {
-        enable = true,
-        enable_autocmd = false,
-      }
-    }
-  end,
-}
-
-use {
-  'andymass/vim-matchup',
-  after = { 'which-key.nvim' },
-  event = 'CursorMoved,CursorMovedI *',
-  setup = function ()
-    vim.g.matchup_matchparen_offscreen = {
-      method = 'popup',
-      scrolloff = 1,
-    }
-    vim.g.matchup_matchparen_deferred = 1
-    vim.g.matchup_matchparen_deferred_fade_time = 450
-    vim.g.matchup_surround_enabled = 1
-    vim.g.matchup_matchpref = { html = { tagnameonly = 1 } }
-    if vim.g.vscode == 1 then
-      vim.g.matchup_matchparen_enabled = 0
-    end
-  end,
-  config = function ()
-    require('which-key').register {
-      ['%'] = "Next matching word",
-      ['z%'] = "Go within Nth nearest block",
-      ['g%'] = "Previous matching word",
-      ['[%'] = "Previous outer opening word",
-      [']%'] = "Next outer closing word",
-    }
-  end
-}
 -- }}}
 
 -- Invisible improvements {{{
@@ -151,10 +109,10 @@ use {
 -- Editing-oriented normal mode commands {{{
 use 'tpope/vim-surround'
 
+-- Comment {{{
 use {
-  'numToStr/Comment.nvim',
+  'numToStr/Comment.nvim', as = 'Comment',
   opt = true,
-  after = { 'which-key.nvim' },
   config = function()
     require('Comment').setup {
       mappings = { basic = true, extended = true },
@@ -176,13 +134,17 @@ use {
     }
   end
 }
+-- }}}
+use {
+  'haya14busa/vim-metarepeat',
+}
 
 -- }}}
 
 -- Show what is otherwise hidden {{{
 -- Show available keybindings as you type
 use {
-  'folke/which-key.nvim',
+  'folke/which-key.nvim', as = "which-key",
   opt = true,
   config = function ()
     require('which-key').setup {
@@ -216,6 +178,35 @@ use {  'mbbill/undotree', cmd = "UndotreeToggle" }
 -- use 'rhysd/clever-f.vim'
 -- use 'justinmk/vim-sneak'
 use 'ggandor/lightspeed.nvim'
+
+-- Matchup {{{
+use {
+  'andymass/vim-matchup',
+  event = 'CursorMoved,CursorMovedI *',
+  setup = function ()
+    vim.g.matchup_matchparen_offscreen = {
+      method = 'popup',
+      scrolloff = 1,
+    }
+    vim.g.matchup_matchparen_deferred = 1
+    vim.g.matchup_matchparen_deferred_fade_time = 450
+    vim.g.matchup_surround_enabled = 1
+    vim.g.matchup_matchpref = { html = { tagnameonly = 1 } }
+    if vim.g.vscode == 1 then
+      vim.g.matchup_matchparen_enabled = 0
+    end
+  end,
+  config = function ()
+    require('which-key').register {
+      ['%'] = "Next matching word",
+      ['z%'] = "Go within Nth nearest block",
+      ['g%'] = "Previous matching word",
+      ['[%'] = "Previous outer opening word",
+      [']%'] = "Next outer closing word",
+    }
+  end
+}
+-- }}}
 -- }}}
 
 -- GIT integration {{{
@@ -241,7 +232,15 @@ use {
   },
   opt = true,
   config = function()
-    require('gitsigns').setup{}
+    require('gitsigns').setup()
+  end
+}
+
+use {
+  'sindrets/diffview.nvim',
+  cmd = 'DiffviewOpen',
+  config = function ()
+    require('diffview').setup {}
   end
 }
 
@@ -255,24 +254,21 @@ use {
 
 -- }}}
 
--- EXTRA FEATURES {{{
-
-use {
-  'haya14busa/vim-metarepeat',
-  keys = 'g.',
-}
-
 use {
   "chrisbra/NrrwRgn",
-  cmd = { "NarrowRegion", "NarrowWindow", "NR", "NW", "NRV", },
-  keys = { "<Leader>nr" },
 }
 
+-- Telescope {{{
 use {
-  'nvim-telescope/telescope.nvim',
-  module = 'telescope',
-  cmd = 'Telescope',
-  wants = { 'harpoon' },
+  'nvim-telescope/telescope.nvim', as = 'telescope',
+  opt = true,
+  wants = {
+    'harpoon',
+    'session-lens',
+    'popup.nvim',
+    'plenary.nvim',
+    'telescope-fzf-native.nvim',
+  },
   requires = {
     'nvim-lua/popup.nvim',
     'nvim-lua/plenary.nvim',
@@ -281,9 +277,22 @@ use {
   config = function ()
     local telescope = require('telescope')
     local actions = require('telescope.actions')
+    local layout_actions = require('telescope.actions.layout')
     local themes = require('telescope.themes')
     telescope.setup({
       defaults = {
+        disable_devicons = true,
+        layout_strategy = 'vertical',
+        layout_config = {
+          horizontal = { height = 0.5 },
+          cursor = { height = 0.5 },
+          vertical = {
+            height = 0.625,
+            preview_cutoff = 10,
+            width = 0.5,
+          },
+        },
+        preview = { hide_on_startup = true, },
         mappings = {
           i = {
             ["<Esc>"] = actions.close,
@@ -293,7 +302,19 @@ use {
             ["<C-Space>"] = actions.complete_tag,
             ["<C-u>"] = false,
             ["<C-d>"] = false,
+            ["<D-k>"] = layout_actions.toggle_preview,
           },
+        },
+      },
+      pickers = {
+        buffers = {
+          show_all_buffers = true, ignore_current_buffer = true,
+          sort_mru = true, bufnr_width = 3,
+          disable_devicons = true,
+        },
+        find_files = {
+          disable_devicons = true,
+          preview = { hide_on_startup = true, },
         }
       },
       extensions = {
@@ -309,6 +330,7 @@ use {
     telescope.load_extension('zoxide')
     telescope.load_extension('repo')
     telescope.load_extension('harpoon')
+    telescope.load_extension("frecency")
   end
 }
 
@@ -320,66 +342,51 @@ use {
 }
 
 use {
-  'nvim-telescope/telescope-frecency.nvim',
-  as = 'telescope-frecency',
-  after = { 'telescope.nvim' },
+  'nvim-telescope/telescope-frecency.nvim', as = 'telescope-frecency',
   requires = {
-    'telescope.nvim',
     {
       'tami5/sqlite.lua',
       module = "sqlite",
       setup = function () vim.g.sqlite_clib_path = '/usr/lib/libsqlite3.dylib' end
     }
   },
-  config = function () require('telescope').load_extension("frecency") end,
 }
 
 use {
-  'rmagatti/session-lens',
-  after = { 'telescope.nvim', 'auto-session' },
+  'rmagatti/session-lens', opt = true,
+  wants = { 'auto-session' },
   config = function ()
     require('session-lens').setup {
       path_display = 'shorten',
     }
   end
 }
-
+--}}}
+-- FZF {{{
 use {
-  'ThePrimeagen/harpoon',
-  module = 'harpoon',
-  config = function () require('harpoon').setup {} end,
-}
-
-use {
-  'akinsho/bufferline.nvim',
-  as = 'bufferline',
+  'junegunn/fzf',
+  run = ":call fzf#install()",
   opt = true,
-  requires = 'kyazdani42/nvim-web-devicons',
-  config = function()
-    require('bufferline').setup {
-      buffer_close_icon = '✖︎ ',
-      diagnostics = "coc",
-      show_buffer_icons = false,
-    }
-  end,
 }
 
 use {
-  'sindrets/diffview.nvim',
-  cmd = 'DiffviewOpen',
-  config = function ()
-    require('diffview').setup {}
-  end
+  'yuki-yano/fzf-preview.vim',
+  as = 'fzf-preview',
+  branch = 'release/remote',
+  opt = true,
+}
+--}}}
+
+use {
+  'ThePrimeagen/harpoon', opt = true,
+  config = function () require('harpoon').setup {} end,
 }
 
 -- .editorconfig support
 use { 'editorconfig/editorconfig-vim', opt = true }
 
-use 'chrisbra/unicode.vim'
-
 use {
   'tpope/vim-eunuch',
-  cmd = { 'Delete', 'Unlink', 'Move', 'Rename', 'Chmod', 'Mkdir', 'Cfind', 'Clocate', 'Lfind', 'Llocate', 'Wall', 'SudoWrite', 'SudoEdit', },
 }
 
 use {
@@ -390,11 +397,10 @@ use {
     "Time", -- measure how long it takes to run some stuff.
   },
 }
--- }}}
 
 -- AESTHETICS {{{
 
--- Pretty status line
+-- status line {{{
 use {
   'nvim-lualine/lualine.nvim', as = 'lualine',
   opt = true,
@@ -410,17 +416,67 @@ use {
       end
     end
     local gps = require('nvim-gps')
+    local function is_special()
+      local buftype = vim.bo.buftype
+      return buftype == 'help' or buftype == 'quickfix' or buftype == 'terminal'
+    end
+    local function special_filename()
+      local buftype = vim.bo.buftype
+      if buftype == 'help' then
+        return vim.fn.expand('%:t')
+      elseif buftype == 'quickfix' then
+        local wintype = vim.fn.win_gettype()
+        if wintype == 'quickfix' then
+          return vim.fn.getqflist({title = 1}).title
+        elseif wintype == 'loclist' then
+          return  vim.fn.getloclist({title = 1}).title
+        end
+      elseif buftype == 'terminal' then
+        return vim.b.term_title
+      else
+        return '???'
+      end
+    end
+    local function min_width(w)
+      return function ()
+        local name = vim.api.nvim_buf_get_name(0)
+        local winw = vim.api.nvim_win_get_width(0)
+        return winw - #name >= w
+      end
+    end
+    local section_a = {
+      {
+        'filename', path = 1,
+        symbols = { modified = ' ⊕', readonly = ' ⊖', unnamed = '‹no name›' },
+        cond = function() return not is_special() end,
+      },
+      {
+        special_filename,
+        cond = is_special,
+      },
+    }
+    local section_b = {
+      {'diff', source = diff_source}, {'b:gitsigns_head', icon = '', cond = min_width(80) }
+    }
     require('lualine').setup {
       options = {
-        theme = 'newpaper',
+        theme = 'zenbones_light_bright',
       },
       sections = {
-        lualine_a = { {'filename', path = 1, symbols = { modified = ' ⊕', readonly = ' ⊖', unnamed = '‹no name›' }}, 'filetype' },
-        lualine_b = { {'diff', source = diff_source}, {'b:gitsigns_head', icon = ''} },
-        lualine_c = { {gps.get_location, cond = gps.is_available} },
-        lualine_x = { function () return vim.fn['coc#status']() end },
+        lualine_a = section_a,
+        lualine_b = section_b,
+        lualine_c = { {gps.get_location, cond = function () return gps.is_available() and min_width(65)() end} },
+        lualine_x = { {function () return vim.fn['coc#status']() end, cond = min_width(50)} },
         lualine_y = {'progress'},
         lualine_z = {'mode'},
+      },
+      inactive_sections = {
+        lualine_a = section_a,
+        lualine_b = section_b,
+        lualine_c = {},
+        lualine_x = {},
+        lualine_y = { 'progress' },
+        lualine_z = { 'location' },
       }
     }
   end
@@ -433,7 +489,7 @@ use {
     local icon = require('nvim-nonicons').get
     require('nvim-gps').setup {
       icons = {
-        ['tag-name'] = '∆ ',
+        ['tag-name'] = icon('struct'),
         ['class-name'] = icon('class'),
         ['function-name'] = 'ƒ ',
         ['method-name'] = '∂ ',
@@ -443,6 +499,26 @@ use {
   end,
 }
 
+-- }}}
+
+-- Buffer line {{{
+use {
+  'akinsho/bufferline.nvim',
+  as = 'bufferline',
+  opt = true,
+  requires = 'kyazdani42/nvim-web-devicons',
+  config = function()
+    require('bufferline').setup {
+      buffer_close_icon = '✕',
+      diagnostics = "coc",
+      show_buffer_icons = false,
+      always_show_bufferline = false,
+    }
+  end,
+}
+-- }}}
+
+-- Icons {{{
 use {
   'yamatsum/nvim-nonicons',
   opt = true,
@@ -452,17 +528,32 @@ use {
     config = function() require('nvim-web-devicons').setup() end,
   }
 }
-
--- Colour schemes
+-- }}}
+-- Colour schemes {{{
 use {
   'yorik1984/newpaper.nvim', as = 'newpaper',
-  opt = true,
+  opt = true, disable = true,
   config = function ()
-    require('newpaper').setup {
-      style = 'light',
-    }
+    require('newpaper').setup { style = 'light', }
   end
 }
+
+use { 'rktjmp/lush.nvim', as = 'lush', opt = true }
+use {
+  'mcchrish/zenbones.nvim', as = 'zenbones', opt = true,
+  config = function ()
+    vim.g.zenbones = {
+      lightness = 'bright',
+      darken_noncurrent_window = true,
+    }
+    vim.cmd [[
+      set termguicolors
+      set background=light
+      colorscheme zenbones
+    ]]
+  end
+}
+-- }}}
 
 -- }}}
 
@@ -470,6 +561,7 @@ use {
 
 use { 'ledger/vim-ledger', as = 'ledger', }
 
+-- Vimwiki {{{
 use {
   'vimwiki/vimwiki',
   event = { "BufReadPost,BufNew *.wiki" },
@@ -502,8 +594,8 @@ use {
     ]]
   end
 }
+--}}}
 
--- Syntax highlighting and suchlike
 use { 'neovimhaskell/haskell-vim', cond = is_not_vscode, ft = 'haskell' }
 use {
   'gabrielelana/vim-markdown',
@@ -518,6 +610,7 @@ use {
 
 use {
   '~/Code/intero-neovim',
+  disable = true,
   setup = function ()
     vim.g.intero_backend = {
       command = 'cabal repl',
@@ -527,13 +620,27 @@ use {
   end
 }
 
--- Tree-sitter language grammars
+-- Tree-sitter {{{
 use {
   'nvim-treesitter/nvim-treesitter',
   run = function () vim.cmd 'TSUpdate' end,
   config = function () require('treesitter') end
 }
 
+use {
+  'joosepalviste/nvim-ts-context-commentstring',
+  module = 'ts_context_commentstring',
+  requires = { 'nvim-treesitter/nvim-treesitter' },
+  config = function ()
+    require('nvim-treesitter.configs').setup {
+      context_commentstring = {
+        enable = true,
+        enable_autocmd = false,
+      }
+    }
+  end,
+}
+-- Treesitter playground {{{
 use {
   'nvim-treesitter/playground',
   cmd = 'TSPlaygroundToggle',
@@ -562,6 +669,7 @@ use {
     require('nvim-treesitter.install').compilers = { "gcc" }
   end,
 }
+--}}}
 use {
   'nvim-treesitter/nvim-treesitter-textobjects',
   requires = { 'nvim-treesitter/nvim-treesitter' },
@@ -570,7 +678,7 @@ use {
   'RRethy/nvim-treesitter-textsubjects',
   requires = { 'nvim-treesitter/nvim-treesitter' },
 }
-
+-- }}}
 -- }}}
 
 -- Semantic knowledge, incl. LSP {{{
@@ -583,21 +691,6 @@ use {
   opt = true,
 }
 
-use {
-  'junegunn/fzf',
-  run = ":call fzf#install()",
-  opt = true,
-}
-
-use {
-  'yuki-yano/fzf-preview.vim',
-  as = 'fzf-preview',
-  branch = 'release/remote',
-  opt = true,
-}
-
-use { 'b0o/SchemaStore.nvim' }
-
 -- }}}
 
 -- Keystroke-saving, incl. completion {{{
@@ -608,6 +701,7 @@ use {
   event = "InsertEnter *",
 }
 
+-- Snippets {{{
 use {
   'L3MON4D3/LuaSnip',
   event = "InsertEnter *",
@@ -653,7 +747,7 @@ use {
     require('snippets')
   end
 }
-
+--}}}
 -- Autocomplete
 
 -- }}}

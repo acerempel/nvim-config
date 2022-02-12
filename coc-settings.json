@@ -54,7 +54,6 @@
   "tailwindCSS.headwind.runOnSave": false,
   "eslint.packageManager": "pnpm",
   "suggest.enablePreselect": true,
-  "suggest.numberSelect": false,
   "suggest.maxCompleteItemCount": 7,
   "suggest.snippetsSupport": true,
   "suggest.acceptSuggestionOnCommitCharacter": true,
@@ -66,13 +65,19 @@
   "list.insertMappings": {
     "<C-p>": "do:previous",
     "<C-n>": "do:next",
-    "∆": "toggle"
+    "<Tab>": "do:toggle",
+    "<C-t>": "action:tabe",
+    "<C-x>": "action:split",
+    "<C-v>": "action:vsplit",
+    "<C-q>": "action:quickfix"
   },
   "coc.preferences.extensionUpdateCheck": "weekly",
+  "coc.preferences.jumpCommand": "edit",
   "list.source.files.args": ["-H", "-tf", "-tl", "-E.git", "-cnever"],
   "list.source.files.command": "fd",
   "codeLens.enable": true,
   "Lua.diagnostics.globals": ["vim"],
+  "Lua.runtime.version": "LuaJIT",
   "rust-analyzer.assist.importGranularity": "module",
   "rust-analyzer.lens.implementations": false,
   "languageserver": {

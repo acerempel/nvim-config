@@ -55,8 +55,7 @@ whichkey.register(
         "Fuzzy find"
       },
       d = { "<cmd>BufferClose<CR>", "Delete bufffer" },
-      p = { "<cmd>BufferPin<CR>", "Pin buffer" },
-      k = { "<cmd>BufferPick<CR>", "Jump to buffer" },
+      k = { "<cmd>BufferLinePick<CR>", "Jump to buffer" },
       c = {
         "<cmd>lua require('telescope.builtin').buffers({ sort_mru = true, ignore_current_buffer = true, cwd_only = true })<cr>",
         "Fuzzy find within current directory"
@@ -133,7 +132,7 @@ whichkey.register(textobjects, { mode = "x" })
 
 whichkey.register(
   {
-    [','] = harpoons,
+    ['<Leader>a'] = harpoons,
     ["["] = {
       name = "Previous, before, above",
       w = {
@@ -174,8 +173,7 @@ whichkey.register(
         "Next diagnostic"
       },
       c = { "Next Git change" },
-      j = { "<Cmd>BufferNext<CR>", "Next buffer" },
-      J = { "<Cmd>BufferLast<CR>", "Last buffer" },
+      j = { "<Cmd>BufferLineCycleNext<CR>", "Next buffer" },
       t = { "<Cmd>tabnext<CR>", "Next tab" },
       T = { "<Cmd>tablast<CR>", "Last tab" },
       z = { "End of current fold" },
@@ -201,6 +199,25 @@ whichkey.register(
       i = { "Toggle folding" },
       j = { "To start of next fold" },
       k = { "To end of previous fold" },
+    },
+    [','] = {
+      name = 'Fuzzy find',
+      d = {
+        "<Cmd>lua require('telescope').extensions.zoxide.list({})<CR>",
+        "Directories oft-used"
+      },
+      f = {
+        "<Cmd>lua require('telescope').extensions.frecency.frecency()<CR>",
+        "Files oft-used"
+      },
+      h = {
+        "<cmd>lua require('telescope.builtin').help_tags()<cr>",
+        "Help tags"
+      },
+      s = {
+        "<cmd>lua require('telescope.builtin').buffers()<CR>",
+        "Buffers"
+      },
     }
   }
 )

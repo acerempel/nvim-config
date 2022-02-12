@@ -55,7 +55,6 @@ end ]]
 
 M.coc_buf_maps = function (bufnr)
   if not vim.api.nvim_buf_call(bufnr, function() return vim.fn.CocAction('ensureDocument') end) then
-    vim.cmd([[echom 'Document not COCified ]] .. bufnr .. [[']])
     return nil
   end
   local whichkey = require('which-key')
@@ -94,12 +93,17 @@ M.coc_buf_maps = function (bufnr)
   "       \ v:lua.require'util'.check_back_space() ? "\<TAB>" :
   "       \ coc#refresh()
   inoremap <silent><buffer><expr> <Tab> luaeval("require('coc').tab()")
-  inoremap <buffer><expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+  inoremap <silent><buffer><expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<S-Tab>"
   inoremap <silent><buffer><expr> <C-Space> coc#refresh()
+  snoremap <silent><buffer><expr> <Tab> luaeval("require('coc').tab()")
+  snoremap <silent><buffer><expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+  snoremap <silent><buffer><expr> <C-Space> coc#refresh()
 
   " Make <CR> auto-select the first completion item and notify coc.nvim to
   " format on enter
   inoremap <silent><buffer><expr> <cr> pumvisible() ? coc#_select_confirm()
+                                \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+  snoremap <silent><buffer><expr> <cr> pumvisible() ? coc#_select_confirm()
                                 \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
   ]]
 
@@ -111,7 +115,6 @@ end
 local command = vim.api.nvim_command
 
 M.setup_coc_maps = function()
-  command [[echom 'Setting up COC mappings']]
   local extensions = vim.fn.CocAction('extensionStats')
   local filetypes = { haskell = true }
   for _, ext in ipairs(extensions) do
@@ -119,6 +122,8 @@ M.setup_coc_maps = function()
       local ft_match = event:match('^onLanguage:([%w%._-]+)$')
       if ft_match then
         filetypes[ft_match] = true
+      elseif ext.id == 'coc-html' then
+        filetypes['html'] = true
       end
     end
   end
