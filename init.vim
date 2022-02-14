@@ -308,6 +308,16 @@ lua << ENDLUA
 _G.is_not_vscode = function () return vim.g.vscode == nil end
 require('help_float').setup {}
 ENDLUA
+
+command! -nargs=0 BufferClose call DoCloseBuffer()
+
+function! DoCloseBuffer() abort
+  if winnr('$') > 1
+    close
+  else
+    bdelete
+  endif
+endfunction
 " }}}
 
 " COC mappings {{{
