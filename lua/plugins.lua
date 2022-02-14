@@ -263,7 +263,6 @@ use {
   'nvim-telescope/telescope.nvim', as = 'telescope',
   opt = true,
   wants = {
-    'harpoon',
     'session-lens',
     'popup.nvim',
     'plenary.nvim',
@@ -282,6 +281,7 @@ use {
     telescope.setup({
       defaults = {
         disable_devicons = true,
+        color_devicons = false,
         layout_strategy = 'vertical',
         layout_config = {
           horizontal = { height = 0.5 },
@@ -329,8 +329,8 @@ use {
     telescope.load_extension('lsp_handlers')
     telescope.load_extension('zoxide')
     telescope.load_extension('repo')
-    telescope.load_extension('harpoon')
-    telescope.load_extension("frecency")
+    telescope.load_extension('frecency')
+    telescope.load_extension('coc')
   end
 }
 
@@ -339,6 +339,7 @@ use {
   'nvim-telescope/telescope-ui-select.nvim',
   'jvgrootveld/telescope-zoxide',
   'cljoly/telescope-repo.nvim',
+  'fannheyward/telescope-coc.nvim',
 }
 
 use {
@@ -379,6 +380,7 @@ use {
 
 use {
   'ThePrimeagen/harpoon', opt = true,
+  disable = true,
   config = function () require('harpoon').setup {} end,
 }
 

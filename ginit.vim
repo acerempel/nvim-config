@@ -27,7 +27,7 @@ noremap <D-v> p
 inoremap <D-v> <C-o>p
 noremap <D-c> y
 noremap <D-x> d
-noremap <D-p> <Cmd>CocList files<CR>
+noremap <D-p> <Cmd>lua require('telescope.builtin').find_files()<CR>
 noremap <S-D-P> <Cmd>lua require('telescope.builtin').commands()<CR>
 noremap <S-D-p> <Cmd>lua require('telescope.builtin').commands()<CR>
 noremap <D-q> <Cmd>qall<CR>
@@ -58,4 +58,4 @@ nmap <D-]> <C-I>
 inoremap <D-[> <C-D>
 inoremap <D-]> <C-T>
 nnoremap <M-D-p> <Cmd>CocList commands<CR>
-nnoremap <S-D-m> <Cmd>CocList diagnostics<CR>
+nnoremap <S-D-m> <Cmd>lua require("telescope").extensions.coc.workspace_diagnostics(require("telescope.themes").get_ivy({ layout_config = { height = 10 }, initial_mode = "normal" }))<CR>

@@ -132,7 +132,6 @@ whichkey.register(textobjects, { mode = "x" })
 
 whichkey.register(
   {
-    ['<Leader>a'] = harpoons,
     ["["] = {
       name = "Previous, before, above",
       w = {
@@ -186,6 +185,10 @@ whichkey.register(
       name = "Go to; jump around; select",
       O = { "Show document outline" },
       b = { "go", "Go to nth byte" },
+      W = {
+        "<cmd>lua require'telescope.builtin'.live_grep({ additional_args = '-F' })<CR>",
+        "Search for regex"
+      }
     },
     Y = { "Yank till end of line" },
     Q = { "Re-run last used macro" },
@@ -203,7 +206,7 @@ whichkey.register(
     [','] = {
       name = 'Fuzzy find',
       d = {
-        "<Cmd>lua require('telescope').extensions.zoxide.list({})<CR>",
+        "<Cmd>lua require('telescope').extensions.zoxide.list({ disable_devicons = true })<CR>",
         "Directories oft-used"
       },
       f = {
@@ -213,6 +216,10 @@ whichkey.register(
       h = {
         "<cmd>lua require('telescope.builtin').help_tags()<cr>",
         "Help tags"
+      },
+      m = {
+        "<cmd>lua require('telescope.builtin').man_pages()<cr>",
+        "Man pages"
       },
       s = {
         "<cmd>lua require('telescope.builtin').buffers()<CR>",
