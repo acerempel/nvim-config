@@ -45,10 +45,7 @@ use {
 --}}}
 
 -- Existing commands improved {{{
-use {
-  'kevinhwang91/nvim-hlslens',
-  module = 'hlslens',
-}
+use 'rktjmp/highlight-current-n.nvim'
 
 -- Cool marks
 use {

@@ -243,18 +243,32 @@ nnoremap <silent> U <Cmd>UndotreeToggle<CR>
 noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
 noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
 
-noremap <silent> n <Cmd>execute('normal! ' . v:count1 . 'n')<CR>
-      \<Cmd>lua require('hlslens').start()<CR>
-noremap <silent> N <Cmd>execute('normal! ' . v:count1 . 'N')<CR>
-      \<Cmd>lua require('hlslens').start()<CR>
-noremap * *<Cmd>lua require('hlslens').start()<CR>
-noremap # #<Cmd>lua require('hlslens').start()<CR>
-noremap g* g*<Cmd>lua require('hlslens').start()<CR>
-noremap g# g#<Cmd>lua require('hlslens').start()<CR>
+" Highlight-current-n {{{
+nmap n <Plug>(highlight-current-n-n)
+nmap N <Plug>(highlight-current-n-N)
 
-" use : instead of <Cmd>
-nnoremap <silent> <leader>l :noh<CR>
+" If you want the highlighting to take effect in other maps they must
+" also be nmaps (or rather, not "nore").
+"
+" * will search <cword> ahead, but it can be more ergonomic to have *
+" simply fill the / register with the current <cword>, which makes future
+" commands like cgn "feel better". This effectively does that by performing
+" "search ahead <cword> (*), go back to last match (N)".
+nmap * *N
 
+" Some QOL autocommands
+augroup ClearSearchHL
+  autocmd!
+  " You may only want to see hlsearch /while/ searching, you can automatically
+  " toggle hlsearch with the following autocommands
+  autocmd CmdlineEnter /,\? set hlsearch
+  autocmd CmdlineLeave /,\? set nohlsearch
+  " this will apply similar n|N highlighting to the first search result
+  " careful with escaping ? in lua, you may need \\?
+  autocmd CmdlineLeave /,\? lua require('highlight_current_n')['/,?']()
+augroup END
+" }}}
+" Command-line prefix :tab or :vert{{{
 cnoremap <expr> <C-T> getcmdtype() == ':' ? "<C-\>eToggleTab()<CR>" : "<C-T>"
 cnoremap <expr> <C-S> getcmdtype() == ':' ? "<C-\>eToggleVsplit()<CR>" : "<C-S>"
 
@@ -281,6 +295,7 @@ function! ToggleVsplit() abort
     return "vert " .. line
   endif
 endfunction
+"}}}
 " }}}
 
 " AUTOCOMMANDS (non-VSCode only) {{{
