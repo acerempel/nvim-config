@@ -12,10 +12,7 @@ local use = packer.use
 use { 'wbthomason/packer.nvim', opt = true }
 
 -- Miscellaneous {{{
-use {
-  'dstein64/vim-startuptime',
-  cmd = 'StartupTime',
-}
+use { 'dstein64/vim-startuptime', cmd = 'StartupTime', }
 
 -- Set 'path', 'includeexpr', etc. to reasonable values
 use 'tpope/vim-apathy'
@@ -23,8 +20,7 @@ use 'tpope/vim-apathy'
 
 -- Improvements to QuickFix and Location List{{{
 use {
-  'https://gitlab.com/yorickpeterse/nvim-pqf.git',
-  as = "pqf",
+  'https://gitlab.com/yorickpeterse/nvim-pqf.git', as = "pqf",
   opt = true,
   config = function() require('pqf').setup() end,
 }
@@ -38,10 +34,7 @@ use {
   end
 }
 
-use {
-  'gabrielpoca/replacer.nvim',
-  module = 'replacer',
-}
+use { 'gabrielpoca/replacer.nvim', module = 'replacer', }
 --}}}
 
 -- Existing commands improved {{{
@@ -61,7 +54,7 @@ use {
 }
 
 -- More and better text-objects
-use { 'wellle/targets.vim' }
+use 'wellle/targets.vim'
 -- }}}
 
 -- Invisible improvements {{{
@@ -75,14 +68,10 @@ use {
 
 use 'tpope/vim-repeat'
 
-use {
-  'nathom/filetype.nvim',
-}
+use 'nathom/filetype.nvim'
 
 -- Cache lua require() calls
-use {
-  'lewis6991/impatient.nvim',
-}
+use 'lewis6991/impatient.nvim'
 
 -- Faster folds, I guess
 use { 'konfekt/fastfold', opt = true }
@@ -132,9 +121,8 @@ use {
   end
 }
 -- }}}
-use {
-  'haya14busa/vim-metarepeat',
-}
+use 'haya14busa/vim-metarepeat'
+
 
 -- }}}
 
@@ -208,15 +196,9 @@ use {
 
 -- GIT integration {{{
 
-use {
-  'tpope/vim-fugitive',
-  opt = true,
-}
+use { 'tpope/vim-fugitive', opt = true, }
 
-use {
-  'tpope/vim-rhubarb',
-  opt = true
-}
+use { 'tpope/vim-rhubarb', opt = true }
 
 -- Show diff when writing a commit message
 use 'rhysd/committia.vim'
@@ -224,9 +206,7 @@ use 'rhysd/committia.vim'
 -- Show signs indicating which lines have been changed
 use {
   'lewis6991/gitsigns.nvim',
-  requires = {
-    'nvim-lua/plenary.nvim'
-  },
+  requires = { 'nvim-lua/plenary.nvim' },
   opt = true,
   config = function()
     require('gitsigns').setup()
@@ -236,9 +216,7 @@ use {
 use {
   'sindrets/diffview.nvim',
   cmd = 'DiffviewOpen',
-  config = function ()
-    require('diffview').setup {}
-  end
+  config = function () require('diffview').setup {} end,
 }
 
 use {
@@ -251,9 +229,8 @@ use {
 
 -- }}}
 
-use {
-  "chrisbra/NrrwRgn",
-}
+use "chrisbra/NrrwRgn"
+
 
 -- Telescope {{{
 use {
@@ -384,9 +361,8 @@ use {
 -- .editorconfig support
 use { 'editorconfig/editorconfig-vim', opt = true }
 
-use {
-  'tpope/vim-eunuch',
-}
+use 'tpope/vim-eunuch'
+
 
 use {
   "tpope/vim-scriptease",
