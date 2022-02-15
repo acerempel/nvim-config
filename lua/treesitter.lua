@@ -60,3 +60,6 @@ require('nvim-treesitter.configs').setup {
     }
   },
 }
+
+vim.api.nvim_command('nmap \\ v\\')
+vim.api.nvim_command('omap \\ v\\')
