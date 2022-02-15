@@ -53,6 +53,7 @@ noremap <S-D-[> <Cmd>BufferLineCyclePrev<CR>
 noremap <S-D-}> <Cmd>BufferLineCycleNext<CR>
 noremap <S-D-{> <Cmd>BufferLineCyclePrev<CR>
 nnoremap <C-tab> <Cmd>lua require'telescope.builtin'.buffers()<CR>
+nnoremap <S-D-a> <Cmd>lua require'telescope.builtin'.buffers()<CR>
 nmap <D-[> <C-O>
 nmap <D-]> <C-I>
 inoremap <D-[> <C-D>
