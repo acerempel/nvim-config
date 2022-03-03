@@ -25,35 +25,32 @@ end
 
 whichkey.register(
   {
+    p = {
+      "<cmd>lua require('telescope.builtin').find_files()<cr>",
+      "Files beneath the current directory"
+    },
+    h = {
+      "<cmd>lua require('telescope.builtin').help_tags()<cr>",
+      "Help tags"
+    },
+    i = {
+      "<cmd>lua require('telescope').extensions.file_browser.file_browser()<cr>",
+      "Directory tree"
+    },
+    o = {
+      "<cmd>lua require('telescope.builtin').oldfiles()<cr>",
+      "Files from previous sessions"
+    },
     f = {
-      name = "Find files",
-      f = {
-        "<cmd>lua require('telescope.builtin').find_files()<cr>",
-        "Files beneath the current directory"
-      },
-      i = {
-        "<cmd>lua require('telescope.builtin').file_browser()<cr>",
-        "Directory tree"
-      },
-      h = {
-        "<cmd>lua require('telescope.builtin').help_tags()<cr>",
-        "Help tags"
-      },
-      o = {
-        "<cmd>lua require('telescope.builtin').oldfiles()<cr>",
-        "Files from previous sessions"
-      },
-      r = {
-        "<Cmd>lua require('telescope').extensions.frecency.frecency()<CR>",
-        "Frequently & recently used files"
-      }
+      "<Cmd>lua require('telescope').extensions.frecency.frecency()<CR>",
+      "Frequently & recently used files"
+    },
+    a = {
+      "<cmd>lua require('telescope.builtin').buffers({ sort_mru = true, ignore_current_buffer = true })<cr>",
+      "Buffers"
     },
     j = {
       name = "Buffers",
-      j = {
-        "<cmd>lua require('telescope.builtin').buffers({ sort_mru = true, ignore_current_buffer = true })<cr>",
-        "Fuzzy find"
-      },
       d = { "<cmd>BufferClose<CR>", "Delete bufffer" },
       k = { "<cmd>BufferLinePick<CR>", "Jump to buffer" },
       c = {
@@ -62,11 +59,8 @@ whichkey.register(
       },
     },
     d = {
-      name = "Directories",
-      r = {
-        "<Cmd>lua require('telescope').extensions.zoxide.list({})<CR>",
-        "Frequently used directories"
-      },
+      "<Cmd>lua require('telescope').extensions.zoxide.list({})<CR>",
+      "Frequently used directories"
     },
     k = {
       name = "Symbol under the cursor",
@@ -78,20 +72,12 @@ whichkey.register(
         "Switch branch"
       },
     },
-    S = {
+    s = {
       "<Cmd>lua require('session-lens').search_session()<CR>",
       "Find session"
     },
-    h = {
+    c = {
       name = "Git: change-hunk actions",
-      p = { "Preview hunk diff" },
-      r = { "Restore hunk from the index" },
-      R = { "Restore all hunks from the index" },
-      s = { "Stage hunk" },
-      S = { "Stage buffer" },
-      u = { "Undo stage hunk" },
-      U = { "Restore buffer from the index" },
-      b = { "Show last commit affecting this line" },
       B = { "<Plug>(git-messenger)", "Show last commit affecting this line, more detail" },
     },
     [':'] = {
@@ -106,21 +92,12 @@ whichkey.register(
       "<cmd>lua require('telescope.builtin').live_grep()<cr>",
       "Search files using regex"
     },
-    y = {
+    --[[ y = {
       "<cmd>lua require('telescope').extensions.neoclip.default()<CR>",
       "Yank history"
-    },
+    }, ]]
   },
   { prefix = "<Leader>" }
-)
-
-whichkey.register(
-  { h = {
-    name = "Git operations",
-    s = "Stage hunks",
-    r = "Restore hunks from the index",
-  } },
-  { prefix = "<Leader>", mode = "v" }
 )
 
 local textobjects = {

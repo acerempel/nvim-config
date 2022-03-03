@@ -48,11 +48,12 @@ nmap <D-t> gW
 nmap <D-.> z=
 xmap <D-.> z=
 nnoremap <S-D-v> <Cmd>G<CR><C-w>L56<C-w><Bar>
-noremap <S-D-]> <Cmd>BufferLineCycleNext<CR>
-noremap <S-D-[> <Cmd>BufferLineCyclePrev<CR>
-noremap <S-D-}> <Cmd>BufferLineCycleNext<CR>
-noremap <S-D-{> <Cmd>BufferLineCyclePrev<CR>
-nnoremap <C-tab> <Cmd>lua require'telescope.builtin'.buffers()<CR>
+nmap <S-D-]> <Plug>(cokeline-focus-next)
+nmap <S-D-[> <Plug>(cokeline-focus-prev)
+nmap <S-D-}> <Plug>(cokeline-focus-next)
+nmap <S-D-{> <Plug>(cokeline-focus-prev)
+nmap <C-tab> <Plug>(cokeline-pick-focus)
+lua for i = 1,9 do vim.api.nvim_set_keymap('n', ('<D-%s>'):format(i), ('<Plug>(cokeline-focus-%s)'):format(i),  { silent = true }) end
 nnoremap <S-D-a> <Cmd>lua require'telescope.builtin'.buffers()<CR>
 nmap <D-[> <C-O>
 nmap <D-]> <C-I>

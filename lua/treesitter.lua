@@ -1,5 +1,6 @@
 require('nvim-treesitter.configs').setup {
   highlight = { enable = true },
+  matchup = { enable = true },
   incremental_selection = {
     enable = true,
     keymaps = {
@@ -61,5 +62,5 @@ require('nvim-treesitter.configs').setup {
   },
 }
 
-vim.api.nvim_command('nmap \\ v\\')
-vim.api.nvim_command('omap \\ v\\')
+vim.api.nvim_command([[nmap \ v\]])
+vim.api.nvim_command([[omap \ v\]])

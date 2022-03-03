@@ -24,11 +24,11 @@ set clipboard=unnamed
 
 set updatetime=300 timeoutlen=700
 
-set formatoptions=croqj textwidth=80
+set formatoptions=croqj textwidth=72
 set autoindent nojoinspaces
 
 set list listchars=tab:↹·,nbsp:⎵,trail:·,extends:⇉,precedes:⇇
-set showbreak=↪︎
+set showbreak=↪︎\ 
 set fillchars=vert:│,fold:─
 set diffopt=filler,vertical,context:3,internal,algorithm:histogram,closeoff,hiddenoff,indent-heuristic
 set nowrap linebreak breakindent
@@ -59,7 +59,7 @@ set lazyredraw
 
 set undofile undodir=~/.local/share/nvim/undo
 set noswapfile nobackup nowritebackup
-set history=10000 shada^=%
+set history=10000 shada-=%
 set jumpoptions=stack
 set viewoptions=curdir,cursor,folds
 set sessionoptions=blank,buffers,curdir,folds,help,tabpages,terminal,winpos,winsize
@@ -303,6 +303,11 @@ endfunction
 augroup filetypes
   autocmd!
   autocmd FileType table setlocal tabstop=28 noexpandtab nolist
+augroup END
+
+augroup coc_tree
+  autocmd!
+  autocmd FileType coctree setlocal breakindentopt+=shift:2
 augroup END
 
 function! SetTreeSitterFolding() abort

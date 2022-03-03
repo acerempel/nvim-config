@@ -1,19 +1,23 @@
 {
   "coc.preferences.formatOnType": true,
   "suggest.autoTrigger": "trigger",
+  "outline.sortBy": "position",
+  "outline.splitCommand": "botright 42vs",
+  "tree.key.selectNext": "<C-n>",
+  "tree.key.selectPrevious": "<C-p>",
   "diagnostic.virtualText": true,
   "diagnostic.virtualTextCurrentLineOnly": false,
   "diagnostic.virtualTextPrefix": " ■ ",
   "diagnostic.virtualTextLineSeparator": " ∣ ",
-  "diagnostic.errorSign": "⊗",
-  "diagnostic.infoSign": "⦿",
-  "diagnostic.hintSign": "⊙",
-  "git.branchCharacter": "⌥",
+  "diagnostic.errorSign": "❌",
+  "diagnostic.infoSign": "🛦 ",
+  "diagnostic.hintSign": "☞ ",
+  "diagnostic.warningSign": "⚠︎ ",
   "typescript.preferences.quoteStyle": "double",
   "javascript.preferences.quoteStyle": "double",
+  "javascript.format.insertSpaceAfterTypeAssertion": true,
+  "typescript.format.insertSpaceAfterTypeAssertion": true,
   "typescript.referencesCodeLens.enable": false,
-  "html.suggest.ionic": false,
-  "html.suggest.angular1": false,
   "html.autoClosingTags": true,
   "html.filetypes": [
     "html",
@@ -87,5 +91,6 @@
       "filetypes": ["haskell", "lhaskell"],
       "rootPatterns": ["cabal.project", "stack.yaml", "*.cabal"]
     }
-  }
+  },
+  "Lua.telemetry.enable": false
 }
