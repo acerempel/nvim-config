@@ -52,7 +52,7 @@ nmap <S-D-]> <Plug>(cokeline-focus-next)
 nmap <S-D-[> <Plug>(cokeline-focus-prev)
 nmap <S-D-}> <Plug>(cokeline-focus-next)
 nmap <S-D-{> <Plug>(cokeline-focus-prev)
-nmap <C-tab> <Plug>(cokeline-pick-focus)
+nmap <C-tab> <cmd>lua require('telescope.builtin').buffers({ sort_mru = true, ignore_current_buffer = true })<cr>
 lua for i = 1,9 do vim.api.nvim_set_keymap('n', ('<D-%s>'):format(i), ('<Plug>(cokeline-focus-%s)'):format(i),  { silent = true }) end
 nnoremap <S-D-a> <Cmd>lua require'telescope.builtin'.buffers()<CR>
 nmap <D-[> <C-O>
@@ -61,3 +61,6 @@ inoremap <D-[> <C-D>
 inoremap <D-]> <C-T>
 nnoremap <M-D-p> <Cmd>CocList commands<CR>
 nnoremap <S-D-m> <Cmd>lua require("telescope").extensions.coc.workspace_diagnostics(require("telescope.themes").get_ivy({ layout_config = { height = 10 }, initial_mode = "normal" }))<CR>
+nmap <D-/> gcc
+xmap <D-/> gC
+smap <D-/> <C-g>gC

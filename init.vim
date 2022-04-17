@@ -168,6 +168,12 @@ inoremap <C-F> <Right>
 inoremap <C-B> <Left>
 snoremap <C-E> <Esc>`>a
 snoremap <C-A> <Esc>`<i
+inoremap <M-Left> <S-Left>
+inoremap <M-Right> <S-Right>
+inoremap <D-Left> <Home>
+inoremap <D-Right> <End>
+inoremap <expr> <C-p> pumvisible() ? "\<C-p>" : "\<Up>"
+inoremap <expr> <C-n> pumvisible() ? "\<C-n>" : "\<Down>"
 
 " I want this to be remapped, because I map gd to LSP functionality when
 " applicable.

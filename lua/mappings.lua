@@ -1,28 +1,5 @@
 local whichkey = require('which-key')
 
-local harpoons = {
-  name = "Buffers: harpoon",
-  a = {
-    "<Cmd>lua require'harpoon.mark'.add_file()<CR>",
-    "Add to harpoon list"
-  },
-  e = {
-    "<Cmd>lua require'harpoon.ui'.toggle_quick_menu()<CR>",
-    "Edit harpoon list"
-  },
-  [','] = {
-    "<Cmd>lua require('telescope').extensions.marks()<CR>",
-    "Fuzzy find"
-  }
-}
-
-for i = 1, 9, 1 do
-  harpoons[tostring(i)] = {
-    string.format("<cmd>lua require'harpoon.ui'.nav_file(%d)<CR>", i),
-    "Go to Nth harpooned buffer"
-  }
-end
-
 whichkey.register(
   {
     p = {
@@ -70,6 +47,10 @@ whichkey.register(
       b = {
         "<cmd>lua require('telescope.builtin').git_branches()<CR>",
         "Switch branch"
+      },
+      m = {
+        "<cmd>Merginal<CR>",
+        "Merginal"
       },
     },
     s = {

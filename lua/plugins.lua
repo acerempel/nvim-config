@@ -122,49 +122,51 @@ use {
   end
 }
 -- }}}
+
 -- Paste and yank and delete improvements {{{
 use {
   'gbprod/substitute.nvim', as = 'substitute',
   config = function ()
     require("substitute").setup({
-      on_substitute = function(_)
-        vim.fn["yoink#startUndoRepeatSwap"]()
+      on_substitute = function(event)
+        require("yanky").init_ring("p", event.register, event.count, event.vmode:match("[vV�]"))
       end,
     })
     vim.cmd [[
-      nmap X <cmd>lua require('substitute.exchange').operator()<cr>
-      nmap XX <cmd>lua require('substitute.exchange').line()<cr>
-      xmap X <cmd>lua require('substitute.exchange').visual()<cr>
-      nmap Xc <cmd>lua require('substitute.exchange').cancel()<cr>
-      xmap p <cmd>lua require('substitute').visual()<cr>
-      xmap P <cmd>lua require('substitute').visual()<cr>
+      nmap X <cmd>lua require('substitute').operator()<cr>
+      nmap XX <cmd>lua require('substitute').line()<cr>
+      xmap X <cmd>lua require('substitute').visual()<cr>
+      nmap Xc <cmd>lua require('substitute').cancel()<cr>
     ]]
   end
 }
+
 use {
-  'svermeulen/vim-yoink',
-  setup = function ()
-    vim.g.yoinkMaxItems = 20
-    vim.g.yoinkSyncNumberedRegisters = 1
-    vim.g.yoinkIncludeDeleteOperations = 1
-    vim.g.yoinkSavePersistently = 1
-    vim.g.yoinkAutoFormatPaste = 1
-    vim.g.yoinkMoveCursorToEndOfPaste = 1
-    vim.g.yoinkIncludeNamedRegisters = 0
+  'gbprod/yanky.nvim',
+  config = function ()
+    require('yanky').setup {
+      ring = {
+        history_length = 25,
+      },
+    }
 
-    vim.cmd [[
-      nmap p <plug>(YoinkPaste_p)
-      nmap P <plug>(YoinkPaste_P)
+    vim.api.nvim_set_keymap("n", "p", "<Plug>(YankyPutAfter)", {})
+    vim.api.nvim_set_keymap("n", "P", "<Plug>(YankyPutBefore)", {})
+    vim.api.nvim_set_keymap("x", "p", "<Plug>(YankyPutAfter)", {})
+    vim.api.nvim_set_keymap("x", "P", "<Plug>(YankyPutBefore)", {})
+    vim.api.nvim_set_keymap("n", "gp", "<Plug>(YankyGPutAfter)", {})
+    vim.api.nvim_set_keymap("n", "gP", "<Plug>(YankyGPutBefore)", {})
+    vim.api.nvim_set_keymap("x", "gp", "<Plug>(YankyGPutAfter)", {})
+    vim.api.nvim_set_keymap("x", "gP", "<Plug>(YankyGPutBefore)", {})
 
-      " Also replace the default gp with yoink paste so we can toggle paste in this case too
-      nmap gp <plug>(YoinkPaste_gp)
-      nmap gP <plug>(YoinkPaste_gP)
+    vim.api.nvim_set_keymap("n", "<c-n>", "<Plug>(YankyCycleForward)", {})
+    vim.api.nvim_set_keymap("n", "<c-p>", "<Plug>(YankyCycleBackward)", {})
 
-      nmap ( <plug>(YoinkPostPasteSwapBack)
-      nmap ) <plug>(YoinkPostPasteSwapForward)
-    ]]
+    vim.api.nvim_set_keymap("n", "y", "<Plug>(YankyYank)", {})
+    vim.api.nvim_set_keymap("x", "y", "<Plug>(YankyYank)", {})
   end
-}--}}}
+}
+--}}}
 
 -- Show what is otherwise hidden {{{
 -- Show available keybindings as you type
@@ -235,9 +237,19 @@ use {
 -- GIT integration {{{
 
 use { 'tpope/vim-fugitive', opt = true, }
+use { 'idanarye/vim-merginal', cmd = 'Merginal' }
 
 -- Show diff when writing a commit message
 use 'rhysd/committia.vim'
+
+use {
+  'rhysd/conflict-marker.vim', as = 'conflict',
+  setup = function ()
+    vim.g.conflict_marker_enable_mappings = 0
+    vim.g.conflict_marker_enable_matchit = 0
+  end
+  -- TODO mappings
+}
 
 -- Gitsigns{{{
 use {
@@ -275,7 +287,7 @@ use {
             U = { gs('reset_buffer_index()'), "Restore buffer from the index" },
             b = { gs('blame_line()'), "Show last commit affecting this line" },
             d = { gs('diffthis()'), "Diff file against index" },
-            c = { 'lua select_git_action()', "Select git action" },
+            c = { '<Cmd>lua select_git_action()<CR>', "Select git action" },
           },
           { prefix = '<Leader>c', buffer = buf }
         )
@@ -306,8 +318,6 @@ use {
 }
 
 -- }}}
-
-use "chrisbra/NrrwRgn"
 
 -- Telescope {{{
 use {
@@ -354,6 +364,8 @@ use {
             ["<C-u>"] = false,
             ["<C-d>"] = false,
             ["<D-k>"] = layout_actions.toggle_preview,
+            ["<C-tab>"] = actions.move_selection_worse,
+            ["<S-C-tab>"] = actions.move_selection_better,
           },
         },
       },
@@ -366,7 +378,7 @@ use {
         find_files = {
           disable_devicons = true,
           preview = { hide_on_startup = true, },
-          find_command = { 'fd', '-tf', '-LHu', '--strip-cwd-prefix', '-E.git', '-Enode_modules', '-Etarget', '-E.stack-work', '-Edist-newstyle'  },
+          find_command = { 'fd', '-tf', '-LHu', '--strip-cwd-prefix', '-E.git', '-Enode_modules', '-Etarget', '-E.stack-work', '-Edist-newstyle', '-Evendor'  },
         }
       },
       extensions = {
@@ -537,21 +549,23 @@ use {
 
 -- Buffer line {{{
 use {
-  'noib3/nvim-cokeline', as = 'cokeline',
+  'noib3/nvim-bufferline', as = 'cokeline',
   opt = true,
   config = function()
     local get_hex = require('cokeline.utils').get_hex
     local mappings = require('cokeline.mappings')
+    local blurred_fg = get_hex('Comment', 'fg')
+    local blurred_bg = get_hex('ColorColumn', 'bg')
+    local focused_fg = get_hex('Normal', 'fg')
+    local focused_bg = get_hex('Normal', 'bg')
     require('cokeline').setup({
       default_hl = {
-        unfocused = {
-          fg = get_hex('Comment', 'fg'),
-          bg = get_hex('ColorColumn', 'bg'),
-        },
-        focused = {
-          fg = get_hex('Normal', 'fg'),
-          bg = get_hex('Normal', 'bg'),
-        },
+        fg = function (buffer)
+          return buffer.is_focused and focused_fg or blurred_fg
+        end,
+        bg = function (buffer)
+          return buffer.is_focused and focused_bg or blurred_bg
+        end,
       },
 
       components = {
@@ -671,18 +685,6 @@ use {
     vim.g.markdown_enable_input_abbreviations = 0
     vim.g.markdown_enable_insert_mode_mappings = 1
   end,
-}
-
-use {
-  '~/Code/intero-neovim',
-  disable = true,
-  setup = function ()
-    vim.g.intero_backend = {
-      command = 'cabal repl',
-      options = '',
-      cwd = vim.fn.getcwd(),
-    }
-  end
 }
 
 -- Tree-sitter {{{
