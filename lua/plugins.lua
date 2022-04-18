@@ -68,8 +68,6 @@ use {
 
 use 'tpope/vim-repeat'
 
-use 'nathom/filetype.nvim'
-
 -- Cache lua require() calls
 use 'lewis6991/impatient.nvim'
 

@@ -1,4 +1,4 @@
-if !has('nvim-0.5')
+if !has('nvim-0.7')
   echoerr "Neovim too old!!"
   exit
 endif
@@ -222,6 +222,11 @@ let g:vim_svelte_plugin_use_foldexpr = 1
 " Don't load netrw, I don't need it
 let g:loaded_netrw       = 1
 let g:loaded_netrwPlugin = 1
+
+" Enable new filetype.lua
+let g:do_filetype_lua = 1
+" Disable traditional filetype detection
+let g:did_load_filetypes = 0
 
 let php_html_in_strings=0
 let php_html_in_heredoc=0
