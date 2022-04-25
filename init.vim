@@ -7,15 +7,6 @@ lua require('impatient')
 
 " OPTIONS {{{
 
-" Fish isn't sufficiently posixy for vim's use.
-if &shell =~# 'fish$'
-    set shell=/bin/zsh
-endif
-
-if $SHELL =~# 'fish$'
-    let $SHELL = "/bin/zsh"
-endif
-
 set mouse=a
 
 set incsearch inccommand=nosplit nohlsearch
@@ -69,13 +60,13 @@ set signcolumn=yes
 
 set wildchar=<Tab>
 set wildmode=longest:full,full
-set wildignore=*.o,*.hi,*/.git/*,*/dist-newstyle/*,*/.stack-work/*,*/node_modules/*,*/elm-stuff/*
+set wildignore=*.o,*.hi,*/dist-newstyle/*,*/.stack-work/*,*/node_modules/*,*/elm-stuff/*
 
 set hidden
 
 set exrc secure
 
-set guifont=Iosevka:h14
+set guifont=Iosevka:h15
 
 if executable('rg')
     set grepprg=rg\ --vimgrep
@@ -136,6 +127,7 @@ command! -nargs=+ -complete=customlist,v:lua.require'plugins'.loader_complete Pa
 cnoreabbrev ps PackerSync
 cnoreabbrev pi PackerInstall
 cnoreabbrev pp PackerProfile
+cnoreabbrev pc PackerClean
 
 " Otherwise it's short for :langnoremap
 cnoreabbrev ln lnext
