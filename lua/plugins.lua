@@ -40,19 +40,6 @@ use { 'gabrielpoca/replacer.nvim', module = 'replacer', }
 -- Existing commands improved {{{
 use 'rktjmp/highlight-current-n.nvim'
 
--- Cool marks
-use {
-  'chentau/marks.nvim',
-  disable = true,
-  config = function ()
-    require('marks').setup {
-      default_mappings = true,
-      signs = true,
-      mappings = {},
-    }
-  end
-}
-
 -- More and better text-objects
 use 'wellle/targets.vim'
 -- }}}
@@ -307,14 +294,6 @@ use {
   config = function () require('diffview').setup {} end,
 }
 
-use {
-  'rhysd/git-messenger.vim',
-  keys = "<Plug>(git-messenger)",
-  setup = function ()
-    vim.g.git_messenger_no_default_mappings = true
-  end,
-}
-
 -- }}}
 
 -- Telescope {{{
@@ -427,9 +406,6 @@ use {
   end
 }
 --}}}
-
--- .editorconfig support
-use { 'editorconfig/editorconfig-vim', opt = true }
 
 use 'tpope/vim-eunuch'
 
