@@ -761,9 +761,23 @@ use {
 -- Keystroke-saving, incl. completion {{{
 
 use {
-  '~/Code/auto_pairs',
-  cond = is_not_vscode,
+  'windwp/nvim-autopairs',
+  opt = true,
   event = "InsertEnter *",
+  config = function ()
+    local pairs = require('nvim-autopairs')
+    pairs.setup {
+      map_cr = false,
+      map_c_w = true,
+    }
+    local Rule = require('nvim-autopairs.rule')
+    local cond = require('nvim-autopairs.conds')
+    pairs.add_rules {
+      Rule('<', '>', {'rust'})
+        :with_pair(cond.before_regex('[%w:]'))
+    }
+    pairs.remove_rule(">[%w%s]*$") -- CoC does this for us
+  end
 }
 
 -- Snippets {{{

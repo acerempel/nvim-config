@@ -2,7 +2,7 @@ if vim.g.vscode == nil then
   local plugins = {
     "nvim-nonicons",
     "lush", "zenbones",
-    "auto_pairs",
+    "nvim-autopairs",
     "lualine",
   }
   require('packer.load')(plugins, {}, _G.packer_plugins, false)
