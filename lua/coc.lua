@@ -71,26 +71,28 @@ M.coc_buf_maps = function ()
 
   local map_opts =  { silent = true, buffer = bufnr }
 
-  if vim.fn.CocHasProvider('hover') then
-    vim.keymap.set({'n', 'x'}, 'K', "<Cmd>call CocActionAsync('doHover')", map_opts)
+  -- if vim.fn.CocHasProvider('hover') then
+  local filetype = vim.bo[bufnr].filetype
+  if not vim.tbl_contains({"man", "help", "sh"}, filetype) then
+    vim.keymap.set({'n', 'x'}, 'K', "<Cmd>call CocActionAsync('doHover')<CR>", map_opts)
   end
 
-  if vim.fn.CocHasProvider('definition') then
-    vim.keymap.set({'n', 'x'}, 'gd', "<Cmd>call CocActionAsync('jumpDefinition')", map_opts)
-  end
+  -- if vim.fn.CocHasProvider('definition') then
+    vim.keymap.set({'n', 'x'}, 'gd', "<Cmd>call CocActionAsync('jumpDefinition')<CR>", map_opts)
+  -- end
 
-  if vim.fn.CocHasProvider('codeAction') then
+  -- if vim.fn.CocHasProvider('codeAction') then
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'z=', '<Plug>(coc-codeaction-cursor)', {})
     vim.api.nvim_buf_set_keymap(bufnr, 'x', 'z=', '<Plug>(coc-codeaction-selected)', {})
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<M-D-.>', '<Plug>(coc-fix-current)', {})
-  end
+  -- end
 
   vim.api.nvim_buf_set_keymap(bufnr, 'n', ']g', '<Plug>(coc-diagnostic-next)', {})
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '[g', '<Plug>(coc-diagnostic-prev)', {})
 
-  if vim.fn.CocHasProvider('codeLens') then
+  -- if vim.fn.CocHasProvider('codeLens') then
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<D-CR>', "<Cmd>call CocActionAsync('codeLensAction')<CR>", { noremap = true })
-  end
+  -- end
 
   vim.cmd [[
   inoremap <silent><buffer><expr> <Tab> luaeval("require('coc').tab()")
