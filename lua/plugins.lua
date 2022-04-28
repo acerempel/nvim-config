@@ -727,8 +727,7 @@ use {
 use {
   'neoclide/coc.nvim',
   as = 'coc',
-  branch = 'master',
-  run = 'yarn install --frozen-lockfile',
+  branch = 'release',
   opt = true,
 }
 
