@@ -18,6 +18,10 @@
   "javascript.format.insertSpaceAfterTypeAssertion": true,
   "typescript.format.insertSpaceAfterTypeAssertion": true,
   "typescript.referencesCodeLens.enable": false,
+  "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
+  "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
+  "typescript.suggest.objectLiteralMethodSnippets.enabled": true,
+  "javascript.suggest.objectLiteralMethodSnippets.enabled": true,
   "html.autoClosingTags": true,
   "html.filetypes": [
     "html",
