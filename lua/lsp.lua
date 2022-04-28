@@ -15,7 +15,6 @@ vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
 
 local on_attach = function(client, bufnr)
   require('lsp_signature').on_attach(lsp_signature_config)
-  require('packer').loader('telescope.nvim')
   vim.cmd(string.format([[
     augroup lsp_buf
     au!
@@ -78,7 +77,32 @@ end
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
 
-local basic_lsp_config = {
+local runtime_path = vim.split(package.path, ';')
+table.insert(runtime_path, "lua/?.lua")
+table.insert(runtime_path, "lua/?/init.lua")
+
+local lua_config = {
+  runtime = {
+    -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+    version = 'LuaJIT',
+    -- Setup your lua path
+    path = runtime_path,
+  },
+  diagnostics = {
+    -- Get the language server to recognize the `vim` global
+    globals = {'vim'},
+  },
+  workspace = {
+    -- Make the server aware of Neovim runtime files
+    library = vim.api.nvim_get_runtime_file("", true),
+  },
+  -- Do not send telemetry data containing a randomized but unique identifier
+  telemetry = {
+    enable = false,
+  },
+}
+
+local lsp_config = {
   on_attach = on_attach,
   capabilities = capabilities,
   settings = {
@@ -86,6 +110,7 @@ local basic_lsp_config = {
     json = {
       schemas = require("schemastore").json.schemas(),
     },
+    Lua = lua_config,
   }
 }
 
@@ -95,57 +120,17 @@ local servers = {
   "tailwindcss", "vimls",
 }
 
-for _, server in ipairs(servers) do
-  lspconfig[server].setup(basic_lsp_config)
-end
-
-local runtime_path = vim.split(package.path, ';')
-table.insert(runtime_path, "lua/?.lua")
-table.insert(runtime_path, "lua/?/init.lua")
-
-local lua_config = {
-  settings = {
-    Lua = {
-      runtime = {
-        -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
-        version = 'LuaJIT',
-        -- Setup your lua path
-        path = runtime_path,
-      },
-      diagnostics = {
-        -- Get the language server to recognize the `vim` global
-        globals = {'vim'},
-      },
-      workspace = {
-        -- Make the server aware of Neovim runtime files
-        library = vim.api.nvim_get_runtime_file("", true),
-      },
-      -- Do not send telemetry data containing a randomized but unique identifier
-      telemetry = {
-        enable = false,
-      },
+require('nvim-lsp-installer').setup {
+  ensure_installed = servers,
+  ui = {
+    icons = {
+      server_installed = "✓",
+      server_pending = "➜",
+      server_uninstalled = "✗",
     },
   },
 }
 
-local lsp_installer = require("nvim-lsp-installer")
-
--- Provide settings first!
-lsp_installer.settings({
-    ui = {
-        icons = {
-            server_installed = "✓",
-            server_pending = "➜",
-            server_uninstalled = "✗"
-        }
-    }
-})
-
-lsp_installer.on_server_ready(function (server)
-  local local_config = {}
-  if server.name == 'sumneko_lua' then
-    local_config = lua_config
-  end
-  local config = vim.tbl_deep_extend("force", basic_lsp_config, local_config)
-  server:setup(config)
-end)
+for _, server in ipairs(servers) do
+  lspconfig[server].setup(lsp_config)
+end

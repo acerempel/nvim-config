@@ -20,6 +20,7 @@ if vim.g.simplicity == nil and vim.g.vscode == nil then
     "gitsigns.nvim",
     "Comment",
     "vim-matchup",
+    "lspconfig",
   }
   require('packer.load')(plugins, {}, _G.packer_plugins, false)
 end

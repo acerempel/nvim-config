@@ -725,10 +725,19 @@ use {
 -- Semantic knowledge, incl. LSP {{{
 
 use {
-  'neoclide/coc.nvim',
-  as = 'coc',
-  branch = 'release',
+  'neovim/nvim-lspconfig', as = 'lspconfig',
   opt = true,
+  config = function () require("lsp") end,
+}
+
+use {
+  'williamboman/nvim-lsp-installer', as = 'lsp-installer',
+  module = 'nvim-lsp-installer',
+}
+
+use {
+  'ray-x/lsp_signature.nvim', as = 'lsp_signature',
+  module = 'lsp_signature',
 }
 
 -- }}}
