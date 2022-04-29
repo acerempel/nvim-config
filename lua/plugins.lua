@@ -462,7 +462,6 @@ use {
 -- status line {{{
 use {
   'nvim-lualine/lualine.nvim', as = 'lualine',
-  opt = true,
   config = function ()
     local function diff_source()
       local gitsigns = vim.b.gitsigns_status_dict
@@ -620,7 +619,6 @@ use {
 -- Icons {{{
 use {
   'yamatsum/nvim-nonicons',
-  opt = true,
   wants = { 'nvim-web-devicons' },
   requires = {
     'kyazdani42/nvim-web-devicons',
@@ -630,9 +628,9 @@ use {
 -- }}}
 
 -- Colour schemes {{{
-use { 'rktjmp/lush.nvim', as = 'lush', opt = true }
+use { 'rktjmp/lush.nvim', as = 'lush' }
 use {
-  'mcchrish/zenbones.nvim', as = 'zenbones', opt = true,
+  'mcchrish/zenbones.nvim', as = 'zenbones',
   config = function ()
     vim.g.zenbones = {
       lightness = 'bright',
@@ -712,11 +710,10 @@ use {
 }
 --}}}
 
-use { 'neovimhaskell/haskell-vim', cond = is_not_vscode, ft = 'haskell' }
+use { 'neovimhaskell/haskell-vim', ft = 'haskell' }
 use {
   'gabrielelana/vim-markdown',
   ft = 'markdown',
-  cond = is_not_vscode,
   setup = function ()
     vim.g.markdown_enable_mappings = 0
     vim.g.markdown_enable_input_abbreviations = 0
@@ -821,7 +818,6 @@ use {
 -- Autopairs {{{
 use {
   'windwp/nvim-autopairs',
-  opt = true,
   event = "InsertEnter *",
   config = function ()
     local pairs = require('nvim-autopairs')

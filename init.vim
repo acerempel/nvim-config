@@ -99,6 +99,22 @@ augroup omnifunc
   autocmd!
   autocmd FileType * if &omnifunc == "" | setlocal omnifunc=syntaxcomplete#Complete | endif
 augroup END
+
+augroup filetypes
+  autocmd!
+  autocmd FileType table setlocal tabstop=28 noexpandtab nolist
+augroup END
+
+function! SetTreeSitterFolding() abort
+  setlocal foldenable
+  setlocal foldmethod=expr
+  setlocal foldexpr=nvim_treesitter#foldexpr()
+endfunction
+
+augroup treesitter
+  au!
+  au FileType rust,javascript,typescript,javascriptreact,typescriptreact,lua,nix,php,html,css,scss,sass,vim call SetTreeSitterFolding()
+augroup END
 " }}}
 
 " Packer lazy-loading {{{
@@ -180,56 +196,6 @@ function! NomodifiableMappings() abort
   if &ft != 'man' | nnoremap <buffer> <nowait> q <Cmd>close<CR> | endif
 endfunction
 " }}}
-" }}}
-
-" Misc plugin settings {{{
-let g:sneak#s_next = 1
-let g:sneak#absolute_dir = 1
-let g:sneak#label = exists('g:vscode') ? 0 : 1
-
-let g:clever_f_fix_key_direction = 1
-
-let g:EditorConfig_exclude_patterns = ['fugitive://.*']
-
-" Don't load netrw, I don't need it
-let g:loaded_netrw       = 1
-let g:loaded_netrwPlugin = 1
-
-" Enable new filetype.lua
-let g:do_filetype_lua = 1
-" Disable traditional filetype detection
-let g:did_load_filetypes = 0
-
-let php_html_in_strings=0
-let php_html_in_heredoc=0
-let php_html_in_nowdoc=0
-
-" Use matchup instead
-let g:loaded_matchit = 1
-" }}}
-
-" If attached to VS Code {{{
-if exists('g:vscode')
-  source <sfile>:h/vscode.vim
-  finish
-endif
-" }}}
-
-" MAPPINGS (non-VSCode only) {{{
-
-nnoremap <silent> <Leader>td <Cmd>tcd %:h<CR>
-nnoremap <silent> <Leader>tn <Cmd>tabnew<CR>
-nnoremap <silent> <Leader>tc <Cmd>tabclose<CR>
-
-nnoremap <silent> <Plug>(search-workspace) <cmd>lua require'telescope.builtin'.live_grep({ additional_args = '-F' })<CR>
-nnoremap <silent> <Plug>(search-document) <cmd>lua require('telescope.builtin').treesitter()<CR>
-inoremap <silent> <Plug>(search-workspace) <cmd>lua require'telescope.builtin'.live_grep({ additional_args = '-F' })<CR>
-inoremap <silent> <Plug>(search-document) <cmd>lua require('telescope.builtin').treesitter()<CR>
-
-nnoremap <silent> U <Cmd>UndotreeToggle<CR>
-
-noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
-noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
 
 " Command-line prefix :tab or :vert{{{
 cnoremap <expr> <C-T> getcmdtype() == ':' ? "<C-\>eToggleTab()<CR>" : "<C-T>"
@@ -259,38 +225,51 @@ function! ToggleVsplit() abort
   endif
 endfunction
 "}}}
+
+nnoremap <silent> <Leader>td <Cmd>tcd %:h<CR>
+nnoremap <silent> <Leader>tn <Cmd>tabnew<CR>
+nnoremap <silent> <Leader>tc <Cmd>tabclose<CR>
+
+nnoremap <silent> <Plug>(search-workspace) <cmd>lua require'telescope.builtin'.live_grep({ additional_args = '-F' })<CR>
+nnoremap <silent> <Plug>(search-document) <cmd>lua require('telescope.builtin').treesitter()<CR>
+inoremap <silent> <Plug>(search-workspace) <cmd>lua require'telescope.builtin'.live_grep({ additional_args = '-F' })<CR>
+inoremap <silent> <Plug>(search-document) <cmd>lua require('telescope.builtin').treesitter()<CR>
+
+nnoremap <silent> U <Cmd>UndotreeToggle<CR>
+
+noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
+noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
 " }}}
 
-" AUTOCOMMANDS (non-VSCode only) {{{
+" Misc plugin settings {{{
+let g:sneak#s_next = 1
+let g:sneak#absolute_dir = 1
+let g:sneak#label = exists('g:vscode') ? 0 : 1
 
-augroup filetypes
-  autocmd!
-  autocmd FileType table setlocal tabstop=28 noexpandtab nolist
-augroup END
+let g:clever_f_fix_key_direction = 1
 
-augroup coc_tree
-  autocmd!
-  autocmd FileType coctree setlocal breakindentopt+=shift:2
-augroup END
+let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
-function! SetTreeSitterFolding() abort
-  setlocal foldenable
-  setlocal foldmethod=expr
-  setlocal foldexpr=nvim_treesitter#foldexpr()
-endfunction
+" Don't load netrw, I don't need it
+let g:loaded_netrw       = 1
+let g:loaded_netrwPlugin = 1
 
-augroup treesitter
-  au!
-  au FileType rust,javascript,typescript,javascriptreact,typescriptreact,lua,nix,php,html,css,scss,sass,vim call SetTreeSitterFolding()
-augroup END
+" Enable new filetype.lua
+let g:do_filetype_lua = 1
+" Disable traditional filetype detection
+let g:did_load_filetypes = 0
 
+let php_html_in_strings=0
+let php_html_in_heredoc=0
+let php_html_in_nowdoc=0
+
+" Use matchup instead
+let g:loaded_matchit = 1
 " }}}
 
 " Misc lua config {{{
-lua << ENDLUA
-_G.is_not_vscode = function () return vim.g.vscode == nil end
-require('help_float').setup {}
-ENDLUA
+lua require('help_float').setup {}
+" }}}
 
 command! -nargs=0 BufferClose call DoCloseBuffer()
 
@@ -301,6 +280,5 @@ function! DoCloseBuffer() abort
     bdelete
   endif
 endfunction
-" }}}
 
 " vim:foldmethod=marker:foldenable
