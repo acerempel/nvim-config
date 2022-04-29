@@ -9,14 +9,13 @@ lua require('impatient')
 
 set mouse=a
 
-set incsearch inccommand=nosplit nohlsearch
-set noshowmode showcmd
+set inccommand=nosplit nohlsearch
+set noshowmode
 set clipboard=unnamed
 
 set updatetime=300 timeoutlen=700
 
 set formatoptions=croqj textwidth=72
-set autoindent nojoinspaces
 
 set list listchars=tab:↹·,nbsp:⎵,trail:·,extends:⇉,precedes:⇇
 set showbreak=↪︎\ 
@@ -30,30 +29,28 @@ set linespace=6
 set foldminlines=6
 set concealcursor=nc
 
-set scrolloff=2 sidescrolloff=4 sidescroll=1
+set scrolloff=2 sidescrolloff=4
 
 set expandtab tabstop=2 softtabstop=2
 set shiftwidth=2 shiftround
 
-set backspace=indent,eol,start
 set virtualedit=block,onemore
-set nostartofline
 
 set ignorecase smartcase gdefault
 set completeopt-=preview
 
 set splitbelow splitright equalalways
-set switchbuf=uselast,useopen,usetab
+set switchbuf+=useopen,usetab
 set guioptions-=L
 let no_buffers_menu = 0
 set lazyredraw
 
-set undofile undodir=~/.local/share/nvim/undo
+set undofile
 set noswapfile nobackup nowritebackup
-set history=10000 shada-=%
+set shada-=%
 set jumpoptions=stack
 set viewoptions=curdir,cursor,folds
-set sessionoptions=blank,buffers,curdir,folds,help,tabpages,terminal,winpos,winsize
+set sessionoptions=blank,buffers,curdir,folds,tabpages,terminal,winpos,winsize
 
 set shortmess=fnxoOtTc
 set signcolumn=yes
@@ -61,8 +58,6 @@ set signcolumn=yes
 set wildchar=<Tab>
 set wildmode=longest:full,full
 set wildignore=*.o,*.hi,*/dist-newstyle/*,*/.stack-work/*,*/node_modules/*,*/elm-stuff/*
-
-set hidden
 
 set exrc secure
 
@@ -85,8 +80,6 @@ hi default link LspReferenceRead StatusLine
 hi default link LspReferenceWrite Search
 
 highlight! link Conceal Normal
-" highlight NormalFloat guibg=#e4d8ca
-" highlight FloatBorder guibg=#e4d8ca
 " }}}
 
 " AUTOCOMMANDS {{{
@@ -94,7 +87,6 @@ highlight! link Conceal Normal
 augroup reload
   autocmd!
   " Automatically enable changes to plugin configuration
-  autocmd BufWritePost plugins.lua lua package.loaded.plugins = false; require('plugins').compile()
   autocmd BufWritePost $MYVIMRC source $MYVIMRC
 augroup END
 
@@ -110,10 +102,6 @@ augroup END
 " }}}
 
 " Packer lazy-loading {{{
-" let s:packer_commands = ["Install", "Status", "Sync", "Update", "Load", "Compile", "Profile"]
-" for command in s:packer_commands
-"   exe "command! -nargs=* Packer" .. command "exe \"lua require('packer').init()\" | Packer" .. command
-" endfor
 command! -nargs=* -complete=customlist,v:lua.require'plugins'.plugin_complete PackerInstall lua require('plugins').install(<f-args>)
 command! -nargs=* -complete=customlist,v:lua.require'plugins'.plugin_complete PackerUpdate lua require('plugins').update(<f-args>)
 command! -nargs=* -complete=customlist,v:lua.require'plugins'.plugin_complete PackerSync lua require('plugins').sync(<f-args>)
@@ -171,14 +159,10 @@ inoremap <expr> <C-n> pumvisible() ? "\<C-n>" : "\<Down>"
 " applicable.
 nmap <CR> gd
 
-noremap Q @@
 noremap Z "_d
 noremap ZZ "_dd
 
 noremap gb go
-
-" Make Y editor command consistent with D, C, etc.
-noremap Y y$
 
 noremap ' `
 tnoremap <Esc> <c-\><c-n>
@@ -206,10 +190,6 @@ let g:sneak#label = exists('g:vscode') ? 0 : 1
 let g:clever_f_fix_key_direction = 1
 
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
-
-let g:vim_svelte_plugin_use_typescript = 1
-let g:vim_svelte_plugin_use_sass = 1
-let g:vim_svelte_plugin_use_foldexpr = 1
 
 " Don't load netrw, I don't need it
 let g:loaded_netrw       = 1
