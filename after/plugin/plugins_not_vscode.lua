@@ -15,14 +15,15 @@ if vim.g.simplicity == nil and vim.g.vscode == nil then
     "plenary.nvim", "pqf", "vim-qf", "fastfold",
     "telescope",
     "vim-fugitive",
-    "coc",
     "which-key",
     "gitsigns.nvim",
     "Comment",
     "vim-matchup",
+    "nvim-cmp",
     "lspconfig",
   }
   require('packer.load')(plugins, {}, _G.packer_plugins, false)
+  require('lsp')
 end
 
 if vim.g.simplicity ~= nil then

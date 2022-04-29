@@ -93,15 +93,15 @@ whichkey.register(
     ["["] = {
       name = "Previous, before, above",
       w = {
-        "<Cmd>lua vim.lsp.diagnostic.goto_prev({severity_limit='Warning'})<CR>",
+        "<Cmd>lua vim.diagnostic.goto_prev({severity={min='Warning'}})<CR>",
         "Previous warning or error"
       },
       e = {
-        "<Cmd>lua vim.lsp.diagnostic.goto_prev({severity_limit='Error'})<CR>",
+        "<Cmd>lua vim.diagnostic.goto_prev({severity={min='Error'}})<CR>",
         "Previous error"
       },
       d = {
-        "<Cmd>lua vim.lsp.diagnostic.goto_prev()<CR>",
+        "<Cmd>lua vim.diagnostic.goto_prev()<CR>",
         "Previous diagnostic"
       },
       c = { "Previous Git change" },
@@ -118,15 +118,15 @@ whichkey.register(
     ["]"] = {
       name = "Next, after, below",
       w = {
-        "<Cmd>lua vim.lsp.diagnostic.goto_next({severity_limit='Warning'})<CR>",
+        "<Cmd>lua vim.diagnostic.goto_next({severity={min='Warning'}})<CR>",
         "Next warning or error"
       },
       e = {
-        "<Cmd>lua vim.lsp.diagnostic.goto_next({severity_limit='Error'})<CR>",
+        "<Cmd>lua vim.diagnostic.goto_next({severity={min='Error'}})<CR>",
         "Next error"
       },
       d = {
-        "<Cmd>lua vim.lsp.diagnostic.goto_next()<CR>",
+        "<Cmd>lua vim.diagnostic.goto_next()<CR>",
         "Next diagnostic"
       },
       c = { "Next Git change" },
@@ -141,11 +141,11 @@ whichkey.register(
     },
     g = {
       name = "Go to; jump around; select",
-      O = { "Show document outline" },
+      O = { "<Plug>(search-document)", "Search document symbols" },
       b = { "go", "Go to nth byte" },
       W = {
-        "<cmd>lua require'telescope.builtin'.live_grep({ additional_args = '-F' })<CR>",
-        "Search for regex"
+        "<Plug>(search-workspace)",
+        "Search workspace symbols"
       }
     },
     Y = { "Yank till end of line" },

@@ -13,33 +13,17 @@ vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
   { max_width = 72, }
 )
 
+vim.g.Illuminate_delay = 450
+
 local on_attach = function(client, bufnr)
   require('lsp_signature').on_attach(lsp_signature_config)
-  vim.cmd(string.format([[
-    augroup lsp_buf
-    au!
-    au CursorMoved <buffer=%d> lua vim.lsp.buf.clear_references()
-    au InsertLeave,BufEnter,BufWritePost <buffer=%d> lua require('symbols-outline')._refresh()
-    augroup END
-  ]], bufnr, bufnr))
+  require('illuminate').on_attach(client)
   local whichkey = require('which-key')
   whichkey.register(
     {
       ["K"] = {
         "<Cmd>lua vim.lsp.buf.hover()<CR>",
         "Show documentation for symbol"
-      },
-      ["go"] = {
-        "<Cmd>lua vim.lsp.buf.document_symbol()<CR>",
-        "Search document symbols"
-      },
-      ["gO"] = {
-        "<Cmd>lua require'symbols-outline'.toggle_outline()<CR>",
-        "Show document outline"
-      },
-      ["gW"] = {
-        "<Cmd>lua vim.lsp.buf.workspace_symbol()<CR>",
-        "Show all workspace symbols"
       },
       ["gd"] = {
         "<Cmd>lua vim.lsp.buf.definition()<CR>",
@@ -72,6 +56,15 @@ local on_attach = function(client, bufnr)
     },
     { buffer = bufnr }
   )
+  vim.keymap.set({'n', 'i'}, "<Plug>(search-document)", require('telescope.builtin').lsp_document_symbols, { buffer = bufnr })
+  vim.keymap.set({'n', 'i'}, "<Plug>(search-workspace)", require('telescope.builtin').lsp_dynamic_workspace_symbols, { buffer = bufnr })
+  vim.keymap.set({'n', 'i'}, '<D-g>', function() require"illuminate".next_reference{wrap=true} end, { buffer = bufnr })
+  vim.keymap.set({'n', 'i'}, '<S-D-g>', function() require"illuminate".next_reference{wrap=true,reverse=true} end, { buffer = bufnr })
+  vim.keymap.set('i', '<D-.>', function() vim.lsp.buf.code_action() end, { buffer = bufnr })
+  vim.api.nvim_create_autocmd({'CursorHold', 'CursorHoldI'}, {
+    buffer = bufnr,
+    callback = function() require'nvim-lightbulb'.update_lightbulb() end,
+  })
 end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -111,6 +104,18 @@ local lsp_config = {
       schemas = require("schemastore").json.schemas(),
     },
     Lua = lua_config,
+    ["rust-analyzer"] = {
+      assist = {
+        importGranularity = "module",
+        importPrefix = "self",
+      },
+      cargo = {
+        loadOutDirsFromCheck = true
+      },
+      procMacro = {
+        enable = true
+      },
+    },
   }
 }
 
@@ -132,5 +137,23 @@ require('nvim-lsp-installer').setup {
 }
 
 for _, server in ipairs(servers) do
-  lspconfig[server].setup(lsp_config)
+  if server ~= 'rust_analyzer' then
+    lspconfig[server].setup(lsp_config)
+  end
 end
+
+require('rust-tools').setup({
+  tools = {
+    inlay_hints = {
+      show_parameter_hints = false
+    },
+  },
+  server = lsp_config,
+})
+
+require('fidget').setup()
+
+require('nvim-lightbulb').setup {
+  sign = { enabled = false },
+  virtual_text = { enabled = true },
+}

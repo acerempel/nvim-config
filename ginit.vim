@@ -42,9 +42,12 @@ inoremap <S-D-Z> <C-o><C-r>
 noremap <D-,> <Cmd>edit $MYVIMRC<CR>
 noremap <D-o> <Cmd>lua require('telescope.builtin').file_browser()<CR>
 inoremap <D-o> <Cmd>lua require('telescope.builtin').file_browser()<CR>
-nmap <S-D-o> gO
-nmap <S-D-O> gO
-nmap <D-t> gW
+nmap <S-D-o> <Plug>(search-document)
+nmap <S-D-O> <Plug>(search-document)
+nmap <D-t> <Plug>(search-workspace)
+imap <S-D-o> <Plug>(search-document)
+imap <S-D-O> <Plug>(search-document)
+imap <D-t> <Plug>(search-workspace)
 nmap <D-.> z=
 xmap <D-.> z=
 nnoremap <S-D-v> <Cmd>G<CR><C-w>L56<C-w><Bar>
@@ -60,7 +63,7 @@ nmap <D-]> <C-I>
 inoremap <D-[> <C-D>
 inoremap <D-]> <C-T>
 nnoremap <M-D-p> <Cmd>CocList commands<CR>
-nnoremap <S-D-m> <Cmd>lua require("telescope").extensions.coc.workspace_diagnostics(require("telescope.themes").get_ivy({ layout_config = { height = 10 }, initial_mode = "normal" }))<CR>
+nnoremap <S-D-m> <Cmd>lua require("telescope.builtin").diagnostics()<CR>
 nmap <D-/> gcc
 xmap <D-/> gC
 smap <D-/> <C-g>gC

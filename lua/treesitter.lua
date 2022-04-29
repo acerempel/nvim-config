@@ -62,5 +62,7 @@ require('nvim-treesitter.configs').setup {
   },
 }
 
+require('nvim-treesitter.install').compilers = { "gcc" }
+
 vim.api.nvim_command([[nmap \ v\]])
 vim.api.nvim_command([[omap \ v\]])

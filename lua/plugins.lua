@@ -38,7 +38,44 @@ use { 'gabrielpoca/replacer.nvim', module = 'replacer', }
 --}}}
 
 -- Existing commands improved {{{
-use 'rktjmp/highlight-current-n.nvim'
+use {
+  'rktjmp/highlight-current-n.nvim',
+  config = function ()
+    vim.cmd [[
+      nmap n <Plug>(highlight-current-n-n)
+      nmap N <Plug>(highlight-current-n-N)
+
+      " Some QOL autocommands
+      augroup ClearSearchHL
+        autocmd!
+        " You may only want to see hlsearch /while/ searching, you can automatically
+        " toggle hlsearch with the following autocommands
+        autocmd CmdlineEnter /,\? set hlsearch
+        autocmd CmdlineLeave /,\? set nohlsearch
+        " this will apply similar n|N highlighting to the first search result
+        " careful with escaping ? in lua, you may need \\?
+        autocmd CmdlineLeave /,\? lua require('highlight_current_n')['/,?']()
+      augroup END
+    ]]
+  end
+}
+
+use {
+  'haya14busa/vim-asterisk', as = 'asterisk',
+  setup = function () vim.g['asterisk#keeppos'] = 1 end,
+  config = function ()
+    vim.cmd [[
+      map *   <Plug>(asterisk-*)
+      map #   <Plug>(asterisk-#)
+      map g*  <Plug>(asterisk-g*)
+      map g#  <Plug>(asterisk-g#)
+      map z*  <Plug>(asterisk-z*)
+      map gz* <Plug>(asterisk-gz*)
+      map z#  <Plug>(asterisk-z#)
+      map gz# <Plug>(asterisk-gz#)
+    ]]
+  end
+}
 
 -- More and better text-objects
 use 'wellle/targets.vim'
@@ -65,14 +102,15 @@ use { 'konfekt/fastfold', opt = true }
 -- Session management {{{
 use { 'farmergreg/vim-lastplace' }
 use {
-  'rmagatti/auto-session', opt = true,
-  config = function ()
+  "olimorris/persisted.nvim", as = 'persisted',
+  config = function()
     vim.opt.shada:remove('%')
-    require('auto-session').setup {
-      log_level = 'info',
-      auto_session_suppress_dirs = { '~/', '~/Code', '~/Documents' },
+    require("persisted").setup {
+      use_git_branch = true,
+      allowed_dirs = {'~/Code', '~/Blogs', '~/.config', '~/WordPress'},
     }
-  end
+    require("telescope").load_extension("persisted") -- To load the telescope extension
+  end,
 }
 --}}}
 
@@ -301,7 +339,6 @@ use {
   'nvim-telescope/telescope.nvim', as = 'telescope',
   opt = true,
   wants = {
-    'session-lens',
     'popup.nvim',
     'plenary.nvim',
     'telescope-fzf-native.nvim',
@@ -324,6 +361,10 @@ use {
         layout_config = {
           horizontal = { height = 0.5 },
           cursor = { height = 0.5 },
+          bottom_pane = {
+            height = 0.325,
+            prompt_position = 'bottom',
+          },
           vertical = {
             height = 0.625,
             preview_cutoff = 10,
@@ -356,12 +397,22 @@ use {
           disable_devicons = true,
           preview = { hide_on_startup = true, },
           find_command = { 'fd', '-tf', '-LHu', '--strip-cwd-prefix', '-E.git', '-Enode_modules', '-Etarget', '-E.stack-work', '-Edist-newstyle', '-Evendor'  },
+        },
+        diagnostics = themes.get_ivy {
+          no_unlisted = true,
+          results_title = false,
+          initial_mode = 'normal',
         }
       },
       extensions = {
         ["ui-select"] = themes.get_cursor(),
         lsp_handlers = {
-          location = { telescope = themes.get_ivy({ layout_config = { height = 12 } }) },
+          location = {
+            telescope = themes.get_ivy({
+              initial_mode = 'normal',
+              results_title = false,
+            })
+          },
         },
       },
     })
@@ -371,7 +422,6 @@ use {
     telescope.load_extension('zoxide')
     telescope.load_extension('repo')
     telescope.load_extension('frecency')
-    telescope.load_extension('coc')
     telescope.load_extension('file_browser')
   end
 }
@@ -381,7 +431,6 @@ use {
   'nvim-telescope/telescope-ui-select.nvim',
   'jvgrootveld/telescope-zoxide',
   'cljoly/telescope-repo.nvim',
-  'fannheyward/telescope-coc.nvim',
   'nvim-telescope/telescope-file-browser.nvim',
 }
 
@@ -394,16 +443,6 @@ use {
       setup = function () vim.g.sqlite_clib_path = '/usr/lib/libsqlite3.dylib' end
     }
   },
-}
-
-use {
-  'rmagatti/session-lens', opt = true,
-  wants = { 'auto-session' },
-  config = function ()
-    require('session-lens').setup {
-      path_display = 'shorten',
-    }
-  end
 }
 --}}}
 
@@ -589,6 +628,7 @@ use {
   }
 }
 -- }}}
+
 -- Colour schemes {{{
 use { 'rktjmp/lush.nvim', as = 'lush', opt = true }
 use {
@@ -604,6 +644,29 @@ use {
       set background=light
       colorscheme zenbones
     ]]
+  end
+}
+-- }}}
+
+-- Notifications {{{
+use {
+  'rcarriga/nvim-notify', as = 'notify',
+  config = function ()
+    require('notify').setup {
+      stages = 'fade',
+      timeout = 3000,
+      max_width = 50,
+      max_height = 25,
+      render = 'minimal',
+    }
+    vim.cmd [[
+      highlight! link NotifyERRORTitle  Directory
+      highlight! link NotifyWARNTitle Directory
+      highlight! link NotifyINFOTitle Directory
+      highlight! link NotifyDEBUGTitle  Directory
+      highlight! link NotifyTRACETitle  Directory
+    ]]
+    vim.notify = require('notify')
   end
 }
 -- }}}
@@ -671,7 +734,6 @@ use {
 use {
   'joosepalviste/nvim-ts-context-commentstring',
   module = 'ts_context_commentstring',
-  requires = { 'nvim-treesitter/nvim-treesitter' },
   config = function ()
     require('nvim-treesitter.configs').setup {
       context_commentstring = {
@@ -681,6 +743,7 @@ use {
     }
   end,
 }
+
 -- Treesitter playground {{{
 use {
   'nvim-treesitter/playground',
@@ -707,43 +770,55 @@ use {
         },
       }
     }
-    require('nvim-treesitter.install').compilers = { "gcc" }
   end,
 }
 --}}}
+--
+use { 'nvim-treesitter/nvim-treesitter-textobjects', }
+use { 'RRethy/nvim-treesitter-textsubjects', }
+
 use {
-  'nvim-treesitter/nvim-treesitter-textobjects',
-  requires = { 'nvim-treesitter/nvim-treesitter' },
-}
-use {
-  'RRethy/nvim-treesitter-textsubjects',
-  requires = { 'nvim-treesitter/nvim-treesitter' },
+  'm-demare/hlargs.nvim', as = 'hlargs',
+  config = function ()
+    require('hlargs').setup {
+      performance = {
+        parse_delay = 15,
+        slow_parse_delay = 100,
+        debounce = {
+          partial_parse = 30,
+          partial_insert_mode = 450,
+        }
+      }
+    }
+  end
 }
 -- }}}
 -- }}}
 
 -- Semantic knowledge, incl. LSP {{{
 
-use {
-  'neovim/nvim-lspconfig', as = 'lspconfig',
-  opt = true,
-  config = function () require("lsp") end,
-}
+use { 'neovim/nvim-lspconfig', as = 'lspconfig', }
+use { 'williamboman/nvim-lsp-installer', as = 'lsp-installer', }
+use { 'ray-x/lsp_signature.nvim', as = 'lsp_signature', }
+use 'b0o/schemastore.nvim'
+use { 'simrat39/rust-tools.nvim', as = 'rust-tools', }
+use { 'j-hui/fidget.nvim', as = 'fidget', }
+use { 'kosayoda/nvim-lightbulb', as = 'lightbulb', }
 
 use {
-  'williamboman/nvim-lsp-installer', as = 'lsp-installer',
-  module = 'nvim-lsp-installer',
-}
-
-use {
-  'ray-x/lsp_signature.nvim', as = 'lsp_signature',
-  module = 'lsp_signature',
+  'RRethy/vim-illuminate', as = 'illuminate',
+  config = function ()
+    vim.api.nvim_create_autocmd({'VimEnter'}, {pattern = "*", callback = function ()
+      vim.api.nvim_command('IlluminationDisable')
+      vim.api.nvim_command('autocmd! illuminated_autocmd')
+    end })
+  end
 }
 
 -- }}}
 
 -- Keystroke-saving, incl. completion {{{
-
+-- Autopairs {{{
 use {
   'windwp/nvim-autopairs',
   opt = true,
@@ -751,7 +826,7 @@ use {
   config = function ()
     local pairs = require('nvim-autopairs')
     pairs.setup {
-      map_cr = false,
+      map_cr = true,
       map_c_w = true,
     }
     local Rule = require('nvim-autopairs.rule')
@@ -763,10 +838,110 @@ use {
     pairs.remove_rule(">[%w%s]*$") -- CoC does this for us
   end
 }
-
 --}}}
--- Autocomplete
 
+-- Snippets {{{
+use {
+  'L3MON4D3/LuaSnip',
+  module = 'luasnip',
+  config = function ()
+    local types = require('luasnip.util.types')
+    _G.luasnip = require('luasnip')
+    luasnip.config.set_config({
+      history = true,
+      -- Update more often, :h events for more info.
+      updateevents = "TextChanged,TextChangedI",
+      ext_opts = {
+        [types.choiceNode] = {
+          active = {
+            virt_text = { { "choiceNode", "Comment" } },
+          },
+        },
+      },
+      -- treesitter-hl has 100, use something higher (default is 200).
+      ext_base_prio = 300,
+      -- minimal increase in priority.
+      ext_prio_increase = 1,
+    })
+    _G.mapping_ctrl_n = function ()
+      if luasnip.choice_active() then
+        return require('util').term('<Cmd>lua luasnip.change_choice(1)<CR>')
+      else
+        return require('util').term('<C-n>')
+      end
+    end
+    _G.mapping_ctrl_p = function ()
+      if luasnip.choice_active() then
+        return require('util').term('<Cmd>lua luasnip.change_choice(-1)<CR>')
+      else
+        return require('util').term('<C-p>')
+      end
+    end
+    vim.api.nvim_set_keymap("i", "<C-n>", "v:lua.mapping_ctrl_n()", { expr = true, noremap = true })
+    vim.api.nvim_set_keymap("s", "<C-n>", "v:lua.mapping_ctrl_n()", { expr = true, noremap = true })
+    vim.api.nvim_set_keymap("i", "<C-p>", "v:lua.mapping_ctrl_p()", { expr = true, noremap = true })
+    vim.api.nvim_set_keymap("s", "<C-p>", "v:lua.mapping_ctrl_p()", { expr = true, noremap = true })
+    require('snippets')
+  end
+}
+--}}}
+
+-- Autocomplete {{{
+use 'hrsh7th/cmp-nvim-lsp' -- LSP source for nvim-cmp
+use 'saadparwaiz1/cmp_luasnip' -- Snippets source for nvim-cmp
+
+use {
+  'hrsh7th/nvim-cmp',
+  config = function ()
+    local cmp = require('cmp')
+    local luasnip = require('luasnip')
+    cmp.setup {
+      snippet = {
+        expand = function(args)
+          luasnip.lsp_expand(args.body)
+        end,
+      },
+      preselect = cmp.PreselectMode.Item,
+      completion = {
+        autocomplete = false,
+      },
+      mapping = cmp.mapping.preset.insert({
+        ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+        ['<C-f>'] = cmp.mapping.scroll_docs(4),
+        ['<C-Space>'] = cmp.mapping.complete(),
+        ['<C-e>'] = cmp.mapping.abort(),
+        ['<Esc>'] = cmp.mapping.close(),
+        ['<CR>'] = cmp.mapping.confirm {
+          behavior = cmp.ConfirmBehavior.Replace,
+          select = true,
+        },
+        ['<Tab>'] = cmp.mapping(function(fallback)
+          if cmp.visible() then
+            cmp.select_next_item()
+          elseif luasnip.expand_or_jumpable() then
+            luasnip.expand_or_jump()
+          else
+            fallback()
+          end
+        end, { 'i', 's' }),
+        ['<S-Tab>'] = cmp.mapping(function(fallback)
+          if cmp.visible() then
+            cmp.select_prev_item()
+          elseif luasnip.jumpable(-1) then
+            luasnip.jump(-1)
+          else
+            fallback()
+          end
+        end, { 'i', 's' }),
+      }),
+      sources = {
+        { name = 'nvim_lsp' },
+        { name = 'luasnip' },
+      },
+    }
+end
+}
+-- }}}
 -- }}}
 
 return packer
