@@ -8,15 +8,13 @@ packer.init {
 }
 
 local use = packer.use
--- Packer itself
+
 use { 'wbthomason/packer.nvim', opt = true }
 
--- Miscellaneous {{{
 use { 'dstein64/vim-startuptime', cmd = 'StartupTime', }
 
 -- Set 'path', 'includeexpr', etc. to reasonable values
 use 'tpope/vim-apathy'
---}}}
 
 -- Improvements to QuickFix and Location List{{{
 use {
@@ -37,49 +35,8 @@ use {
 use { 'gabrielpoca/replacer.nvim', module = 'replacer', }
 --}}}
 
--- Existing commands improved {{{
-use {
-  'rktjmp/highlight-current-n.nvim',
-  config = function ()
-    vim.cmd [[
-      nmap n <Plug>(highlight-current-n-n)
-      nmap N <Plug>(highlight-current-n-N)
-
-      " Some QOL autocommands
-      augroup ClearSearchHL
-        autocmd!
-        " You may only want to see hlsearch /while/ searching, you can automatically
-        " toggle hlsearch with the following autocommands
-        autocmd CmdlineEnter /,\? set hlsearch
-        autocmd CmdlineLeave /,\? set nohlsearch
-        " this will apply similar n|N highlighting to the first search result
-        " careful with escaping ? in lua, you may need \\?
-        autocmd CmdlineLeave /,\? lua require('highlight_current_n')['/,?']()
-      augroup END
-    ]]
-  end
-}
-
-use {
-  'haya14busa/vim-asterisk', as = 'asterisk',
-  setup = function () vim.g['asterisk#keeppos'] = 1 end,
-  config = function ()
-    vim.cmd [[
-      map *   <Plug>(asterisk-*)
-      map #   <Plug>(asterisk-#)
-      map g*  <Plug>(asterisk-g*)
-      map g#  <Plug>(asterisk-g#)
-      map z*  <Plug>(asterisk-z*)
-      map gz* <Plug>(asterisk-gz*)
-      map z#  <Plug>(asterisk-z#)
-      map gz# <Plug>(asterisk-gz#)
-    ]]
-  end
-}
-
 -- More and better text-objects
 use 'wellle/targets.vim'
--- }}}
 
 -- Invisible improvements {{{
 -- Fix performance issues with the CursorHold autocmd
@@ -109,7 +66,6 @@ use {
       use_git_branch = true,
       allowed_dirs = {'~/Code', '~/Blogs', '~/.config', '~/WordPress'},
     }
-    require("telescope").load_extension("persisted") -- To load the telescope extension
   end,
 }
 --}}}
@@ -191,8 +147,7 @@ use {
 }
 --}}}
 
--- Show what is otherwise hidden {{{
--- Show available keybindings as you type
+-- Show available keybindings as you type {{{
 use {
   'folke/which-key.nvim', as = "which-key",
   opt = true,
@@ -216,16 +171,55 @@ use {
     require('mappings')
   end
 }
+-- }}}
 
 use { 'tversteeg/registers.nvim', opt = true, }
 
 -- Nice interface for vim's tree-shaped undo
 use {  'mbbill/undotree', cmd = "UndotreeToggle" }
 
--- }}}
-
 -- Moving around {{{
 use 'ggandor/lightspeed.nvim'
+
+-- Highlight only the current search match {{{
+use {
+  'rktjmp/highlight-current-n.nvim',
+  config = function ()
+    vim.cmd [[
+      nmap n <Plug>(highlight-current-n-n)
+      nmap N <Plug>(highlight-current-n-N)
+
+      " Some QOL autocommands
+      augroup ClearSearchHL
+        autocmd!
+        " You may only want to see hlsearch /while/ searching, you can automatically
+        " toggle hlsearch with the following autocommands
+        autocmd CmdlineEnter /,\? set hlsearch
+        autocmd CmdlineLeave /,\? set nohlsearch
+        " this will apply similar n|N highlighting to the first search result
+        " careful with escaping ? in lua, you may need \\?
+        autocmd CmdlineLeave /,\? lua require('highlight_current_n')['/,?']()
+      augroup END
+    ]]
+  end
+}
+--}}}
+
+use {
+  'haya14busa/vim-asterisk', as = 'asterisk',
+  config = function ()
+    vim.cmd [[
+      map *   <Plug>(asterisk-*)
+      map #   <Plug>(asterisk-#)
+      map g*  <Plug>(asterisk-g*)
+      map g#  <Plug>(asterisk-g#)
+      map z*  <Plug>(asterisk-z*)
+      map gz* <Plug>(asterisk-gz*)
+      map z#  <Plug>(asterisk-z#)
+      map gz# <Plug>(asterisk-gz#)
+    ]]
+  end
+}
 
 -- Matchup {{{
 use {
@@ -274,7 +268,7 @@ use {
   -- TODO mappings
 }
 
--- Gitsigns{{{
+-- Gitsigns {{{
 use {
   'lewis6991/gitsigns.nvim',
   requires = { 'nvim-lua/plenary.nvim' },
@@ -341,8 +335,6 @@ use {
     "Time", -- measure how long it takes to run some stuff.
   },
 }
-
--- AESTHETICS {{{
 
 -- status line {{{
 use {
@@ -434,9 +426,7 @@ use {
 }
 -- }}}
 
--- }}}
-
--- Syntax knowledge, incl. tree-sitter {{{
+-- Syntaxes, filetypes {{{
 
 use { 'ledger/vim-ledger', as = 'ledger', }
 
@@ -485,6 +475,7 @@ use {
     vim.g.markdown_enable_insert_mode_mappings = 1
   end,
 }
+-- }}}
 
 -- Tree-sitter {{{
 use {
@@ -552,12 +543,12 @@ use {
         }
       }
     }
+    vim.api.nvim_command('hi! link Hlargs Constant')
   end
 }
 -- }}}
--- }}}
 
--- Semantic knowledge, incl. LSP {{{
+-- LSP {{{
 
 use { 'neovim/nvim-lspconfig', as = 'lspconfig', }
 use { 'williamboman/nvim-lsp-installer', as = 'lsp-installer', }
@@ -579,7 +570,6 @@ use {
 
 -- }}}
 
--- Keystroke-saving, incl. completion {{{
 -- Autopairs {{{
 use {
   'windwp/nvim-autopairs',
@@ -621,7 +611,6 @@ use {
     require('conf.cmp')
   end
 }
--- }}}
 -- }}}
 
 return packer
