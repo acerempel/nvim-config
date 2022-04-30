@@ -353,6 +353,7 @@ use {
     local actions = require('telescope.actions')
     local layout_actions = require('telescope.actions.layout')
     local themes = require('telescope.themes')
+    local ctrl_y = vim.api.nvim_replace_termcodes('<C-y>', true, false, true)
     telescope.setup({
       defaults = {
         disable_devicons = true,
@@ -384,6 +385,13 @@ use {
             ["<D-k>"] = layout_actions.toggle_preview,
             ["<C-tab>"] = actions.move_selection_worse,
             ["<S-C-tab>"] = actions.move_selection_better,
+            ["<CR>"] = function(...)
+              if vim.fn.pumvisible() == 1 then
+                vim.api.nvim_feedkeys(ctrl_y, 'n', false)
+              else
+                actions.select_default(...)
+              end
+            end
           },
         },
       },
@@ -402,10 +410,27 @@ use {
           no_unlisted = true,
           results_title = false,
           initial_mode = 'normal',
+        },
+        help_tags = {
+          mappings = {
+            i = {
+              ["<CR>"] = actions.select_vertical,
+            },
+          },
+        },
+        man_pages = {
+          mappings = {
+            i = {
+              ["<CR>"] = actions.select_vertical,
+            },
+          },
         }
       },
       extensions = {
-        ["ui-select"] = themes.get_cursor(),
+        ["ui-select"] = themes.get_cursor({ border = false }),
+        frecency = {
+          disable_devicons = false,
+        },
         lsp_handlers = {
           location = {
             telescope = themes.get_ivy({

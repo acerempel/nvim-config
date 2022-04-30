@@ -10,6 +10,10 @@ whichkey.register(
       "<cmd>lua require('telescope.builtin').help_tags()<cr>",
       "Help tags"
     },
+    m = {
+      "<cmd>lua require('telescope.builtin').man_pages()<CR>",
+      "Man pages",
+    },
     i = {
       "<cmd>lua require('telescope').extensions.file_browser.file_browser()<cr>",
       "Directory tree"
