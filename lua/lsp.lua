@@ -17,7 +17,12 @@ vim.g.Illuminate_delay = 450
 
 local on_attach = function(client, bufnr)
   require('lsp_signature').on_attach(lsp_signature_config)
-  require('illuminate').on_attach(client)
+  local capabilities = client.server_capabilities
+  if capabilities.documentHighlightProvider then
+    require('illuminate').on_attach(client)
+    vim.keymap.set({'n', 'i'}, '<D-g>', function() require"illuminate".next_reference{wrap=true} end, { buffer = bufnr })
+    vim.keymap.set({'n', 'i'}, '<S-D-g>', function() require"illuminate".next_reference{wrap=true,reverse=true} end, { buffer = bufnr })
+  end
   local whichkey = require('which-key')
   whichkey.register(
     {
@@ -58,13 +63,19 @@ local on_attach = function(client, bufnr)
   )
   vim.keymap.set({'n', 'i'}, "<Plug>(search-document)", require('telescope.builtin').lsp_document_symbols, { buffer = bufnr })
   vim.keymap.set({'n', 'i'}, "<Plug>(search-workspace)", require('telescope.builtin').lsp_dynamic_workspace_symbols, { buffer = bufnr })
-  vim.keymap.set({'n', 'i'}, '<D-g>', function() require"illuminate".next_reference{wrap=true} end, { buffer = bufnr })
-  vim.keymap.set({'n', 'i'}, '<S-D-g>', function() require"illuminate".next_reference{wrap=true,reverse=true} end, { buffer = bufnr })
-  vim.keymap.set('i', '<D-.>', function() vim.lsp.buf.code_action() end, { buffer = bufnr })
-  vim.api.nvim_create_autocmd({'CursorHold', 'CursorHoldI'}, {
-    buffer = bufnr,
-    callback = function() require'nvim-lightbulb'.update_lightbulb() end,
-  })
+  if capabilities.documentFormattingProvider then
+    vim.keymap.set({'n', 'i'}, '<D-k>f', function() vim.lsp.formatting() end, { buffer = bufnr })
+  end
+  if capabilities.documentRangeFormattingProvider then
+    vim.api.nvim_buf_set_var(bufnr, 'formatexpr', 'v:lua.vim.lsp.formatexpr()')
+  end
+  if capabilities.codeActionProvider then
+    vim.keymap.set({'n', 'i'}, '<D-.>', function() vim.lsp.buf.code_action() end, { buffer = bufnr })
+    vim.api.nvim_create_autocmd({'CursorHold', 'CursorHoldI'}, {
+      buffer = bufnr,
+      callback = function() require'nvim-lightbulb'.update_lightbulb() end,
+    })
+  end
 end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -92,6 +103,13 @@ local lua_config = {
   -- Do not send telemetry data containing a randomized but unique identifier
   telemetry = {
     enable = false,
+  },
+  format = {
+    enable = true,
+    defaultConfig = {
+      indent_style = "space",
+      indent_size = "2",
+    }
   },
 }
 
@@ -122,7 +140,7 @@ local lsp_config = {
 local servers = {
   "rust_analyzer", "tsserver",
   "intelephense", "html", "cssls", "jsonls",
-  "tailwindcss", "vimls",
+  "tailwindcss", "vimls", "sumneko_lua",
 }
 
 require('nvim-lsp-installer').setup {
