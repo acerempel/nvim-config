@@ -58,6 +58,13 @@ local section_b = {
   {'diff', source = diff_source}, {'b:gitsigns_head', icon = '', cond = min_width(80) }
 }
 
+local diagnostics = {
+  'diagnostics', sources = {'nvim_diagnostic'},
+  sections = {'error', 'warn', 'info'},
+  symbols = {error = '⨶ ', warn = '⚠︎ ', info = '🛦 '},
+  cond = min_width(50),
+}
+
 require('lualine').setup {
   options = {
     theme = 'zenbones_light_bright',
@@ -66,7 +73,7 @@ require('lualine').setup {
     lualine_a = section_a,
     lualine_b = section_b,
     lualine_c = { {gps.get_location, cond = function () return gps.is_available() and min_width(65)() end} },
-    lualine_x = { {function () return vim.fn['coc#status']() end, cond = min_width(50)} },
+    lualine_x = { diagnostics },
     lualine_y = {'progress'},
     lualine_z = {'mode'},
   },
