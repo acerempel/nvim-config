@@ -1,6 +1,17 @@
 local cmp = require('cmp')
 local luasnip = require('luasnip')
 
+local function only_ws_before_cursor()
+  local _, col = vim.api.nvim_win_get_cursor(0)
+  local line = vim.api.nvim_get_current_line()
+  local line_to_cursor = line:sub(1, col)
+  if line_to_cursor:match("^%s*$") then
+    return true
+  else
+    return false
+  end
+end
+
 cmp.setup {
   snippet = {
     expand = function(args)
@@ -24,10 +35,12 @@ cmp.setup {
     ['<Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_next_item()
-      elseif luasnip.expand_or_jumpable() then
+      elseif luasnip.expand_or_locally_jumpable() then
         luasnip.expand_or_jump()
-      else
+      elseif only_ws_before_cursor() then
         fallback()
+      else
+        cmp.complete()
       end
     end, { 'i', 's' }),
     ['<S-Tab>'] = cmp.mapping(function(fallback)

@@ -13,16 +13,17 @@ vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
   { max_width = 72, }
 )
 
-vim.g.Illuminate_delay = 450
+local highlight = require('lsp.highlight')
+local highlight_attach = highlight.setup { wrap = true }
 
 local on_attach = function(client, bufnr)
   require('lsp_signature').on_attach(lsp_signature_config)
   local capabilities = client.server_capabilities
-  if capabilities.documentHighlightProvider then
-    require('illuminate').on_attach(client)
-    vim.keymap.set({'n', 'i'}, '<D-g>', function() require"illuminate".next_reference{wrap=true} end, { buffer = bufnr })
-    vim.keymap.set({'n', 'i'}, '<S-D-g>', function() require"illuminate".next_reference{wrap=true,reverse=true} end, { buffer = bufnr })
-  end
+  highlight_attach(bufnr)
+  vim.keymap.set('n', 'gh', vim.lsp.buf.document_highlight, { buffer = bufnr })
+  vim.keymap.set({'n', 'i'}, '<d-e>', vim.lsp.buf.document_highlight, { buffer = bufnr })
+  vim.keymap.set({'n', 'i'}, '<d-g>', function() highlight.next_reference{wrap=true} end, { buffer = bufnr })
+  vim.keymap.set({'n', 'i'}, '<s-d-g>', function() highlight.next_reference{wrap=true,reverse=true} end, { buffer = bufnr })
   local whichkey = require('which-key')
   whichkey.register(
     {
@@ -42,10 +43,6 @@ local on_attach = function(client, bufnr)
         "<Cmd>lua vim.lsp.buf.rename()<CR>",
         "Rename symbol"
       },
-      ["gh"] = {
-        "<Cmd>lua vim.lsp.buf.document_highlight()<CR>",
-        "Highlight occurrences"
-      },
       ["gt"] = {
         "<Cmd>lua vim.lsp.buf.type_definition()<CR>",
         "Go to type definition"
@@ -61,25 +58,24 @@ local on_attach = function(client, bufnr)
     },
     { buffer = bufnr }
   )
+  vim.keymap.set({'n', 'x'}, "<C-w><CR>", function() require('goto-preview').goto_preview_definition() end, { buffer = bufnr })
+  vim.keymap.set({'n', 'x'}, "<C-w>g]", function() require('goto-preview').goto_preview_references() end, { buffer = bufnr })
   vim.keymap.set({'n', 'i'}, "<Plug>(search-document)", require('telescope.builtin').lsp_document_symbols, { buffer = bufnr })
   vim.keymap.set({'n', 'i'}, "<Plug>(search-workspace)", require('telescope.builtin').lsp_dynamic_workspace_symbols, { buffer = bufnr })
   if capabilities.documentFormattingProvider then
-    vim.keymap.set({'n', 'i'}, '<D-k>f', function() vim.lsp.formatting() end, { buffer = bufnr })
+    vim.keymap.set({'n', 'i'}, '<d-k>f', function() vim.lsp.formatting() end, { buffer = bufnr })
   end
   if capabilities.documentRangeFormattingProvider then
     vim.api.nvim_buf_set_var(bufnr, 'formatexpr', 'v:lua.vim.lsp.formatexpr()')
   end
-  if capabilities.codeActionProvider then
-    vim.keymap.set({'n', 'i'}, '<D-.>', function() vim.lsp.buf.code_action() end, { buffer = bufnr })
-    vim.api.nvim_create_autocmd({'CursorHold', 'CursorHoldI'}, {
-      buffer = bufnr,
-      callback = function() require'nvim-lightbulb'.update_lightbulb() end,
-    })
-  end
+  vim.keymap.set({'n', 'i'}, '<d-.>', function() vim.lsp.buf.code_action() end, { buffer = bufnr })
+  vim.api.nvim_create_autocmd({'CursorHold', 'CursorHoldI'}, {
+    buffer = bufnr,
+    callback = function() require'nvim-lightbulb'.update_lightbulb() end,
+  })
 end
 
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 local runtime_path = vim.split(package.path, ';')
 table.insert(runtime_path, "lua/?.lua")
@@ -117,7 +113,7 @@ local lsp_config = {
   on_attach = on_attach,
   capabilities = capabilities,
   settings = {
-    intelephense = { stubs = { "wordpress", "standard", "pcre", "http", "json", "mysql", "mysqli", "pdo_mysql" } },
+    intelephense = { stubs = { "Core", "mbstring", "date", "superglobals", "wordpress", "standard", "pcre", "http", "json", "mysql", "mysqli", "pdo_mysql" } },
     json = {
       schemas = require("schemastore").json.schemas(),
     },
@@ -133,6 +129,9 @@ local lsp_config = {
       procMacro = {
         enable = true
       },
+      hoverActions = {
+        enable = false,
+      },
     },
   }
 }
@@ -141,6 +140,7 @@ local servers = {
   "rust_analyzer", "tsserver",
   "intelephense", "html", "cssls", "jsonls",
   "tailwindcss", "vimls", "sumneko_lua",
+  "pyright",
 }
 
 require('nvim-lsp-installer').setup {

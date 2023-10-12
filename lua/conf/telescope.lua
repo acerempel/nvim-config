@@ -79,7 +79,7 @@ telescope.setup({
   extensions = {
     ["ui-select"] = themes.get_cursor({ border = false }),
     frecency = {
-      disable_devicons = false,
+      disable_devicons = true,
     },
     lsp_handlers = {
       location = {
@@ -96,6 +96,6 @@ telescope.load_extension('fzf')
 telescope.load_extension('ui-select')
 telescope.load_extension('lsp_handlers')
 telescope.load_extension('zoxide')
-telescope.load_extension('repo')
 telescope.load_extension('frecency')
 telescope.load_extension('file_browser')
+telescope.load_extension("persisted")

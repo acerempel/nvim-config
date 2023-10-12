@@ -39,13 +39,6 @@ use { 'gabrielpoca/replacer.nvim', module = 'replacer', }
 use 'wellle/targets.vim'
 
 -- Invisible improvements {{{
--- Fix performance issues with the CursorHold autocmd
-use {
-  'antoinemadec/FixCursorHold.nvim',
-  setup = function ()
-    vim.g.cursorhold_updatetime = 700
-  end
-}
 
 use 'tpope/vim-repeat'
 
@@ -309,19 +302,11 @@ use {
   'gbrlsnchs/telescope-lsp-handlers.nvim',
   'nvim-telescope/telescope-ui-select.nvim',
   'jvgrootveld/telescope-zoxide',
-  'cljoly/telescope-repo.nvim',
   'nvim-telescope/telescope-file-browser.nvim',
 }
 
 use {
   'nvim-telescope/telescope-frecency.nvim', as = 'telescope-frecency',
-  requires = {
-    {
-      'tami5/sqlite.lua',
-      module = "sqlite",
-      setup = function () vim.g.sqlite_clib_path = '/usr/lib/libsqlite3.dylib' end
-    }
-  },
 }
 --}}}
 
@@ -348,15 +333,24 @@ use {
   'SmiteshP/nvim-gps',
   module = 'nvim-gps',
   config = function ()
-    local icon = require('nvim-nonicons').get
     require('nvim-gps').setup {
       icons = {
-        ['tag-name'] = icon('struct'),
-        ['class-name'] = icon('class'),
-        ['function-name'] = 'ƒ ',
-        ['method-name'] = '∂ ',
+        ['tag-name'] = '❮❯',
+        ['class-name'] = '∏ ',
+        ['function-name'] = 'λ ',
+        ['method-name'] = 'ƒ ',
+        ['container-name'] = '⛶ '
       },
-      separator = ' → '
+      separator = ' → ',
+      languages = {
+        json = {
+          icons = {
+            ["object-name"] = '{}',
+            ["boolean-name"] = '⊨ ',
+            ["array-name"] = '[]',
+          }
+        }
+      }
     }
   end,
 }
@@ -370,17 +364,6 @@ use {
   config = function()
     require('conf.cokeline')
   end,
-}
--- }}}
-
--- Icons {{{
-use {
-  'yamatsum/nvim-nonicons',
-  wants = { 'nvim-web-devicons' },
-  requires = {
-    'kyazdani42/nvim-web-devicons',
-    config = function() require('nvim-web-devicons').setup() end,
-  }
 }
 -- }}}
 
@@ -407,20 +390,22 @@ use {
 use {
   'rcarriga/nvim-notify', as = 'notify',
   config = function ()
+    local icons = {
+      ERROR = 'E', WARN = 'I', INFO = 'I', DEBUG = 'D', TRACE = 'T',
+    }
     require('notify').setup {
       stages = 'fade',
       timeout = 3000,
       max_width = 50,
       max_height = 25,
-      render = 'minimal',
+      render = 'default',
+      icons = icons,
     }
-    vim.cmd [[
-      highlight! link NotifyERRORTitle  Directory
-      highlight! link NotifyWARNTitle Directory
-      highlight! link NotifyINFOTitle Directory
-      highlight! link NotifyDEBUGTitle  Directory
-      highlight! link NotifyTRACETitle  Directory
-    ]]
+    local normal_fg = vim.api.nvim_get_hl_by_name('Normal', true).foreground
+    for level, _ in pairs(icons) do
+      local group = string.format('Notify%sTitle', level)
+      vim.api.nvim_set_hl(0, group, {bold = true, foreground = normal_fg})
+    end
     vim.notify = require('notify')
   end
 }
@@ -555,17 +540,30 @@ use { 'williamboman/nvim-lsp-installer', as = 'lsp-installer', }
 use { 'ray-x/lsp_signature.nvim', as = 'lsp_signature', }
 use 'b0o/schemastore.nvim'
 use { 'simrat39/rust-tools.nvim', as = 'rust-tools', }
-use { 'j-hui/fidget.nvim', as = 'fidget', }
+use { 'j-hui/fidget.nvim', as = 'fidget', tag = 'legacy', }
 use { 'kosayoda/nvim-lightbulb', as = 'lightbulb', }
-
 use {
-  'RRethy/vim-illuminate', as = 'illuminate',
+  'filipdutescu/renamer.nvim', as = 'renamer',
+  branch = 'master',
+  requires = { 'nvim-lua/plenary.nvim' },
   config = function ()
-    vim.api.nvim_create_autocmd({'VimEnter'}, {pattern = "*", callback = function ()
-      vim.api.nvim_command('IlluminationDisable')
-      vim.api.nvim_command('autocmd! illuminated_autocmd')
-    end })
+    require('renamer').setup {
+      with_qf_list = false,
+      mappings = {},
+    }
   end
+}
+use {
+  'rmagatti/goto-preview',
+  config = function ()
+    require('goto-preview').setup {
+      width = 80,
+      height = 20,
+    }
+  end
+}
+use {
+  'weilbith/nvim-code-action-menu', as = 'code-action-menu',
 }
 
 -- }}}

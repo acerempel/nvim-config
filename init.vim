@@ -3,7 +3,7 @@ if !has('nvim-0.7')
   exit
 endif
 
-lua require('impatient')
+lua vim.loader.enable()
 
 " OPTIONS {{{
 
@@ -115,6 +115,11 @@ augroup treesitter
   au!
   au FileType rust,javascript,typescript,javascriptreact,typescriptreact,lua,nix,php,html,css,scss,sass,vim call SetTreeSitterFolding()
 augroup END
+
+augroup terminal
+  autocmd!
+  autocmd TermOpen fish,bash,zsh,sh startinsert
+augroup END
 " }}}
 
 " Packer lazy-loading {{{
@@ -183,6 +188,8 @@ noremap gb go
 noremap ' `
 tnoremap <Esc> <c-\><c-n>
 
+noremap <d-s> <Cmd>w<CR>
+inoremap <d-s> <Cmd>w<CR>
 " }}}
 
 " Nomodifiable {{{
@@ -253,11 +260,6 @@ let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 " Don't load netrw, I don't need it
 let g:loaded_netrw       = 1
 let g:loaded_netrwPlugin = 1
-
-" Enable new filetype.lua
-let g:do_filetype_lua = 1
-" Disable traditional filetype detection
-let g:did_load_filetypes = 0
 
 let php_html_in_strings=0
 let php_html_in_heredoc=0

@@ -197,7 +197,7 @@ local lua_func = snippet(
   return line:sub(1, col - #trigger)
 end --]]
 
---[[ local function func_preamble()
+--[[ local function func_preamble(_args, parent)
   local line_before_trigger = get_line_before_trigger('function')
   if line_before_trigger:match('^%s*$') then
     return node(nil, { text('local function '), insert(1) })
@@ -262,38 +262,32 @@ local js_if_else = snippet(
     text({ '', '}' }) }
 )
 
-luasnip.snippets = {
-  html = {
-    tagpair,
-    input, anchor,
-    description, doctype, html,
-    stylesheet,
-  },
-  php = {
-    php, php_if, php_phpif,
-  },
-  xml = {
-    tagpair,
-  },
-  lua = {
-    lua_pairs, lua_ipairs,
-    lua_if, lua_if_else, lua_if_elseif,
-    lua_pcall,
-    lua_require, lua_local_require,
-    lua_func,
-    snippet({ trig = 'elseif', name = 'elseif … then' },
-      { text('elseif '), insert(1), text({ ' then', '\t' }), insert(0) })
-  },
-  javascript = {
-    js_for_of, js_if, js_if_else,
-  },
-  typescript = {},
-}
+luasnip.add_snippets('html', {
+  tagpair,
+  input, anchor,
+  description, doctype, html,
+  stylesheet,
+})
 
-for _, snip in ipairs(luasnip.snippets.javascript) do
-  table.insert(luasnip.snippets.typescript, snip)
-end
+luasnip.add_snippets('php', {
+  php, php_if, php_phpif,
+})
 
-for _, snip in ipairs(luasnip.snippets.html) do
-  table.insert(luasnip.snippets.php, snip)
-end
+luasnip.add_snippets('lua', {
+  lua_pairs, lua_ipairs,
+  lua_if, lua_if_else, lua_if_elseif,
+  lua_pcall,
+  lua_require, lua_local_require,
+  lua_func,
+  snippet({ trig = 'elseif', name = 'elseif … then' },
+    { text('elseif '), insert(1), text({ ' then', '\t' }), insert(0) })
+})
+
+luasnip.add_snippets('javascript', {
+  js_for_of, js_if, js_if_else,
+})
+
+luasnip.filetype_extend('typescript', {'javascript'})
+luasnip.filetype_extend('php', {'html'})
+luasnip.filetype_extend('typescriptreact', {'typescript'})
+luasnip.filetype_extend('javascriptreact', {'javascript'})
