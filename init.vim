@@ -146,10 +146,16 @@ cnoreabbrev tel Telescope
 " MAPPINGS {{{
 
 " Leaders {{{
-let mapleader = " "
-let g:mapleader = " "
+if get(g:, 'manpager', 0) == 1
+  map <Space> <C-F>
+  map <S-Space> <C-B>
+else
+  let mapleader = " "
+  let g:mapleader = " "
+  map <Space> <Nop>
+endif
+
 let maplocalleader = ","
-map <Space> <Nop>
 map , <Nop>
 noremap ; :
 " }}}
