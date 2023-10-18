@@ -11,6 +11,7 @@ if vim.g.simplicity == nil then
     "vim-matchup",
     "nvim-cmp",
     "lspconfig",
+    "renamer",
   }
   require('packer.load')(plugins, {}, _G.packer_plugins, false)
   require('lsp')

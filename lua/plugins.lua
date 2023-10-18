@@ -521,6 +521,7 @@ use { 'kosayoda/nvim-lightbulb', as = 'lightbulb', }
 use {
   'filipdutescu/renamer.nvim', as = 'renamer',
   branch = 'master',
+  opt = true,
   requires = { 'nvim-lua/plenary.nvim' },
   config = function ()
     require('renamer').setup {
