@@ -386,31 +386,6 @@ use {
 }
 -- }}}
 
--- Notifications {{{
-use {
-  'rcarriga/nvim-notify', as = 'notify',
-  config = function ()
-    local icons = {
-      ERROR = 'E', WARN = 'I', INFO = 'I', DEBUG = 'D', TRACE = 'T',
-    }
-    require('notify').setup {
-      stages = 'fade',
-      timeout = 3000,
-      max_width = 50,
-      max_height = 25,
-      render = 'default',
-      icons = icons,
-    }
-    local normal_fg = vim.api.nvim_get_hl_by_name('Normal', true).foreground
-    for level, _ in pairs(icons) do
-      local group = string.format('Notify%sTitle', level)
-      vim.api.nvim_set_hl(0, group, {bold = true, foreground = normal_fg})
-    end
-    vim.notify = require('notify')
-  end
-}
--- }}}
-
 -- Syntaxes, filetypes {{{
 
 use { 'ledger/vim-ledger', as = 'ledger', }
