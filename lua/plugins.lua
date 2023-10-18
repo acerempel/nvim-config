@@ -143,6 +143,7 @@ use {
 -- Show available keybindings as you type {{{
 use {
   'folke/which-key.nvim', as = "which-key",
+  tag = 'v1.6.0',
   opt = true,
   config = function ()
     require('which-key').setup {
