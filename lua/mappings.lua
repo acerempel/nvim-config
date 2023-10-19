@@ -32,8 +32,6 @@ whichkey.register(
     },
     j = {
       name = "Buffers",
-      d = { "<cmd>BufferClose<CR>", "Delete bufffer" },
-      k = { "<cmd>BufferLinePick<CR>", "Jump to buffer" },
       c = {
         "<cmd>lua require('telescope.builtin').buffers({ sort_mru = true, ignore_current_buffer = true, cwd_only = true })<cr>",
         "Fuzzy find within current directory"

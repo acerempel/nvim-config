@@ -149,10 +149,7 @@ use {
 }
 -- }}}
 
-use {
-  'tversteeg/registers.nvim',
-  config = function () require('registers').setup() end
-}
+use { 'tversteeg/registers.nvim', opt = true, config = function() require('registers').setup() end }
 
 -- Nice interface for vim's tree-shaped undo
 use {  'mbbill/undotree', cmd = "UndotreeToggle" }
@@ -317,7 +314,7 @@ use {
 -- }}}
 
 use {
-  'noib3/nvim-bufferline', as = 'cokeline',
+  'willothy/nvim-cokeline', as = 'cokeline',
   opt = true,
   config = function() require('conf.cokeline') end,
 }
@@ -514,23 +511,28 @@ use {
       Rule('<', '>', {'rust'})
         :with_pair(cond.before_regex('[%w:]'))
     }
-    pairs.remove_rule(">[%w%s]*$") -- CoC does this for us
+    -- pairs.remove_rule(">[%w%s]*$") -- CoC does this for us
   end
 }
 
 use {
   'L3MON4D3/LuaSnip',
-  module = 'luasnip',
-  config = function () require('conf.luasnip') end
+  opt = true,
+  config = function ()
+    require('conf.luasnip')
+  end
 }
 
 -- Autocomplete {{{
-use 'hrsh7th/cmp-nvim-lsp' -- LSP source for nvim-cmp
-use 'saadparwaiz1/cmp_luasnip' -- Snippets source for nvim-cmp
+use { 'hrsh7th/cmp-nvim-lsp', opt = true } -- LSP source for nvim-cmp
+use { 'saadparwaiz1/cmp_luasnip', opt = true } -- Snippets source for nvim-cmp
 
 use {
   'hrsh7th/nvim-cmp',
-  config = function () require('conf.cmp') end
+  opt = true,
+  config = function ()
+    require('conf.cmp')
+  end
 }
 -- }}}
 

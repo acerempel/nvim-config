@@ -95,6 +95,10 @@ local lua_config = {
     -- Setup your lua path
     path = runtime_path,
   },
+  completion = {
+    callSnippet = "Replace",
+    showWord = "Disable",
+  },
   diagnostics = {
     -- Get the language server to recognize the `vim` global
     globals = {'vim'},
@@ -146,7 +150,7 @@ local lsp_config = {
 local servers = {
   "rust_analyzer", "tsserver",
   "intelephense", "html", "cssls", "jsonls",
-  "tailwindcss", "vimls", "sumneko_lua",
+  "tailwindcss", "vimls", "lua_ls",
   "pyright",
 }
 

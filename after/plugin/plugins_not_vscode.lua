@@ -1,14 +1,19 @@
 if vim.g.simplicity == nil then
   local plugins = {
+    "plenary.nvim",
+    "which-key",
     "registers.nvim",
     "cokeline",
-    "plenary.nvim", "pqf", "vim-qf", "fastfold",
+    "pqf", "vim-qf", "fastfold",
     "telescope",
     "vim-fugitive",
-    "which-key",
     "gitsigns.nvim",
     "Comment",
     "vim-matchup",
+    "LuaSnip",
+    "nvim-cmp", "cmp-nvim-lsp", "cmp_luasnip",
+    "lspconfig",
+    "renamer",
   }
   require('packer.load')(plugins, {}, _G.packer_plugins, false)
 end

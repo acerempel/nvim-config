@@ -48,3 +48,16 @@ require('cokeline').setup({
     },
   },
 })
+
+local cl_mappings = {
+  [']a'] = { '<Plug>(cokeline-focus-next)', 'Next buffer' },
+  ['[a'] = { '<Plug>(cokeline-focus-prev)', 'Previous buffer' },
+  A = { '<Plug>(cokeline-pick-focus)', 'Jump to buffer' },
+  Z = { '<Plug>(cokeline-pick-close)', 'Close buffer remotely' },
+}
+
+for ix = 1, 9 do
+  cl_mappings['<C-'..ix..'>'] = { string.format('<Plug>(cokeline-focus-%s)', ix), string.format('Switch to buffer %s', ix) }
+end
+
+require('which-key').register(cl_mappings)

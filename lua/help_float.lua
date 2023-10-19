@@ -58,6 +58,7 @@ M.open = function()
   local buf = vim.fn.bufadd(tag.filename)
   vim.fn.bufload(buf)
 
+  -- Don't print file info when opening the help file
   local prev_shortmess = vim.o.shortmess
   vim.opt.shortmess:append('F')
   win = vim.api.nvim_open_win(buf, false, win_config)
