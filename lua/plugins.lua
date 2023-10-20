@@ -80,6 +80,7 @@ use {
 -- Paste and yank and delete improvements {{{
 use {
   'gbprod/substitute.nvim', as = 'substitute',
+  opt = true,
   config = function ()
     require("substitute").setup({
       on_substitute = function(event)
@@ -97,6 +98,7 @@ use {
 
 use {
   'gbprod/yanky.nvim',
+  opt = true,
   config = function ()
     require('yanky').setup {
       ring = {
@@ -178,7 +180,7 @@ use {
 -- Matchup {{{
 use {
   'andymass/vim-matchup',
-  event = 'CursorMoved,CursorMovedI *',
+  opt = true,
   setup = function ()
     vim.g.matchup_matchparen_offscreen = {
       method = 'popup',
@@ -282,12 +284,15 @@ use {
 -- status line {{{
 use {
   'nvim-lualine/lualine.nvim', as = 'lualine',
-  config = function () require('conf.lualine') end
+  opt = true,
+  config = function ()
+    require('conf.lualine')
+  end
 }
 
 use {
   'SmiteshP/nvim-gps',
-  module = 'nvim-gps',
+  opt = true,
   config = function ()
     require('nvim-gps').setup {
       icons = {
@@ -398,7 +403,6 @@ use {
 
 use {
   'joosepalviste/nvim-ts-context-commentstring',
-  module = 'ts_context_commentstring',
   config = function ()
     require('nvim-treesitter.configs').setup {
       context_commentstring = {
@@ -461,13 +465,12 @@ use {
 -- LSP {{{
 
 use { 'neovim/nvim-lspconfig', as = 'lspconfig', opt = true }
-use { 'williamboman/nvim-lsp-installer', as = 'lsp-installer', }
+use { 'williamboman/nvim-lsp-installer', as = 'lsp-installer', opt = true }
 use { 'ray-x/lsp_signature.nvim', as = 'lsp_signature', opt = true }
 use 'b0o/schemastore.nvim'
 use { 'simrat39/rust-tools.nvim', as = 'rust-tools', opt = true }
 use { 'j-hui/fidget.nvim', as = 'fidget', tag = 'legacy', opt = true }
 use { 'kosayoda/nvim-lightbulb', as = 'lightbulb', opt = true }
-
 use {
   'filipdutescu/renamer.nvim', as = 'renamer',
   branch = 'master',
@@ -498,7 +501,7 @@ use { 'weilbith/nvim-code-action-menu', as = 'code-action-menu' }
 
 use {
   'windwp/nvim-autopairs',
-  event = "InsertEnter *",
+  opt = true,
   config = function ()
     local pairs = require('nvim-autopairs')
     pairs.setup {
