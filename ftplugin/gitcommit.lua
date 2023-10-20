@@ -7,12 +7,4 @@ local api = vim.api
 -- end
 api.nvim_command 'startinsert'
 api.nvim_buf_set_keymap(0, 'n', 'q', '<Cmd>wq<CR>', { noremap = true })
-local tab_rhs = 'pumvisible() ? "<C-n>" : luaeval("check_back_space()") == v:true ? "<Tab>" : "<C-x><C-o>"'
-local s_tab_rhs = 'pumvisible() ? "<C-p>" : "<S-Tab>"'
-local cr_rhs = 'pumvisible() ? "<C-y>" : "<Plug>(auto-pairs-cr)"'
-local esc_rhs = 'pumvisible() ? "<C-e>" : "<Esc>"'
-api.nvim_buf_set_keymap(0, 'i', '<Tab>', tab_rhs, { noremap = true, expr = true })
-api.nvim_buf_set_keymap(0, 'i', '<S-Tab>', s_tab_rhs, { noremap = true, expr = true })
-api.nvim_buf_set_keymap(0, 'i', '<CR>', cr_rhs, { expr = true })
-api.nvim_buf_set_keymap(0, 'i', '<Esc>', esc_rhs, { noremap = true, expr = true })
 api.nvim_buf_set_keymap(0, 'i', '<D-CR>', '<Cmd>stopinsert<Bar>wq<CR>', { noremap = true })
