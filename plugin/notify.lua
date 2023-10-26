@@ -1,5 +1,4 @@
 _G.notifications = {}
-
 local levels = vim.log.levels
 local log_level_strings = {
   [levels.DEBUG] = "Debug",
@@ -27,9 +26,17 @@ else
   end
 end
 
+send_notification_bytes = string.dump(send_notification)
+
+vim.loop.disable_stdio_inheritance()
+
 vim.notify = function (message, level, opts)
   opts = opts or {}
   local title = (log_level_strings[level] or 'Notification') .. (opts.title and (' ' .. opts.title) or '')
   table.insert(_G.notifications, message)
-  send_notification(title, message)
+  local task_func = function(send_notification, title, message)
+    assert(loadstring(send_notification))(title, message)
+  end
+  local task = vim.loop.new_work(task_func, function(...) return ... end)
+  task:queue(send_notification_bytes, title, message)
 end
