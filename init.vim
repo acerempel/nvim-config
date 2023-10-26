@@ -48,7 +48,7 @@ set lazyredraw
 set undofile
 set noswapfile nobackup nowritebackup
 set shada-=%
-set jumpoptions=stack
+set jumpoptions=stack,view
 set viewoptions=curdir,cursor,folds
 set sessionoptions=blank,buffers,curdir,folds,tabpages,terminal,winpos,winsize
 
