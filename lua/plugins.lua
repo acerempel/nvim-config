@@ -42,9 +42,6 @@ use 'wellle/targets.vim'
 
 use 'tpope/vim-repeat'
 
--- Cache lua require() calls
-use 'lewis6991/impatient.nvim'
-
 -- Faster folds, I guess
 use { 'konfekt/fastfold', opt = true }
 -- }}}
