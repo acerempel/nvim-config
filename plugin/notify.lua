@@ -29,7 +29,7 @@ end
 
 vim.notify = function (message, level, opts)
   opts = opts or {}
-  local title = (log_level_strings[level] or 'Notification') .. ((' ' .. opts.title) or '')
+  local title = (log_level_strings[level] or 'Notification') .. (opts.title and (' ' .. opts.title) or '')
   table.insert(_G.notifications, message)
   send_notification(title, message)
 end
