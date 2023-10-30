@@ -2,9 +2,7 @@ vim.api.nvim_command('packadd packer.nvim')
 local packer = require('packer')
 
 packer.init {
-  disable_commands = true,
   log = { level = 'info' },
-  profile = { enable = true, threshold = 1 },
 }
 
 local use = packer.use
