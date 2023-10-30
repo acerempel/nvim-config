@@ -9,7 +9,7 @@ lua vim.loader.enable()
 
 set mouse=a
 
-set inccommand=nosplit nohlsearch
+set inccommand=nosplit
 set noshowmode
 set clipboard=unnamed
 

@@ -160,29 +160,7 @@ use {  'mbbill/undotree', cmd = "UndotreeToggle" }
 -- Moving around {{{
 use 'ggandor/lightspeed.nvim'
 
--- Highlight only the current search match {{{
-use {
-  'rktjmp/highlight-current-n.nvim',
-  config = function ()
-    vim.cmd [[
-      nmap n <Plug>(highlight-current-n-n)
-      nmap N <Plug>(highlight-current-n-N)
-
-      " Some QOL autocommands
-      augroup ClearSearchHL
-        autocmd!
-        " You may only want to see hlsearch /while/ searching, you can automatically
-        " toggle hlsearch with the following autocommands
-        autocmd CmdlineEnter /,\? set hlsearch
-        autocmd CmdlineLeave /,\? set nohlsearch
-        " this will apply similar n|N highlighting to the first search result
-        " careful with escaping ? in lua, you may need \\?
-        autocmd CmdlineLeave /,\? lua require('highlight_current_n')['/,?']()
-      augroup END
-    ]]
-  end
-}
---}}}
+use 'romainl/vim-cool'
 
 use {
   'haya14busa/vim-asterisk', as = 'asterisk',
