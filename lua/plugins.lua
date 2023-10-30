@@ -19,20 +19,18 @@ use 'tpope/vim-apathy'
 -- Improvements to QuickFix and Location List{{{
 use {
   'https://gitlab.com/yorickpeterse/nvim-pqf.git', as = "pqf",
-  opt = true,
   config = function() require('pqf').setup() end,
 }
 
 use {
   'romainl/vim-qf',
-  opt = true,
   setup = function ()
     vim.g.qf_mapping_ack_style = 1
     vim.g.qf_nowrap = 0
   end
 }
 
-use { 'gabrielpoca/replacer.nvim', module = 'replacer', }
+use 'gabrielpoca/replacer.nvim'
 --}}}
 
 use {
