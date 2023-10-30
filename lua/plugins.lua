@@ -41,32 +41,16 @@ use {
 -- More and better text-objects
 use 'wellle/targets.vim'
 
--- Invisible improvements {{{
-
 use 'tpope/vim-repeat'
 
 -- Faster folds, I guess
 use { 'konfekt/fastfold', opt = true }
--- }}}
 
--- Session management {{{
-use { 'farmergreg/vim-lastplace' }
-use {
-  "olimorris/persisted.nvim", as = 'persisted',
-  config = function()
-    vim.opt.shada:remove('%')
-    require("persisted").setup {
-      use_git_branch = true,
-      allowed_dirs = {'~/Code', '~/Blogs', '~/.config', '~/WordPress'},
-    }
-  end,
-}
---}}}
+use 'farmergreg/vim-lastplace'
 
--- Editing-oriented normal mode commands {{{
 use 'tpope/vim-surround'
+
 use 'haya14busa/vim-metarepeat'
--- }}}
 
 -- Comment {{{
 use {
@@ -265,7 +249,6 @@ use {
   -- TODO mappings
 }
 
--- Gitsigns {{{
 use {
   'lewis6991/gitsigns.nvim',
   requires = { 'nvim-lua/plenary.nvim' },
@@ -274,7 +257,7 @@ use {
     require('conf.gitsigns')
   end
 }
---}}}
+
 use {
   'sindrets/diffview.nvim',
   cmd = 'DiffviewOpen',
@@ -314,8 +297,6 @@ use {
 }
 --}}}
 
-use 'tpope/vim-eunuch'
-
 use {
   "tpope/vim-scriptease",
   cmd = {
@@ -328,9 +309,7 @@ use {
 -- status line {{{
 use {
   'nvim-lualine/lualine.nvim', as = 'lualine',
-  config = function ()
-    require('conf.lualine')
-  end
+  config = function () require('conf.lualine') end
 }
 
 use {
@@ -361,18 +340,15 @@ use {
 
 -- }}}
 
--- Buffer line {{{
 use {
   'noib3/nvim-bufferline', as = 'cokeline',
   opt = true,
-  config = function()
-    require('conf.cokeline')
-  end,
+  config = function() require('conf.cokeline') end,
 }
--- }}}
 
 -- Colour schemes {{{
 use { 'rktjmp/lush.nvim', as = 'lush' }
+
 use {
   'mcchrish/zenbones.nvim', as = 'zenbones',
   config = function ()
@@ -394,7 +370,6 @@ use {
 
 use { 'ledger/vim-ledger', as = 'ledger', }
 
--- Vimwiki {{{
 use {
   'vimwiki/vimwiki',
   event = { "BufReadPost,BufNew *.wiki" },
@@ -427,9 +402,9 @@ use {
     ]]
   end
 }
---}}}
 
 use { 'neovimhaskell/haskell-vim', ft = 'haskell' }
+
 use {
   'gabrielelana/vim-markdown',
   ft = 'markdown',
@@ -461,7 +436,6 @@ use {
   end,
 }
 
--- Treesitter playground {{{
 use {
   'nvim-treesitter/playground',
   cmd = 'TSPlaygroundToggle',
@@ -489,8 +463,7 @@ use {
     }
   end,
 }
---}}}
---
+
 use { 'nvim-treesitter/nvim-treesitter-textobjects', }
 use { 'RRethy/nvim-treesitter-textsubjects', }
 
@@ -514,13 +487,14 @@ use {
 
 -- LSP {{{
 
-use { 'neovim/nvim-lspconfig', as = 'lspconfig', }
+use { 'neovim/nvim-lspconfig', as = 'lspconfig', opt = true }
 use { 'williamboman/nvim-lsp-installer', as = 'lsp-installer', }
-use { 'ray-x/lsp_signature.nvim', as = 'lsp_signature', }
+use { 'ray-x/lsp_signature.nvim', as = 'lsp_signature', opt = true }
 use 'b0o/schemastore.nvim'
-use { 'simrat39/rust-tools.nvim', as = 'rust-tools', }
-use { 'j-hui/fidget.nvim', as = 'fidget', tag = 'legacy', }
-use { 'kosayoda/nvim-lightbulb', as = 'lightbulb', }
+use { 'simrat39/rust-tools.nvim', as = 'rust-tools', opt = true }
+use { 'j-hui/fidget.nvim', as = 'fidget', tag = 'legacy', opt = true }
+use { 'kosayoda/nvim-lightbulb', as = 'lightbulb', opt = true }
+
 use {
   'filipdutescu/renamer.nvim', as = 'renamer',
   branch = 'master',
@@ -533,8 +507,10 @@ use {
     }
   end
 }
+
 use {
   'rmagatti/goto-preview',
+  module = 'goto-preview',
   config = function ()
     require('goto-preview').setup {
       width = 80,
@@ -542,13 +518,11 @@ use {
     }
   end
 }
-use {
-  'weilbith/nvim-code-action-menu', as = 'code-action-menu',
-}
+
+use { 'weilbith/nvim-code-action-menu', as = 'code-action-menu' }
 
 -- }}}
 
--- Autopairs {{{
 use {
   'windwp/nvim-autopairs',
   event = "InsertEnter *",
@@ -567,17 +541,12 @@ use {
     pairs.remove_rule(">[%w%s]*$") -- CoC does this for us
   end
 }
---}}}
 
--- Snippets {{{
 use {
   'L3MON4D3/LuaSnip',
   module = 'luasnip',
-  config = function ()
-    require('conf.luasnip')
-  end
+  config = function () require('conf.luasnip') end
 }
---}}}
 
 -- Autocomplete {{{
 use 'hrsh7th/cmp-nvim-lsp' -- LSP source for nvim-cmp
@@ -585,9 +554,7 @@ use 'saadparwaiz1/cmp_luasnip' -- Snippets source for nvim-cmp
 
 use {
   'hrsh7th/nvim-cmp',
-  config = function ()
-    require('conf.cmp')
-  end
+  config = function () require('conf.cmp') end
 }
 -- }}}
 
