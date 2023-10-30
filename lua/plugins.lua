@@ -35,6 +35,11 @@ use {
 use { 'gabrielpoca/replacer.nvim', module = 'replacer', }
 --}}}
 
+use {
+  'tzachar/highlight-undo.nvim', as = 'highlight-undo',
+  config = function() require('highlight-undo').setup() end,
+}
+
 -- More and better text-objects
 use 'wellle/targets.vim'
 
