@@ -9,12 +9,8 @@ if vim.g.simplicity == nil then
     "gitsigns.nvim",
     "Comment",
     "vim-matchup",
-    "nvim-cmp",
-    "lspconfig",
-    "renamer",
   }
   require('packer.load')(plugins, {}, _G.packer_plugins, false)
-  require('lsp')
 end
 
 if vim.g.simplicity ~= nil then

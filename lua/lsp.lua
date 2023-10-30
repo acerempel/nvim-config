@@ -1,3 +1,10 @@
+local plugins = {
+  "lspconfig",
+  "renamer",
+}
+
+require('packer.load')(plugins, {}, _G.packer_plugins, false)
+
 local lspconfig = require('lspconfig')
 
 local lsp_signature_config = {

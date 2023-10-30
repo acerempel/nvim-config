@@ -289,4 +289,6 @@ function! DoCloseBuffer() abort
   endif
 endfunction
 
+command! -nargs=0 LspStart lua require('lsp')<Bar>LspStart
+
 " vim:foldmethod=marker:foldenable
