@@ -169,7 +169,10 @@ use {
 }
 -- }}}
 
-use { 'tversteeg/registers.nvim', opt = true, }
+use {
+  'tversteeg/registers.nvim',
+  config = function () require('registers').setup() end
+}
 
 -- Nice interface for vim's tree-shaped undo
 use {  'mbbill/undotree', cmd = "UndotreeToggle" }
