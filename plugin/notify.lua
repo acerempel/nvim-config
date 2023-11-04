@@ -51,8 +51,6 @@ else
   end
 end
 
-send_notification_bytes = string.dump(send_notification)
-
 vim.loop.disable_stdio_inheritance()
 
 vim.notify = function (message, level, opts)
