@@ -40,14 +40,18 @@ if vim.fn.has("mac") == 1 then
     spawn_process('osascript', {'-e', script})
   end
 elseif vim.fn.has("win32") == 1 then
+  function pwsh_escape_single(str)
+    return string.gsub(str, "'", "''")
+  end
   function send_notification(title, message)
     local script_template = [[New-BurntToastNotification -Text '%s', '%s' -AppLogo  C:\Users\alanr\scoop\apps\neovim\current\share\icons\hicolor\128x128\apps\nvim.png]]
-    local script = string.format(script_template, title, message)
+    local script = string.format(script_template, pwsh_escape_single(title), pwsh_escape_single(message))
     spawn_process('pwsh', {'-c', script})
   end
 else
   function send_notification(title, message)
-    vim.fn.echo(title .. ' ' .. message)
+    local command = string.format([[echomsg '%s' '%s']], pwsh_escape_single(title), pwsh_escape_single(message))
+    vim.api.nvim_command(command)
   end
 end
 
