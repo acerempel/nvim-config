@@ -69,7 +69,51 @@ endif
 command! -nargs=+ Find execute 'silent grep! <args>'
 ]] -- }}}
 
+-- Mappings {{{
+vim.cmd [[
+" Nomodifiable {{{
+augroup nomodifiable
+  au!
+  au BufWinEnter * if !&modifiable | call NomodifiableMappings() | endif
+augroup END
+function! NomodifiableMappings() abort
+  nnoremap <buffer> <nowait> u <C-u>
+  nnoremap <buffer> <nowait> d <C-d>
+  nnoremap <buffer> <nowait> <Space> <C-f>
+  nnoremap <buffer> <nowait> <S-Space <C-b>
+  if &ft != 'man' | nnoremap <buffer> <nowait> q <Cmd>close<CR> | endif
+endfunction
+" }}}
+
+inoremap <expr> <C-E> pumvisible() ? "<C-E>" : "<End>"
+inoremap <C-A> <Home>
+" Normally <C-F> re-indents the current line, but I've never used that
+inoremap <C-F> <Right>
+inoremap <C-B> <Left>
+snoremap <C-E> <Esc>`>a
+snoremap <C-A> <Esc>`<i
+inoremap <M-Left> <S-Left>
+inoremap <M-Right> <S-Right>
+inoremap <D-Left> <Home>
+inoremap <D-Right> <End>
+inoremap <expr> <C-p> pumvisible() ? "\<C-p>" : "\<Up>"
+inoremap <expr> <C-n> pumvisible() ? "\<C-n>" : "\<Down>"
+
+if has('win32')
+  noremap <A-j> <C-W>j
+  noremap <A-k> <C-W>k
+  noremap <A-h> <C-W>h
+  noremap <A-l> <C-W>l
+else
+  noremap <C-j> <C-W>j
+  noremap <C-k> <C-W>k
+  noremap <C-h> <C-W>h
+  noremap <C-l> <C-W>l
+endif
+]]
+
 vim.keymap.set({'n', 'v', 'i'}, '<C-s>', '<cmd>w<cr>')
+-- }}}
 
 -- Plugin management {{{
 require 'paq' {
