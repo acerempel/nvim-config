@@ -166,6 +166,7 @@ use {
   'haya14busa/vim-asterisk', as = 'asterisk',
   config = function ()
     vim.cmd [[
+      let g:asterisk#keeppos = 1
       map *   <Plug>(asterisk-*)
       map #   <Plug>(asterisk-#)
       map g*  <Plug>(asterisk-g*)

@@ -9,7 +9,6 @@ lua vim.loader.enable()
 
 set mouse=a
 
-set inccommand=nosplit
 set noshowmode
 set clipboard=unnamed
 
@@ -46,7 +45,7 @@ let no_buffers_menu = 0
 set lazyredraw
 
 set undofile
-set noswapfile nobackup nowritebackup
+set nobackup nowritebackup
 set shada-=%
 set jumpoptions=stack,view
 set viewoptions=curdir,cursor,folds
@@ -122,22 +121,6 @@ augroup terminal
 augroup END
 " }}}
 
-" Packer lazy-loading {{{
-command! -nargs=* -complete=customlist,v:lua.require'plugins'.plugin_complete PackerInstall lua require('plugins').install(<f-args>)
-command! -nargs=* -complete=customlist,v:lua.require'plugins'.plugin_complete PackerUpdate lua require('plugins').update(<f-args>)
-command! -nargs=* -complete=customlist,v:lua.require'plugins'.plugin_complete PackerSync lua require('plugins').sync(<f-args>)
-command! PackerClean lua require('plugins').clean()
-command! PackerCompile lua require('plugins').compile()
-command! PackerProfile lua require('plugins').profile_output()
-command! -nargs=+ -complete=customlist,v:lua.require'plugins'.loader_complete PackerLoad | lua require('plugins').loader(<q-args>)
-" }}}
-
-" Abbreviations {{{
-cnoreabbrev ps PackerSync
-cnoreabbrev pi PackerInstall
-cnoreabbrev pp PackerProfile
-cnoreabbrev pc PackerClean
-
 " Otherwise it's short for :langnoremap
 cnoreabbrev ln lnext
 cnoreabbrev tel Telescope
@@ -161,10 +144,18 @@ noremap ; :
 " }}}
 
 " Moving around {{{
-noremap <C-j> <C-W>j
-noremap <C-k> <C-W>k
-noremap <C-h> <C-W>h
-noremap <C-l> <C-W>l
+if has('win32')
+  noremap <A-j> <C-W>j
+  noremap <A-k> <C-W>k
+  noremap <A-h> <C-W>h
+  noremap <A-l> <C-W>l
+else
+  noremap <C-j> <C-W>j
+  noremap <C-k> <C-W>k
+  noremap <C-h> <C-W>h
+  noremap <C-l> <C-W>l
+endif
+
 noremap ` <C-W>w
 noremap ~ <C-W>W
 
