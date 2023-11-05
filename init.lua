@@ -210,6 +210,8 @@ require 'paq' {
   -- Color scheme
   { 'mcchrish/zenbones.nvim', as = 'zenbones' },
   { 'rktjmp/lush.nvim', as = 'lush' },
+  { 'lifepillar/vim-gruvbox8', branch = 'neovim' },
+  'andreypopp/vim-colors-plain',
 }
 -- }}}
 
@@ -256,10 +258,11 @@ vim.g.zenbones = {
   darken_noncurrent_window = true,
   darken_comments = 67,
 }
-vim.cmd [[
-  set background=light
-  colorscheme zenbones
-]]
+
+vim.g.gruvbox_filetype_hi_groups = 1
+
+vim.opt.background = 'light'
+vim.api.nvim_command('colorscheme plain')
 
 vim.cmd [[
   " vim-qf
