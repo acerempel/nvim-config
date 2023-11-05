@@ -65,7 +65,7 @@ local diagnostics = {
 
 require('lualine').setup {
   options = {
-    theme = 'zenwritten_dark_stark',
+    theme = 'rosebones_light_bright',
   },
   sections = {
     lualine_a = section_a,
