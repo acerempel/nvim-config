@@ -225,6 +225,7 @@ vim.cmd [[
 
   " Use matchup instead
   let g:loaded_matchit = 1
+  let loaded_matchparen = 1
 ]]
 -- }}}
 
