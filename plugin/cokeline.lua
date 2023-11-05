@@ -48,3 +48,9 @@ require('cokeline').setup({
     },
   },
 })
+
+for ix = 1, 8 do
+  rhs = string.format("<Plug>(cokeline-focus-%s)", ix)
+  lhs = '<M-' .. ix .. '>'
+  vim.keymap.set({'n', 'v', 'i'}, lhs, rhs, {remap = true})
+end
