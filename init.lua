@@ -293,6 +293,12 @@ vim.g.matchup_matchpref = { html = { tagnameonly = 1 } }
 if vim.g.vscode == 1 then
   vim.g.matchup_matchparen_enabled = 0
 end
+
+require('notifier').setup {
+  notify = {
+    clear_time = 1500,
+  }
+}
 -- }}}
 
 -- Autocommands {{{
