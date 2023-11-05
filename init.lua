@@ -236,6 +236,7 @@ require('registers').setup()
 require('leap').add_default_mappings()
 require('flit').setup()
 require('range-highlight').setup()
+
 require('hlargs').setup {
   performance = {
     parse_delay = 15,
@@ -246,6 +247,8 @@ require('hlargs').setup {
     }
   }
 }
+
+vim.api.nvim_command('hi! link Hlargs Constant')
 
 vim.g.zenbones = {
   lightness = 'bright',
