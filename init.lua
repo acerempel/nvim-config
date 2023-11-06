@@ -309,7 +309,7 @@ end
 
 require('notifier').setup {
   notify = {
-    clear_time = 1500,
+    clear_time = 3000,
   }
 }
 -- }}}
