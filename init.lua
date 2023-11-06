@@ -51,7 +51,7 @@ set undofile
 set shada-=%
 set jumpoptions=stack,view
 
-set shortmess=fnxoOtTc
+set shortmess-=l
 set signcolumn=yes
 
 set wildmode=longest:full,full
