@@ -61,6 +61,8 @@ set exrc secure
 
 set guifont=Iosevka:h15
 
+set statusline=\ %n\ %-f\ %y\ %(%r\ %)%m%=%P\ of\ %L\ 
+
 if executable('rg')
     set grepprg=rg\ --vimgrep
     set grepformat^=%f:%l:%c:%m

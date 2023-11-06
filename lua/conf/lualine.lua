@@ -9,8 +9,6 @@ local function diff_source()
   end
 end
 
-local gps = require('nvim-gps')
-
 local function is_special()
   local buftype = vim.bo.buftype
   return buftype == 'help' or buftype == 'quickfix' or buftype == 'terminal'
@@ -58,11 +56,6 @@ local section_b = {
   {'diff', source = diff_source}, {'b:gitsigns_head', icon = '', cond = min_width(80) }
 }
 
-local treesitter_location = {
-  gps.get_location,
-  cond = function () return gps.is_available() and min_width(65)() end
-}
-
 local diagnostics = {
   'diagnostics', sources = {'nvim_diagnostic'},
   sections = {'error', 'warn', 'info'},
@@ -72,12 +65,12 @@ local diagnostics = {
 
 require('lualine').setup {
   options = {
-    theme = 'zenwritten_light_bright',
+    theme = 'rosebones_light_bright',
   },
   sections = {
     lualine_a = section_a,
     lualine_b = section_b,
-    lualine_c = { treesitter_location },
+    lualine_c = {},
     lualine_x = { diagnostics },
     lualine_y = {'progress'},
     lualine_z = {'mode'},
