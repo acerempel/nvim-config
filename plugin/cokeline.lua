@@ -24,7 +24,7 @@ require('cokeline').setup({
         if mappings.is_picking_focus() or mappings.is_picking_close() then
           id = buffer.pick_letter
         else
-          id = buffer.index
+          id = buffer.number
         end
         return ' ' .. id .. ' '
       end,
@@ -48,9 +48,3 @@ require('cokeline').setup({
     },
   },
 })
-
-for ix = 1, 8 do
-  rhs = string.format("<Plug>(cokeline-focus-%s)", ix)
-  lhs = '<M-' .. ix .. '>'
-  vim.keymap.set({'n', 'v', 'i'}, lhs, rhs, {remap = true})
-end

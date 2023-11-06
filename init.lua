@@ -115,6 +115,13 @@ endif
 ]]
 
 vim.keymap.set({'n', 'v', 'i'}, '<C-s>', '<cmd>w<cr>')
+
+for ix = 1, 8 do
+  rhs = string.format("<cmd>buf %s<cr>", ix)
+  lhs = '<M-' .. ix .. '>'
+  vim.keymap.set({'n', 'v', 'i'}, lhs, rhs)
+end
+vim.keymap.set({'n', 'v', 'i'}, '<C-9>', '<cmd>blast<cr>')
 -- }}}
 
 -- Plugin management {{{
