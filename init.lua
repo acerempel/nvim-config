@@ -223,6 +223,10 @@ require 'paq' {
   'andreypopp/vim-colors-plain',
   'cideM/yui',
   'zekzekus/menguless',
+
+  -- Fuzzy-finding
+  'vijaymarupudi/nvim-fzf',
+  'vijaymarupudi/nvim-fzf-commands',
 }
 -- }}}
 
