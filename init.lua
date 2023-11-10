@@ -69,6 +69,9 @@ if executable('rg')
 endif
 
 command! -nargs=+ Find execute 'silent grep! <args>'
+
+let g:mapleader = ' '
+let g:maplocalleader = '\'
 ]] -- }}}
 
 -- Mappings {{{
