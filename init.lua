@@ -178,13 +178,6 @@ require 'paq' {
   -- More and better text-objects
   'wellle/targets.vim',
 
-  -- Highlight command-line ranges
-  'winston0410/cmd-parser.nvim',
-  'winston0410/range-highlight.nvim',
-
-  -- Show register contents upon pressing " etc
-  { 'tversteeg/registers.nvim', as = 'registers' },
-
   -- Highlight changed text on undo/redo
   { 'tzachar/highlight-undo.nvim', as = 'highlight-undo', },
 
@@ -257,10 +250,8 @@ vim.cmd [[
 require('pqf').setup()
 require('highlight-undo').setup()
 require('stay-in-place').setup()
-require('registers').setup()
 require('leap').add_default_mappings()
 require('flit').setup()
-require('range-highlight').setup()
 
 require('hlargs').setup {
   performance = {
