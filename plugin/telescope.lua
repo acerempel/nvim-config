@@ -22,7 +22,9 @@ telescope.setup({
         width = 0.5,
       },
     },
-    preview = { hide_on_startup = true, },
+    preview = false,
+    results_title = false,
+    prompt_title = false,
     mappings = {
       i = {
         ["<Esc>"] = actions.close,
@@ -53,7 +55,8 @@ telescope.setup({
     },
     find_files = {
       disable_devicons = true,
-      preview = { hide_on_startup = true, },
+      prompt_title = false,
+      prompt_prefix = 'Files› ',
       find_command = { 'fd', '-tf', '-LHu', '--strip-cwd-prefix', '-E.git', '-Enode_modules', '-Etarget', '-E.stack-work', '-Edist-newstyle', '-Evendor'  },
     },
     diagnostics = themes.get_ivy {
@@ -62,6 +65,8 @@ telescope.setup({
       initial_mode = 'normal',
     },
     help_tags = {
+      prompt_title = false,
+      prompt_prefix = 'Help› ',
       mappings = {
         i = {
           ["<CR>"] = actions.select_vertical,
@@ -93,8 +98,7 @@ telescope.setup({
 })
 
 telescope.load_extension('fzf')
-telescope.load_extension('ui-select')
-telescope.load_extension('lsp_handlers')
-telescope.load_extension('zoxide')
-telescope.load_extension('frecency')
-telescope.load_extension('file_browser')
+
+vim.keymap.set('n', '<Leader>h', function() require('telescope.builtin').help_tags() end, { desc = "Search help tags" })
+vim.keymap.set('n', '<Leader>f', function() require('telescope.builtin').find_files() end, { desc = "Search files" })
+vim.keymap.set('n', '<Leader>c', function() require('telescope.builtin').colorscheme({enable_preview = true}) end, { desc = "Search colorschemes" })

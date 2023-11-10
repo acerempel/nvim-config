@@ -225,8 +225,8 @@ require 'paq' {
   'zekzekus/menguless',
 
   -- Fuzzy-finding
-  'vijaymarupudi/nvim-fzf',
-  'vijaymarupudi/nvim-fzf-commands',
+  'nvim-telescope/telescope.nvim',
+  { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
 }
 -- }}}
 
