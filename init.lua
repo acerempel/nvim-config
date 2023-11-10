@@ -125,6 +125,10 @@ for ix = 1, 8 do
   vim.keymap.set({'n', 'v', 'i'}, lhs, rhs)
 end
 vim.keymap.set({'n', 'v', 'i'}, '<C-9>', '<cmd>blast<cr>')
+
+vim.keymap.set({'n', 'x'}, ']d', vim.diagnostic.goto_next, {desc = "Next diagnostic"})
+vim.keymap.set({'n', 'x'}, '[d', vim.diagnostic.goto_prev, {desc = "Previous diagnostic"})
+
 -- }}}
 
 -- Plugin management {{{
