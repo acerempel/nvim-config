@@ -204,9 +204,6 @@ require 'paq' {
   'nvim-treesitter/nvim-treesitter-textobjects',
   'RRethy/nvim-treesitter-textsubjects',
 
-  -- Highlight function arguments and their use sites
-  { 'm-demare/hlargs.nvim', as = 'hlargs', },
-
   -- Statusline
   { 'nvim-lualine/lualine.nvim', as = 'lualine', },
 
@@ -252,19 +249,6 @@ require('highlight-undo').setup()
 require('stay-in-place').setup()
 require('leap').add_default_mappings()
 require('flit').setup()
-
-require('hlargs').setup {
-  performance = {
-    parse_delay = 15,
-    slow_parse_delay = 100,
-    debounce = {
-      partial_parse = 30,
-      partial_insert_mode = 450,
-    }
-  }
-}
-
-vim.api.nvim_command('hi! link Hlargs Constant')
 
 vim.g.zenbones = {
   lightness = 'bright',
