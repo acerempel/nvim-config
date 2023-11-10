@@ -220,6 +220,10 @@ require 'paq' {
   'andreypopp/vim-colors-plain',
   'cideM/yui',
   'zekzekus/menguless',
+  'Verf/deepwhite.nvim',
+  'miikanissi/modus-themes.nvim',
+  'd00h/nvim-rusticated',
+  'jaredgorski/Mies.vim',
 
   -- Fuzzy-finding
   'nvim-telescope/telescope.nvim',
