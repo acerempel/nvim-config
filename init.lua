@@ -228,6 +228,8 @@ require 'paq' {
   -- Fuzzy-finding
   'nvim-telescope/telescope.nvim',
   { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
+
+  'L3MON4D3/LuaSnip',
 }
 -- }}}
 
@@ -344,4 +346,95 @@ augroup terminal
 augroup END
 " }}}
 ]]
+
+local compl_ns = vim.api.nvim_create_namespace('')
+
+local function lsp_completedone(client_id)
+  return function(args)
+    local item = vim.api.nvim_get_vvar('completed_item')
+    if type(item.user_data) ~= "table"
+      or not item.user_data.nvim or not item.user_data.nvim.lsp
+      or not item.user_data.nvim.lsp.completion_item then
+      return
+    end
+    local lsp_item = item.user_data.nvim.lsp.completion_item
+
+    local edits = lsp_item.additionaltextedits or {}
+    local snippet = nil
+    if lsp_item.textEdit then
+      if lsp_item.insertTextFormat == 2 then
+        snippet = lsp_item.textEdit.newText
+        lsp_item.textEdit.newText = ''
+        item.word = ''
+        table.insert(edits, 1, item.textEdit)
+      end
+    end
+
+    if #edits > 0 then
+      -- Use extmark to track relevant cursor position after text edits
+      local cur_pos = vim.api.nvim_win_get_cursor(0)
+      local extmark_id = vim.api.nvim_buf_set_extmark(0, compl_ns, cur_pos[1] - 1, cur_pos[2], {})
+
+      local offset_encoding = vim.lsp.get_client_by_id(client_id).offset_encoding
+      vim.lsp.util.apply_text_edits(edits, vim.api.nvim_get_current_buf(), offset_encoding)
+
+      local extmark_data = vim.api.nvim_buf_get_extmark_by_id(0, compl_ns, extmark_id, {})
+      pcall(vim.api.nvim_buf_del_extmark, 0, compl_ns, extmark_id)
+      pcall(vim.api.nvim_win_set_cursor, 0, { extmark_data[1] + 1, extmark_data[2] })
+    end
+
+    if snippet then
+      require('luasnip').lsp_expand(snippet)
+    end
+  end
+end
+
+vim.api.nvim_create_autocmd("LspAttach", {
+  callback = function(args)
+    local bufnr = args.buf
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if client.server_capabilities.completionProvider then
+      vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
+      vim.api.nvim_create_autocmd("CompleteDone", {callback = lsp_completedone(args.data.client_id), buffer = bufnr})
+    end
+    if client.server_capabilities.definitionProvider then
+      vim.bo[bufnr].tagfunc = "v:lua.vim.lsp.tagfunc"
+    end
+    if client.server_capabilities.documentRangeFormattingProvider then
+      vim.bo[bufnr].formatexpr = "v:lua.vim.lsp.formatexpr()"
+    end
+    if client.server_capabilities.hoverProvider then
+      vim.keymap.set({'n', 'x'}, 'K', vim.lsp.buf.hover, {buffer = bufnr})
+    end
+  end,
+})
+
+vim.api.nvim_create_autocmd("LspDetach", {
+  callback = function(args)
+    vim.api.nvim_command("setlocal tagfunc< omnifunc< formatexpr<")
+  end,
+})
 -- }}}
+
+local tab = vim.api.nvim_replace_termcodes('<Tab>', true, false, true)
+local stab = vim.api.nvim_replace_termcodes('<S-Tab>', true, false, true)
+local c_n = vim.api.nvim_replace_termcodes('<C-n>', true, false, true)
+local c_p = vim.api.nvim_replace_termcodes('<C-p>', true, false, true)
+local c_x_c_o = vim.api.nvim_replace_termcodes('<C-x><C-o>', true, false, true)
+
+vim.keymap.set('i', '<Tab>', function ()
+  if vim.fn.pumvisible() == 1 then return c_n end
+  local row, col = vim.api.nvim_win_get_cursor(0)
+  if col == 0 then return tab end
+  local line = vim.api.nvim_get_current_line():sub(1, col)
+  if line:match("^%s*$") then return tab end
+  return c_x_c_o
+end, {expr = true, remap = false})
+
+vim.keymap.set('i', '<S-Tab>', function ()
+  if vim.fn.pumvisible() == 1 then return c_p end
+  local row, col = vim.api.nvim_win_get_cursor(0)
+  if col == 0 then return stab end
+  local line = vim.api.nvim_get_current_line():sub(1, col)
+  if line:match("^%s*$") then return stab end
+end, {expr = true, remap = false})
