@@ -421,6 +421,7 @@ local stab = vim.api.nvim_replace_termcodes('<S-Tab>', true, false, true)
 local c_n = vim.api.nvim_replace_termcodes('<C-n>', true, false, true)
 local c_p = vim.api.nvim_replace_termcodes('<C-p>', true, false, true)
 local c_x_c_o = vim.api.nvim_replace_termcodes('<C-x><C-o>', true, false, true)
+local c_y = vim.api.nvim_replace_termcodes('<C-y>', true, false, true)
 
 vim.keymap.set('i', '<Tab>', function ()
   if vim.fn.pumvisible() == 1 then return c_n end
@@ -438,3 +439,7 @@ vim.keymap.set('i', '<S-Tab>', function ()
   local line = vim.api.nvim_get_current_line():sub(1, col)
   if line:match("^%s*$") then return stab end
 end, {expr = true, remap = false})
+
+vim.keymap.set('i', '<CR>', function ()
+  if vim.fn.pumvisible() == 1 then return c_y else return "\r" end
+end, { expr = true, remap = false })
