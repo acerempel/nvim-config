@@ -361,18 +361,19 @@ local function lsp_completedone(client_id)
 
     local edits = lsp_item.additionaltextedits or {}
     local snippet = nil
+    local cur_pos = vim.api.nvim_win_get_cursor(0)
+
     if lsp_item.textEdit then
       if lsp_item.insertTextFormat == 2 then
         snippet = lsp_item.textEdit.newText
         lsp_item.textEdit.newText = ''
-        item.word = ''
-        table.insert(edits, 1, item.textEdit)
+        lsp_item.textEdit.range['end'].character = cur_pos[2]
+        table.insert(edits, 1, lsp_item.textEdit)
       end
     end
 
     if #edits > 0 then
       -- Use extmark to track relevant cursor position after text edits
-      local cur_pos = vim.api.nvim_win_get_cursor(0)
       local extmark_id = vim.api.nvim_buf_set_extmark(0, compl_ns, cur_pos[1] - 1, cur_pos[2], {})
 
       local offset_encoding = vim.lsp.get_client_by_id(client_id).offset_encoding
