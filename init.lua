@@ -201,6 +201,7 @@ require 'paq' {
   'nvim-telescope/telescope.nvim',
   { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
 
+  'NvChad/nvim-colorizer.lua', -- Colours literal
   'lewis6991/gitsigns.nvim', -- Git integration for buffers
 
   'L3MON4D3/LuaSnip',
@@ -229,6 +230,12 @@ require('highlight-undo').setup()
 require('stay-in-place').setup()
 require('leap').add_default_mappings()
 require('flit').setup()
+require('colorizer').setup {
+  filetypes = { 'vim', 'css', 'scss', 'sass', 'lua', },
+  user_default_options = {
+    css = true,
+  },
+}
 
 local function gs(f)
   return ("<Cmd>lua require('gitsigns').%s<CR>"):format(f)
