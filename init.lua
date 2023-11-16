@@ -237,6 +237,25 @@ require('colorizer').setup {
   },
 }
 
+require('sibling-swap').setup {
+  keymaps = {
+    ['<Leader>;'] = 'swap_with_right',
+    ['<Leader>,'] = 'swap_with_left',
+  },
+}
+
+local tree_maps = {
+  ['<M-Up>'] = 'goto_parent',
+  ['<M-Down>'] = 'goto_child',
+  ['<M-Right>'] = 'goto_next',
+  ['<M-Left>'] = 'goto_prev',
+}
+
+for keys, func in pairs(tree_maps) do
+  local rhs = function() require('tree-climber')[func]() end
+  vim.keymap.set({'n', 'x', 'o'}, keys, rhs, { remap = false, silent = true, desc = func })
+end
+
 local function gs(f)
   return ("<Cmd>lua require('gitsigns').%s<CR>"):format(f)
 end
