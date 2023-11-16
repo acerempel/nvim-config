@@ -22,7 +22,7 @@ set formatoptions=croqj textwidth=72
 set list listchars=tab:↹·,nbsp:⎵,trail:·,extends:⇉,precedes:⇇
 set showbreak=↪︎\ 
 set fillchars=vert:│,fold:─
-set diffopt=filler,vertical,context:3,internal,algorithm:histogram,closeoff,hiddenoff,indent-heuristic
+set diffopt=filler,vertical,context:3,internal,algorithm:histogram,closeoff,hiddenoff,indent-heuristic,linematch:60,iwhiteeol
 set nowrap linebreak breakindent
 set foldlevelstart=2
 set foldtext=v:lua.require'foldtext'.foldtext()
