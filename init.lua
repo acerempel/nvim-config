@@ -61,7 +61,7 @@ set exrc secure
 
 set guifont=Iosevka:h15
 
-set statusline=\ %n\ %-f\ %y\ %(%r\ %)%m%=%P\ of\ %L\ 
+set statusline=[%n]\ %.25f\ %(%h\ %)%(%{get(b:,'gitsigns_status','')}\ %)%(%r\ %)%m%=%{reg_recording()}%=%P\ /\ %L\ 
 
 if executable('rg')
     set grepprg=rg\ --vimgrep
