@@ -195,6 +195,8 @@ require 'paq' {
   'nvim-telescope/telescope.nvim',
   { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
 
+  'lewis6991/gitsigns.nvim', -- Git integration for buffers
+
   'L3MON4D3/LuaSnip',
 }
 -- }}}
@@ -221,6 +223,25 @@ require('highlight-undo').setup()
 require('stay-in-place').setup()
 require('leap').add_default_mappings()
 require('flit').setup()
+
+local function gs(f)
+  return ("<Cmd>lua require('gitsigns').%s<CR>"):format(f)
+end
+
+require('gitsigns').setup {
+  on_attach = function(bufnr)
+    local function next_hunk()
+      if vim.wo.diff then return ']c' end
+      return gs("next_hunk()")
+    end
+    local function prev_hunk()
+      if vim.wo.diff then return '[c' end
+      return gs('prev_hunk()')
+    end
+    vim.keymap.set({'n', 'x', 'o'}, '[c', prev_hunk, {buffer = bufnr, expr = true})
+    vim.keymap.set({'n', 'x', 'o'}, ']c', next_hunk, {buffer = bufnr, expr = true})
+  end
+}
 
 vim.g.zenbones = {
   lightness = 'bright',
