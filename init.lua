@@ -139,85 +139,45 @@ vim.keymap.set({'n', 'x'}, '[d', vim.diagnostic.goto_prev, {desc = "Previous dia
 
 -- Plugin management {{{
 require 'paq' {
-  -- Package manager
-  'savq/paq-nvim',
+  'savq/paq-nvim', -- Package manager
+  'romainl/vim-cool', -- Only use hlsearch while searching
+  'justinmk/vim-dirvish', -- Handy directory viewer
+  'dstein64/vim-startuptime', -- Profile vim startup time
+  'tpope/vim-unimpaired', -- Paired commands
+  'farmergreg/vim-lastplace', -- Remember where I left off
+  'tpope/vim-obsession', -- Better session management
+  { 'tzachar/highlight-undo.nvim', as = 'highlight-undo', }, -- Highlight changed text on undo/redo
+  'mbbill/undotree', -- Nice interface for vim's tree-shaped undo
 
-  -- More powerful % operator
-  'andymass/vim-matchup',
+  -- Motions
+  'andymass/vim-matchup', -- More powerful % operator
+  'haya14busa/vim-asterisk', -- Better *, #
+  'ggandor/leap.nvim', -- s, S, gs motions to jump around quickly
+  'ggandor/flit.nvim', -- enhanced f, F, t, T
 
-  -- Only use hlsearch while searching
-  'romainl/vim-cool',
+  -- Quickfix
+  { 'https://gitlab.com/yorickpeterse/nvim-pqf.git', as = "pqf", }, -- Pretty quickfix
+  'romainl/vim-qf', -- Nicer quickfix
+  'gabrielpoca/replacer.nvim', -- Editable quickfix
 
-  -- Better *, #
-  'haya14busa/vim-asterisk',
-
-  -- s, S, gs motions to jump around quickly
-  'ggandor/leap.nvim',
-
-  -- enhanced f, F, t, T
-  'ggandor/flit.nvim',
-
-  -- Handy directory viewer
-  'justinmk/vim-dirvish',
-
-  -- Profile vim startup time
-  'dstein64/vim-startuptime',
-
-  -- Paired commands
-  'tpope/vim-unimpaired',
-
-  -- Pretty quickfix
-  { 'https://gitlab.com/yorickpeterse/nvim-pqf.git', as = "pqf", },
-
-  -- Nicer quickfix
-  'romainl/vim-qf',
-
-  -- Editable quickfix
-  'gabrielpoca/replacer.nvim',
-
-  -- Remember where I left off
-  'farmergreg/vim-lastplace',
-
-  -- Better session management
-  'tpope/vim-obsession',
-
-  -- More and better text-objects
-  'wellle/targets.vim',
-
-  -- Highlight changed text on undo/redo
-  { 'tzachar/highlight-undo.nvim', as = 'highlight-undo', },
-
-  -- Nice interface for vim's tree-shaped undo
-  'mbbill/undotree',
-
-  -- Extensible dot-repeat
-  'tpope/vim-repeat',
-
-  -- Run dot-repeat for each pattern match in selection
-  'haya14busa/vim-metarepeat',
-
-  -- Manipulate surroundings -- brackets etc
-  'tpope/vim-surround',
-
-  -- gS, gJ operators for smarter splitting and joining lines
-  'AndrewRadev/splitjoin.vim',
-
-  -- Don't move cursor or discard selection on <, >, = operators
-  { 'gbprod/stay-in-place.nvim', as = 'stay-in-place' },
+  -- Editing
+  'wellle/targets.vim', -- More and better text-objects
+  'tpope/vim-repeat', -- Extensible dot-repeat
+  'haya14busa/vim-metarepeat', -- Run dot-repeat for each pattern match in selection
+  'tpope/vim-surround', -- Manipulate surroundings -- brackets etc
+  'AndrewRadev/splitjoin.vim', -- gS, gJ operators for smarter splitting and joining lines
 
   -- Tree-sitter
   { 'nvim-treesitter/nvim-treesitter', build = ':TSUpdate' },
   'nvim-treesitter/nvim-treesitter-textobjects',
   'RRethy/nvim-treesitter-textsubjects',
+  'Wansmer/sibling-swap.nvim', -- Swap neighbouring nodes
+  'drybalka/tree-climber.nvim', -- Climb trees
 
-  -- Statusline
-  { 'nvim-lualine/lualine.nvim', as = 'lualine', },
+  { 'nvim-lualine/lualine.nvim', as = 'lualine', }, -- Statusline
 
-  -- Support for other plugins, notably Cokeline
-  { 'nvim-lua/plenary.nvim', as = 'plenary' },
-
-  -- Bufferline
-  'willothy/nvim-cokeline',
+  { 'nvim-lua/plenary.nvim', as = 'plenary' }, -- Support for other plugins, notably Cokeline
+  'willothy/nvim-cokeline', -- Bufferline
 
   -- Color scheme
   { 'mcchrish/zenbones.nvim', as = 'zenbones' },
