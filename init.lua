@@ -41,7 +41,7 @@ set virtualedit=block,onemore
 set ignorecase smartcase gdefault
 set completeopt-=preview
 
-set splitbelow splitright equalalways
+set splitbelow splitright
 set switchbuf+=useopen,usetab
 set guioptions-=L
 let no_buffers_menu = 0
