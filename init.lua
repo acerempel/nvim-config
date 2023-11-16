@@ -190,6 +190,12 @@ require 'paq' {
   'miikanissi/modus-themes.nvim',
   'd00h/nvim-rusticated',
   'jaredgorski/Mies.vim',
+  'muellan/am-colors',
+  'https://git.sr.ht/~romainl/vim-bruin',
+  'ntk148v/komau.vim',
+  'robertmeta/nofrils',
+  'stefanvanburen/rams.vim',
+  'https://github.com/p00f/alabaster.nvim',
 
   -- Fuzzy-finding
   'nvim-telescope/telescope.nvim',
