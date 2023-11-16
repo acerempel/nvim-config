@@ -88,8 +88,10 @@ augroup END
 function! NomodifiableMappings() abort
   nnoremap <buffer> <nowait> u <C-u>
   nnoremap <buffer> <nowait> d <C-d>
-  nnoremap <buffer> <nowait> <Space> <C-f>
-  nnoremap <buffer> <nowait> <S-Space <C-b>
+  if get(g:, 'manpager', 0)
+    nnoremap <buffer> <nowait> <Space> <C-f>
+    nnoremap <buffer> <nowait> <S-Space <C-b>
+  endif
   if &ft != 'man' | nnoremap <buffer> <nowait> q <Cmd>close<CR> | endif
 endfunction
 " }}}
