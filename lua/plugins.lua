@@ -50,6 +50,14 @@ use 'tpope/vim-surround'
 
 use 'haya14busa/vim-metarepeat'
 
+use {
+  'tzachar/highlight-undo.nvim', as = 'highlight-undo',
+  opt = true,
+  config = function ()
+    require('highlight-undo').setup()
+  end
+}
+
 -- Comment {{{
 use {
   'numToStr/Comment.nvim', as = 'Comment',
@@ -91,7 +99,7 @@ use {
       nmap X <cmd>lua require('substitute').operator()<cr>
       nmap XX <cmd>lua require('substitute').line()<cr>
       xmap X <cmd>lua require('substitute').visual()<cr>
-      nmap Xc <cmd>lua require('substitute').cancel()<cr>
+      nmap X<Esc> <cmd>lua require('substitute').cancel()<cr>
     ]]
   end
 }
@@ -156,7 +164,6 @@ use { 'tversteeg/registers.nvim', opt = true, config = function() require('regis
 -- Nice interface for vim's tree-shaped undo
 use {  'mbbill/undotree', cmd = "UndotreeToggle" }
 
--- Moving around {{{
 use 'ggandor/lightspeed.nvim'
 
 use 'romainl/vim-cool'
@@ -204,7 +211,6 @@ use {
     }
   end
 }
--- }}}
 -- }}}
 
 -- GIT integration {{{

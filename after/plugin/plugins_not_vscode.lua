@@ -33,6 +33,7 @@ if vim.g.simplicity == nil then
     "renamer",
     'lspconfig', 'lsp-installer', 'lsp_signature',
     'rust-tools', 'fidget', 'lightbulb',
+    'highlight-undo'
   }
   require('packer.load')(plugins, {}, _G.packer_plugins, false)
 else

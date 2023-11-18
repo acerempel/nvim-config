@@ -6,6 +6,7 @@ local log_level_strings = {
   [levels.INFO] = "Info",
   [levels.TRACE] = 'Trace',
   [levels.WARN] = 'Warning',
+  [levels.OFF] = 'Off',
 }
 
 function spawn_process(prog, args)
