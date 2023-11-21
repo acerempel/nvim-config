@@ -346,7 +346,6 @@ augroup terminal
   autocmd!
   autocmd TermOpen fish,bash,zsh,sh startinsert
 augroup END
-" }}}
 ]]
 
 local compl_ns = vim.api.nvim_create_namespace('')
@@ -399,6 +398,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
     if client.server_capabilities.completionProvider then
       vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
       vim.api.nvim_create_autocmd("CompleteDone", {callback = lsp_completedone(args.data.client_id), buffer = bufnr})
+      vim.bo[bufnr].completeopt = 'menuone'
     end
     if client.server_capabilities.definitionProvider then
       vim.bo[bufnr].tagfunc = "v:lua.vim.lsp.tagfunc"
