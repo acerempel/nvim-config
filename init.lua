@@ -288,11 +288,10 @@ vim.g.gruvbox_filetype_hi_groups = 1
 vim.opt.background = 'light'
 vim.api.nvim_command('colorscheme yui')
 
-vim.cmd [[
-  " vim-qf
-  let g:qf_mapping_ack_style = 1
-  let g:qf_nowrap = 0
+vim.g.qf_mapping_ack_style = 1
+vim.g.qf_nowrap = 0
 
+vim.cmd [[
   " vim-asterisk
   let g:asterisk#keeppos = 1
   map *   <Plug>(asterisk-*)
