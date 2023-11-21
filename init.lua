@@ -146,6 +146,7 @@ local plugins = {
   'tpope/vim-obsession', -- Better session management
   { 'tzachar/highlight-undo.nvim', as = 'highlight-undo', }, -- Highlight changed text on undo/redo
   'mbbill/undotree', -- Nice interface for vim's tree-shaped undo
+  'vigoux/notifier.nvim', -- notifications
 
   -- Motions
   'andymass/vim-matchup', -- More powerful % operator
