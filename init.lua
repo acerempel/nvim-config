@@ -196,6 +196,9 @@ require 'paq' {
   'nvim-telescope/telescope.nvim',
   { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
 
+  -- Language support
+  { 'mrcjkb/rustaceanvim', pin = true }, -- Rust
+
   'NvChad/nvim-colorizer.lua', -- Colours literal
   'lewis6991/gitsigns.nvim', -- Git integration for buffers
 
