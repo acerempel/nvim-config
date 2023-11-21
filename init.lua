@@ -110,16 +110,16 @@ inoremap <D-Right> <End>
 inoremap <expr> <C-p> pumvisible() ? "\<C-p>" : "\<Up>"
 inoremap <expr> <C-n> pumvisible() ? "\<C-n>" : "\<Down>"
 
-if has('win32')
-  noremap <A-j> <C-W>j
-  noremap <A-k> <C-W>k
-  noremap <A-h> <C-W>h
-  noremap <A-l> <C-W>l
-else
+if has('mac')
   noremap <C-j> <C-W>j
   noremap <C-k> <C-W>k
   noremap <C-h> <C-W>h
   noremap <C-l> <C-W>l
+else
+  noremap <A-j> <C-W>j
+  noremap <A-k> <C-W>k
+  noremap <A-h> <C-W>h
+  noremap <A-l> <C-W>l
 endif
 ]]
 
