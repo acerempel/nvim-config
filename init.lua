@@ -183,7 +183,6 @@ require 'paq' {
   'andreypopp/vim-colors-plain',
   'cideM/yui',
   'zekzekus/menguless',
-  'miikanissi/modus-themes.nvim',
   'jaredgorski/Mies.vim',
   'https://git.sr.ht/~romainl/vim-bruin',
   'ntk148v/komau.vim',
