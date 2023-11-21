@@ -287,8 +287,6 @@ vim.g.gruvbox_filetype_hi_groups = 1
 
 vim.opt.background = 'light'
 vim.api.nvim_command('colorscheme yui')
--- vim.api.nvim_command('hi StatusLine gui=NONE guifg=#454545')
--- vim.api.nvim_command('hi StatusLineNC gui=NONE guifg=#676767')
 
 vim.cmd [[
   " vim-qf
