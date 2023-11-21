@@ -153,7 +153,6 @@ require 'paq' {
   'andymass/vim-matchup', -- More powerful % operator
   'haya14busa/vim-asterisk', -- Better *, #
   'ggandor/leap.nvim', -- s, S, gs motions to jump around quickly
-  'ggandor/flit.nvim', -- enhanced f, F, t, T
 
   -- Quickfix
   { 'https://gitlab.com/yorickpeterse/nvim-pqf.git', as = "pqf", }, -- Pretty quickfix
@@ -229,7 +228,6 @@ require('pqf').setup()
 require('highlight-undo').setup()
 require('stay-in-place').setup()
 require('leap').add_default_mappings()
-require('flit').setup()
 require('colorizer').setup {
   filetypes = { 'vim', 'css', 'scss', 'sass', 'lua', },
   user_default_options = {
