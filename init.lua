@@ -41,8 +41,7 @@ set ignorecase smartcase gdefault
 set completeopt-=preview
 
 set splitbelow splitright
-set switchbuf+=useopen,usetab
-set guioptions-=L
+set switchbuf+=useopen
 let no_buffers_menu = 0
 set lazyredraw
 
