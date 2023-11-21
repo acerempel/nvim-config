@@ -331,16 +331,6 @@ augroup YankHighlight
   autocmd TextYankPost * silent! lua vim.highlight.on_yank()
 augroup END
 
-augroup omnifunc
-  autocmd!
-  autocmd FileType * if &omnifunc == "" | setlocal omnifunc=syntaxcomplete#Complete | endif
-augroup END
-
-augroup filetypes
-  autocmd!
-  autocmd FileType table setlocal tabstop=28 noexpandtab nolist
-augroup END
-
 function! SetTreeSitterFolding() abort
   setlocal foldenable
   setlocal foldmethod=expr
