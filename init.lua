@@ -448,3 +448,5 @@ end, {expr = true, remap = false})
 vim.keymap.set('i', '<CR>', function ()
   if vim.fn.pumvisible() == 1 then return c_y else return "\r" end
 end, { expr = true, remap = false })
+
+-- vim:foldmethod=marker
