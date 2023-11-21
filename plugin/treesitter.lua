@@ -61,15 +61,15 @@ require('nvim-treesitter.configs').setup {
   },
   textsubjects = {
     enable = true,
-    prev_selection = ',',
+    prev_selection = '(',
     keymaps = {
-      [';'] = 'textsubjects-smart',
-      ['<Leader>a;'] = 'textsubjects-container-outer',
-      ['<Leader>i;'] = 'textsubjects-container-inner',
+      [')'] = 'textsubjects-smart',
+      ['<Leader>as'] = 'textsubjects-container-outer',
+      ['<Leader>is'] = 'textsubjects-container-inner',
     }
   },
 }
 
 require('nvim-treesitter.install').compilers = { "gcc" }
 
-vim.keymap.set('n', ';', 'v;', {remap = true})
+vim.keymap.set('n', ')', 'v)', {remap = true})
