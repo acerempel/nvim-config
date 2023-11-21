@@ -121,7 +121,7 @@ else
 endif
 ]]
 
-vim.keymap.set({'n', 'v', 'i'}, '<C-s>', '<cmd>w<cr>')
+vim.keymap.set({'n', 'v', 'i'}, vim.fn.has('mac') == 1 and '<D-s>' or '<C-s>', '<cmd>w<cr>')
 
 for ix = 1, 8 do
   rhs = string.format("<cmd>buf %s<cr>", ix)
