@@ -225,7 +225,6 @@ vim.cmd [[
 -- Plugin configuration {{{
 require('pqf').setup()
 require('highlight-undo').setup()
-require('stay-in-place').setup()
 require('leap').add_default_mappings()
 require('colorizer').setup {
   filetypes = { 'vim', 'css', 'scss', 'sass', 'lua', },
