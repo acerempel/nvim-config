@@ -264,14 +264,18 @@ require('gitsigns').setup {
   on_attach = function(bufnr)
     local function next_hunk()
       if vim.wo.diff then return ']c' end
-      return gs("next_hunk()")
+      return gs("next_hunk({preview=true})")
     end
     local function prev_hunk()
       if vim.wo.diff then return '[c' end
-      return gs('prev_hunk()')
+      return gs('prev_hunk({preview=true})')
     end
     vim.keymap.set({'n', 'x', 'o'}, '[c', prev_hunk, {buffer = bufnr, expr = true})
     vim.keymap.set({'n', 'x', 'o'}, ']c', next_hunk, {buffer = bufnr, expr = true})
+    vim.keymap.set({'n', 'x'}, '<LocalLeader>s', gs('stage_hunk()'), {buffer=bufnr})
+    vim.keymap.set({'n', 'x'}, '<LocalLeader>r', gs('reset_hunk()'), {buffer=bufnr})
+    vim.keymap.set({'n', 'x'}, '<LocalLeader>p', gs('preview_hunk_inline()'), {buffer=bufnr})
+    vim.keymap.set({'n', 'x'}, '<LocalLeader>P', gs('preview_hunk()'), {buffer=bufnr})
   end
 }
 
