@@ -186,6 +186,7 @@ require 'paq' {
   'jaredgorski/Mies.vim',
   'https://git.sr.ht/~romainl/vim-bruin',
   'ntk148v/komau.vim',
+  'kkga/vim-envy',
   'stefanvanburen/rams.vim',
   'https://github.com/p00f/alabaster.nvim',
 
@@ -281,7 +282,7 @@ vim.g.zenbones = {
 vim.g.gruvbox_filetype_hi_groups = 1
 
 vim.opt.background = 'light'
-vim.api.nvim_command('colorscheme yui')
+vim.api.nvim_command('colorscheme envy')
 
 vim.g.qf_mapping_ack_style = 1
 vim.g.qf_nowrap = 0
