@@ -10,7 +10,6 @@ vim.loader.enable()
 -- Options {{{
 vim.cmd [[
 set noshowmode
-set cmdheight=0
 set clipboard=unnamedplus
 
 set termguicolors
