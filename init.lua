@@ -187,8 +187,7 @@ require 'paq' {
   'https://git.sr.ht/~romainl/vim-bruin',
   'ntk148v/komau.vim',
   'kkga/vim-envy',
-  'stefanvanburen/rams.vim',
-  'https://github.com/p00f/alabaster.nvim',
+  'stefanvanburen/rams',
 
   -- Fuzzy-finding
   'nvim-telescope/telescope.nvim',
