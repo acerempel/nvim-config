@@ -136,7 +136,7 @@ vim.keymap.set({'n', 'x'}, '[d', vim.diagnostic.goto_prev, {desc = "Previous dia
 -- }}}
 
 -- Plugin management {{{
-require 'paq' {
+local plugins = {
   'savq/paq-nvim', -- Package manager
   'romainl/vim-cool', -- Only use hlsearch while searching
   'justinmk/vim-dirvish', -- Handy directory viewer
@@ -201,6 +201,17 @@ require 'paq' {
 
   'L3MON4D3/LuaSnip',
 }
+
+local installed, paq = pcall(require, 'paq')
+if not installed then
+  local path = vim.fn.stdpath("data") .. "/site/pack/paqs/start/paq-nvim"
+  vim.fn.system { "git", "clone", "--depth=1", "https://github.com/savq/paq-nvim.git", path }
+  vim.loader.reset()
+  paq = require 'paq'
+  paq.install()
+end
+
+paq(plugins)
 -- }}}
 
 -- Disable some built-in plugins {{{
