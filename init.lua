@@ -427,9 +427,9 @@ vim.keymap.set('i', '<Tab>', function ()
   if vim.fn.pumvisible() == 1 then return c_n end
   local luasnip = require('luasnip')
   if luasnip.locally_jumpable(1) then luasnip.jump(1) end
-  local row, col = vim.api.nvim_win_get_cursor(0)
+  local row, col = unpack(vim.api.nvim_win_get_cursor(0))
   if col == 0 then return tab end
-  local line = vim.api.nvim_get_current_line():sub(1, col)
+  local line = vim.api.nvim_get_current_line():sub(1, col + 1)
   if line:match("^%s*$") then return tab end
   if luasnip.expandable() then luasnip.expand() end
   return c_x_c_o
@@ -439,9 +439,9 @@ vim.keymap.set('i', '<S-Tab>', function ()
   if vim.fn.pumvisible() == 1 then return c_p end
   local luasnip = require('luasnip')
   if luasnip.locally_jumpable(-1) then luasnip.jump(-1) end
-  local row, col = vim.api.nvim_win_get_cursor(0)
+  local row, col = unpack(vim.api.nvim_win_get_cursor(0))
   if col == 0 then return stab end
-  local line = vim.api.nvim_get_current_line():sub(1, col)
+  local line = vim.api.nvim_get_current_line():sub(1, col + 1)
   if line:match("^%s*$") then return stab end
 end, {expr = true, remap = false})
 
