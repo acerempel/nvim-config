@@ -143,6 +143,7 @@ local plugins = {
   'tpope/vim-unimpaired', -- Paired commands
   'farmergreg/vim-lastplace', -- Remember where I left off
   'tpope/vim-obsession', -- Better session management
+  'nanotee/zoxide.vim', -- Zoxide integration
   { 'tzachar/highlight-undo.nvim', as = 'highlight-undo', }, -- Highlight changed text on undo/redo
   'mbbill/undotree', -- Nice interface for vim's tree-shaped undo
   'vigoux/notifier.nvim', -- notifications
