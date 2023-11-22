@@ -2,14 +2,11 @@ local cmp = require('cmp')
 local luasnip = require('luasnip')
 
 local function only_ws_before_cursor()
-  local _, col = vim.api.nvim_win_get_cursor(0)
+  local _, col = unpack(vim.api.nvim_win_get_cursor(0))
+  if col == 0 then return true end
   local line = vim.api.nvim_get_current_line()
-  local line_to_cursor = line:sub(1, col)
-  if line_to_cursor:match("^%s*$") then
-    return true
-  else
-    return false
-  end
+  local line_to_cursor = line:sub(1, col+1)
+  return line_to_cursor:match("^%s*$") and true or false
 end
 
 cmp.setup {
