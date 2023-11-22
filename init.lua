@@ -446,15 +446,9 @@ augroup YankHighlight
   autocmd TextYankPost * silent! lua vim.highlight.on_yank()
 augroup END
 
-function! SetTreeSitterFolding() abort
-  setlocal foldenable
-  setlocal foldmethod=expr
-  setlocal foldexpr=nvim_treesitter#foldexpr()
-endfunction
-
 augroup treesitter
   au!
-  au FileType rust,lua,python,vim,help call SetTreeSitterFolding()
+  au FileType rust,lua,python,vim,help setlocal foldenable | setlocal foldmethod=expr | setlocal foldexpr=nvim_treesitter#foldexpr()
 augroup END
 
 augroup terminal
