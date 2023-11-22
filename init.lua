@@ -26,8 +26,6 @@ set diffopt=filler,vertical,context:3,internal,algorithm:histogram,closeoff,hidd
 set nowrap linebreak breakindent
 set foldlevelstart=2
 set foldtext=v:lua.require'foldtext'.foldtext()
-
-set linespace=6
 set foldminlines=6
 set concealcursor=nc
 
@@ -43,7 +41,6 @@ set completeopt-=preview
 
 set splitbelow splitright
 set switchbuf+=useopen
-let no_buffers_menu = 0
 set lazyredraw
 
 set undofile
@@ -59,6 +56,7 @@ set wildignore=*.o,*.hi,*/dist-newstyle/*,*/.stack-work/*,*/node_modules/*,*/elm
 set exrc secure
 
 set guifont=Iosevka:h15
+set linespace=6
 
 set statusline=[%n]\ %.25f\ %(%h\ %)%(%{get(b:,'gitsigns_status','')}\ %)%(%r\ %)%m%=%{reg_recording()}%=%P\ /\ %L\ 
 
