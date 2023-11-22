@@ -275,12 +275,13 @@ require('gitsigns').setup {
       if vim.wo.diff then return '[c' end
       return gs('prev_hunk({preview=true})')
     end
+    local prefix = '<LocalLeader>'
     vim.keymap.set({'n', 'x', 'o'}, '[c', prev_hunk, {buffer = bufnr, expr = true})
     vim.keymap.set({'n', 'x', 'o'}, ']c', next_hunk, {buffer = bufnr, expr = true})
-    vim.keymap.set({'n', 'x'}, '<LocalLeader>s', gs('stage_hunk()'), {buffer=bufnr})
-    vim.keymap.set({'n', 'x'}, '<LocalLeader>r', gs('reset_hunk()'), {buffer=bufnr})
-    vim.keymap.set({'n', 'x'}, '<LocalLeader>p', gs('preview_hunk_inline()'), {buffer=bufnr})
-    vim.keymap.set({'n', 'x'}, '<LocalLeader>P', gs('preview_hunk()'), {buffer=bufnr})
+    vim.keymap.set({'n', 'x'}, prefix..'s', gs('stage_hunk()'), {buffer=bufnr})
+    vim.keymap.set({'n', 'x'}, prefix..'r', gs('reset_hunk()'), {buffer=bufnr})
+    vim.keymap.set({'n', 'x'}, prefix..'p', gs('preview_hunk_inline()'), {buffer=bufnr})
+    vim.keymap.set({'n', 'x'}, prefix..'P', gs('preview_hunk()'), {buffer=bufnr})
   end
 }
 
