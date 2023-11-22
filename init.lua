@@ -317,6 +317,8 @@ vim.g.matchup_matchparen_offscreen = {
   method = 'popup',
   scrolloff = 1,
 }
+vim.g.matchup_delim_start_plaintext = 0
+vim.g.matchup_delim_noskips = 1
 vim.g.matchup_matchparen_deferred = 1
 vim.g.matchup_matchparen_deferred_fade_time = 450
 vim.g.matchup_surround_enabled = 1
