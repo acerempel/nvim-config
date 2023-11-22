@@ -402,28 +402,16 @@ end
 
 vim.api.nvim_create_autocmd("LspAttach", {
   callback = function(args)
-    local bufnr = args.buf
     local client = vim.lsp.get_client_by_id(args.data.client_id)
-    if client.server_capabilities.completionProvider then
-      vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
-      vim.api.nvim_create_autocmd("CompleteDone", {callback = lsp_completedone(args.data.client_id), buffer = bufnr})
-      vim.bo[bufnr].completeopt = 'menuone'
-    end
-    if client.server_capabilities.definitionProvider then
-      vim.bo[bufnr].tagfunc = "v:lua.vim.lsp.tagfunc"
-    end
-    if client.server_capabilities.documentRangeFormattingProvider then
-      vim.bo[bufnr].formatexpr = "v:lua.vim.lsp.formatexpr()"
-    end
     if client.server_capabilities.hoverProvider then
-      vim.keymap.set({'n', 'x'}, 'K', vim.lsp.buf.hover, {buffer = bufnr})
+      vim.keymap.set({'n', 'x'}, 'K', vim.lsp.buf.hover, {buffer = args.buf})
     end
   end,
 })
 
 vim.api.nvim_create_autocmd("LspDetach", {
   callback = function(args)
-    vim.api.nvim_command("setlocal tagfunc< omnifunc< formatexpr<")
+    vim.keymap.del({'n', 'x'}, 'K', {buffer = args.buf})
   end,
 })
 -- }}}
