@@ -357,6 +357,7 @@ local compl_ns = vim.api.nvim_create_namespace('')
 local function lsp_completedone(client_id)
   return function(args)
     local item = vim.api.nvim_get_vvar('completed_item')
+    -- If we don't have an LSP completion item, do nothing
     if type(item.user_data) ~= "table"
       or not item.user_data.nvim or not item.user_data.nvim.lsp
       or not item.user_data.nvim.lsp.completion_item then
@@ -368,16 +369,20 @@ local function lsp_completedone(client_id)
     local snippet = nil
     local cur_pos = vim.api.nvim_win_get_cursor(0)
 
-    if lsp_item.textEdit then
-      if lsp_item.insertTextFormat == 2 then
-        snippet = lsp_item.textEdit.newText
-        lsp_item.textEdit.newText = ''
-        lsp_item.textEdit.range['end'].character = cur_pos[2]
-        table.insert(edits, 1, lsp_item.textEdit)
-      end
+    -- If it's a snippet textEdit, then ...
+    if lsp_item.textEdit and lsp_item.insertTextFormat == 2 then
+      -- ... remember the snippet so we can expand it with luasnip
+      snippet = lsp_item.textEdit.newText
+      -- and change the textEdit so that it deletes the text between the
+      -- completion start point and the cursor
+      lsp_item.textEdit.newText = ''
+      lsp_item.textEdit.range['end'].character = cur_pos[2]
+      -- Perform it along with another other text edits we may have
+      table.insert(edits, 1, lsp_item.textEdit)
     end
 
     if #edits > 0 then
+      -- From https://github.com/echasnovski/mini.completion/blob/2931438a5eff65f003edc9274aaf4bc9ca0467be/lua/mini/completion.lua#L899
       -- Use extmark to track relevant cursor position after text edits
       local extmark_id = vim.api.nvim_buf_set_extmark(0, compl_ns, cur_pos[1] - 1, cur_pos[2], {})
 
@@ -432,15 +437,20 @@ local c_y = vim.api.nvim_replace_termcodes('<C-y>', true, false, true)
 
 vim.keymap.set('i', '<Tab>', function ()
   if vim.fn.pumvisible() == 1 then return c_n end
+  local luasnip = require('luasnip')
+  if luasnip.locally_jumpable(1) then luasnip.jump(1) end
   local row, col = vim.api.nvim_win_get_cursor(0)
   if col == 0 then return tab end
   local line = vim.api.nvim_get_current_line():sub(1, col)
   if line:match("^%s*$") then return tab end
+  if luasnip.expandable() then luasnip.expand() end
   return c_x_c_o
 end, {expr = true, remap = false})
 
 vim.keymap.set('i', '<S-Tab>', function ()
   if vim.fn.pumvisible() == 1 then return c_p end
+  local luasnip = require('luasnip')
+  if luasnip.locally_jumpable(-1) then luasnip.jump(-1) end
   local row, col = vim.api.nvim_win_get_cursor(0)
   if col == 0 then return stab end
   local line = vim.api.nvim_get_current_line():sub(1, col)
