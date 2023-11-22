@@ -454,7 +454,7 @@ endfunction
 
 augroup treesitter
   au!
-  au FileType rust,javascript,typescript,javascriptreact,typescriptreact,lua,nix,php,html,css,scss,sass,vim call SetTreeSitterFolding()
+  au FileType rust,lua,python,vim,help call SetTreeSitterFolding()
 augroup END
 
 augroup terminal
