@@ -294,7 +294,7 @@ vim.g.zenbones = {
 vim.g.gruvbox_filetype_hi_groups = 1
 
 vim.opt.background = 'light'
-vim.api.nvim_command('colorscheme envy')
+vim.api.nvim_command('colorscheme rams')
 
 vim.g.qf_mapping_ack_style = 1
 vim.g.qf_nowrap = 0
