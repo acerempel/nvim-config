@@ -164,6 +164,7 @@ local plugins = {
   'haya14busa/vim-metarepeat', -- Run dot-repeat for each pattern match in selection
   'tpope/vim-surround', -- Manipulate surroundings -- brackets etc
   'AndrewRadev/splitjoin.vim', -- gS, gJ operators for smarter splitting and joining lines
+  'echasnovski/mini.align', -- Align stuff
 
   -- Tree-sitter
   { 'nvim-treesitter/nvim-treesitter', build = ':TSUpdate' },
@@ -235,6 +236,7 @@ vim.cmd [[
 require('pqf').setup()
 require('highlight-undo').setup()
 require('leap').add_default_mappings()
+require('mini.align').setup()
 require('colorizer').setup {
   filetypes = { 'vim', 'css', 'scss', 'sass', 'lua', },
   user_default_options = {
