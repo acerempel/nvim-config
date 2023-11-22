@@ -125,9 +125,9 @@ vim.keymap.set({'n', 'v', 'i'}, vim.fn.has('mac') == 1 and '<D-s>' or '<C-s>', '
 for ix = 1, 8 do
   rhs = string.format("<cmd>buf %s<cr>", ix)
   lhs = '<M-' .. ix .. '>'
-  vim.keymap.set({'n', 'v', 'i'}, lhs, rhs)
+  vim.keymap.set({'n', 'v', 'i', 't'}, lhs, rhs)
 end
-vim.keymap.set({'n', 'v', 'i'}, '<C-9>', '<cmd>blast<cr>')
+vim.keymap.set({'n', 'v', 'i', 't'}, '<C-9>', '<cmd>blast<cr>')
 
 vim.keymap.set({'n', 'x'}, ']d', vim.diagnostic.goto_next, {desc = "Next diagnostic"})
 vim.keymap.set({'n', 'x'}, '[d', vim.diagnostic.goto_prev, {desc = "Previous diagnostic"})
