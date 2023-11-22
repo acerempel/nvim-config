@@ -129,8 +129,62 @@ for ix = 1, 8 do
 end
 vim.keymap.set({'n', 'v', 'i', 't'}, '<C-9>', '<cmd>blast<cr>')
 
-vim.keymap.set({'n', 'x'}, ']d', vim.diagnostic.goto_next, {desc = "Next diagnostic"})
-vim.keymap.set({'n', 'x'}, '[d', vim.diagnostic.goto_prev, {desc = "Previous diagnostic"})
+-- Paired mappings (like unimpaired) {{{
+vim.keymap.set({'n', 'x', 'o'}, ']d', vim.diagnostic.goto_next, {desc = "Next diagnostic"})
+vim.keymap.set({'n', 'x', 'o'}, '[d', vim.diagnostic.goto_prev, {desc = "Previous diagnostic"})
+
+local function rhs(prefix, dir)
+  return function() vim.cmd[prefix..dir] { count = vim.v.count1 } end
+end
+
+local function map_one(lhs, rhs, desc, opts)
+  local defopts = { desc = desc, remap = false }
+  opts = opts and vim.tbl_extend('keep', opts, defopts) or defopts
+  vim.keymap.set({'n', 'x', 'o'}, lhs, rhs, opts)
+end
+
+function map_pair(what, char, prefix)
+  char = char or string.sub(what, 1, 1)
+  prefix = prefix or char
+  map_one(']'..char, rhs(prefix, 'next'), 'Next ' .. what)
+  map_one('['..char, rhs(prefix, 'prev'), 'Previous ' .. what)
+  local upchar = string.upper(char)
+  map_one('['..upchar, rhs(prefix, 'first'), 'First ' .. what)
+  map_one(']'..upchar, rhs(prefix, 'last'), 'Last ' .. what)
+end
+
+map_pair('buffer')
+map_pair('tag')
+map_pair('quickfix item', 'q', 'c')
+map_pair('loclist item')
+map_pair('argument', 'a', '')
+
+function add_lines(n)
+  local lines = {}
+  for n = 1, count do table.insert(lines, '') end
+  local l = vim.api.nvim_win_get_cursor(0)[1] + n
+  vim.api.nvim_buf_set_lines(0, l, l, false, lines)
+end
+
+function add_lines_above() add_lines(-1) end
+function add_lines_below() add_lines(0) end
+
+function linewise(keys)
+  return function ()
+    local t = vim.fn.getreg()
+    vim.fn.setreg(vim.v.register, t, 'l')
+    return keys
+  end
+end
+
+local function op(action)
+  return '<cmd>lua count = vim.v.count1; reg = vim.v.register<cr><cmd>set opfunc=v:lua.'..action..'<CR>g@l'
+end
+
+map_one(']<space>', op('add_lines_below'), 'Add lines below')
+map_one('[<space>', op('add_lines_above'), 'Add lines above')
+map_one(']p', linewise(']p'), 'Paste below linewise and match indent', {expr=true})
+map_one('[p', linewise('[p'), 'Paste above linewise and match indent', {expr=true})-- }}}
 
 -- }}}
 
@@ -140,7 +194,6 @@ local plugins = {
   'romainl/vim-cool', -- Only use hlsearch while searching
   'justinmk/vim-dirvish', -- Handy directory viewer
   'dstein64/vim-startuptime', -- Profile vim startup time
-  'tpope/vim-unimpaired', -- Paired commands
   'farmergreg/vim-lastplace', -- Remember where I left off
   'tpope/vim-obsession', -- Better session management
   'nanotee/zoxide.vim', -- Zoxide integration
