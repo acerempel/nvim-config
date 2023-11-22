@@ -13,6 +13,7 @@ set noshowmode
 set clipboard=unnamedplus
 
 set termguicolors
+set title
 
 set updatetime=300 timeoutlen=700
 
