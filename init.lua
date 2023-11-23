@@ -545,4 +545,43 @@ vim.keymap.set('i', '<CR>', function ()
   if vim.fn.pumvisible() == 1 then return c_y else return "\r" end
 end, { expr = true, remap = false })
 
+function start_pylsp()
+  local settings = {
+    pylsp = {
+      plugins = {
+        rope_autoimport = {enabled = true}
+      }
+    }
+  }
+  local root_files = {
+    'pyproject.toml',
+    'setup.py',
+    'setup.cfg',
+    'requirements.txt',
+    'Pipfile',
+    '.git',
+  }
+  local root = vim.fs.find(root_files, {
+    upward = true,
+    stop = vim.loop.os_homedir(),
+    path = vim.fs.dirname(vim.api.nvim_buf_get_name(0)),
+  })
+  local function on_init(client, result)
+    -- Handle offset encoding by default
+    if result.offsetEncoding then
+      client.offset_encoding = result.offsetEncoding
+    end
+    -- Send `settings` to server via workspace/didChangeConfiguration
+    client.notify('workspace/didChangeConfiguration', { settings = settings, })
+  end
+  local root_dir = #root > 0 and root[1] or nil
+  local config = {
+    name = 'pylsp',
+    cmd = { 'pylsp' },
+    settings = settings,
+    on_init = on_init,
+    root_dir = root_dir,
+  }
+  vim.lsp.start(config)
+end
 -- vim:foldmethod=marker
