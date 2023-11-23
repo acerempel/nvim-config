@@ -3,7 +3,6 @@ vim.loader.enable()
 -- Options {{{
 vim.cmd [[
 set noshowmode
-set clipboard=unnamedplus
 
 set termguicolors
 set title
@@ -60,6 +59,13 @@ command! -nargs=+ Find execute 'silent grep! <args>'
 let g:mapleader = ' '
 let g:maplocalleader = '\'
 ]] -- }}}
+
+if vim.fn.has('wsl') == 1 then
+  -- Disable clipboard, it makes startup so slow
+  vim.g.clipboard = 0
+else
+  vim.o.clipboard = 'unnamed'
+end
 
 -- Mappings {{{
 vim.keymap.set({'n', 'x'}, '<CR>', '<C-]>')
@@ -348,7 +354,11 @@ require('gitsigns').setup {
 }
 
 desire('yanky', function(y)
-  y.setup()
+  y.setup {
+    system_clipboard = { sync_with_ring = false },
+    highlight = { on_put = false, on_yank = false, },
+  }
+
   vim.keymap.set({"n","x"}, "p", "<Plug>(YankyPutAfter)")
   vim.keymap.set({"n","x"}, "P", "<Plug>(YankyPutBefore)")
   vim.keymap.set({"n","x"}, "gp", "<Plug>(YankyGPutAfter)")
