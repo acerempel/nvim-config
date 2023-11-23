@@ -212,6 +212,7 @@ local plugins = {
   'tpope/vim-surround', -- Manipulate surroundings -- brackets etc
   'AndrewRadev/splitjoin.vim', -- gS, gJ operators for smarter splitting and joining lines
   'echasnovski/mini.align', -- Align stuff
+  'gbprod/yanky.nvim',
 
   -- Tree-sitter
   { 'nvim-treesitter/nvim-treesitter', build = ':TSUpdate' },
@@ -280,6 +281,17 @@ vim.cmd [[
 -- }}}
 
 -- Plugin configuration {{{
+local default_config = function(p) p.setup() end
+function desire(plugin, config)
+  local installed, plugin = pcall(require, plugin)
+  if not installed then
+    vim.notify(plugin .. ' not installed', vim.log.levels.WARN)
+  else
+    config = config or default_config
+    config(plugin)
+  end
+end
+
 require('pqf').setup()
 require('highlight-undo').setup()
 require('leap').add_default_mappings()
@@ -333,6 +345,27 @@ require('gitsigns').setup {
     vim.keymap.set({'n', 'x'}, prefix..'P', gs('preview_hunk()'), {buffer=bufnr})
   end
 }
+
+desire('yanky', function(y)
+  y.setup()
+  vim.keymap.set({"n","x"}, "p", "<Plug>(YankyPutAfter)")
+  vim.keymap.set({"n","x"}, "P", "<Plug>(YankyPutBefore)")
+  vim.keymap.set({"n","x"}, "gp", "<Plug>(YankyGPutAfter)")
+  vim.keymap.set({"n","x"}, "gP", "<Plug>(YankyGPutBefore)")
+
+  vim.keymap.set("n", "]p", "<Plug>(YankyPutIndentAfterLinewise)")
+  vim.keymap.set("n", "[p", "<Plug>(YankyPutIndentBeforeLinewise)")
+  vim.keymap.set("n", "]P", "<Plug>(YankyPutIndentAfterLinewise)")
+  vim.keymap.set("n", "[P", "<Plug>(YankyPutIndentBeforeLinewise)")
+
+  vim.keymap.set("n", ">p", "<Plug>(YankyPutIndentAfterShiftRight)")
+  vim.keymap.set("n", "<p", "<Plug>(YankyPutIndentAfterShiftLeft)")
+  vim.keymap.set("n", ">P", "<Plug>(YankyPutIndentBeforeShiftRight)")
+  vim.keymap.set("n", "<P", "<Plug>(YankyPutIndentBeforeShiftLeft)")
+
+  vim.keymap.set("n", "=p", "<Plug>(YankyPutAfterFilter)")
+  vim.keymap.set("n", "=P", "<Plug>(YankyPutBeforeFilter)")
+end)
 
 vim.g.zenbones = {
   lightness = 'bright',
