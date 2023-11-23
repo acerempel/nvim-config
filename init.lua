@@ -63,6 +63,9 @@ let g:maplocalleader = '\'
 ]] -- }}}
 
 -- Mappings {{{
+vim.keymap.set({'n', 'x'}, '<CR>', '<C-]>')
+vim.keymap.set({'n', 'x', 'o'}, '-', ':')
+vim.keymap.set('n', '_', '<Plug>(dirvish_up)')
 vim.cmd [[
 
 noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
