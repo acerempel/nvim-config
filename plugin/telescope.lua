@@ -1,4 +1,9 @@
-local telescope = require('telescope')
+local installed, telescope = pcall(require, 'telescope')
+if not installed then
+  vim.notify('telescope not installed', vim.log.levels.WARN)
+  return
+end
+
 local actions = require('telescope.actions')
 local layout_actions = require('telescope.actions.layout')
 local themes = require('telescope.themes')
