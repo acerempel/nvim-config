@@ -1,4 +1,0 @@
-{
-  "Lua.diagnostics.globals": ["use", "vim"],
-  "Lua.runtime.version": "LuaJIT"
-}
