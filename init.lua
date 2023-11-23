@@ -421,6 +421,12 @@ require('notifier').setup {}
 
 -- Autocommands {{{
 vim.cmd [[
+augroup reload
+  autocmd!
+  " Automatically enable changes to plugin configuration
+  autocmd BufWritePost $MYVIMRC source $MYVIMRC
+augroup END
+
 augroup YankHighlight
   autocmd!
   autocmd TextYankPost * silent! lua vim.highlight.on_yank()
