@@ -14,7 +14,6 @@ set formatoptions-=t textwidth=72
 
 set list listchars=tab:↹·,nbsp:⎵,trail:·,extends:⇉,precedes:⇇
 set showbreak=↪︎\ 
-set fillchars=vert:│,fold:─
 set diffopt=filler,vertical,context:3,internal,algorithm:histogram,closeoff,hiddenoff,indent-heuristic,linematch:60,iwhiteeol
 set nowrap linebreak breakindent
 set foldtext=v:lua.require'foldtext'.foldtext()
