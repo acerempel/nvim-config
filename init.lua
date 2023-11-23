@@ -222,7 +222,6 @@ local plugins = {
   'drybalka/tree-climber.nvim', -- Climb trees
 
   { 'nvim-lualine/lualine.nvim', as = 'lualine', }, -- Statusline
-
   { 'nvim-lua/plenary.nvim', as = 'plenary' }, -- Support for other plugins, notably Cokeline
   'willothy/nvim-cokeline', -- Bufferline
 
