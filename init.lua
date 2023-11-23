@@ -17,7 +17,6 @@ set showbreak=↪︎\
 set fillchars=vert:│,fold:─
 set diffopt=filler,vertical,context:3,internal,algorithm:histogram,closeoff,hiddenoff,indent-heuristic,linematch:60,iwhiteeol
 set nowrap linebreak breakindent
-set foldlevelstart=2
 set foldtext=v:lua.require'foldtext'.foldtext()
 set foldminlines=6
 set concealcursor=nc
@@ -37,7 +36,6 @@ set switchbuf+=useopen
 set lazyredraw
 
 set undofile
-set shada-=%
 set jumpoptions=stack,view
 
 set shortmess-=l
@@ -46,7 +44,7 @@ set signcolumn=yes
 set wildmode=longest:full,full
 set wildignore=*.o,*.hi,*/dist-newstyle/*,*/.stack-work/*,*/node_modules/*,*/elm-stuff/*
 
-set exrc secure
+set exrc
 
 set guifont=Iosevka:h15
 set linespace=6
