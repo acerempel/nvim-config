@@ -1,10 +1,3 @@
-vim.cmd [[
-if !has('nvim-0.7')
-  echoerr "Neovim too old!!"
-  exit
-  endif
-]]
-
 vim.loader.enable()
 
 -- Options {{{
