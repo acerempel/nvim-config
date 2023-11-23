@@ -238,6 +238,9 @@ local plugins = {
   'ntk148v/komau.vim',
   'kkga/vim-envy',
   'stefanvanburen/rams',
+  'jonathanfilip/vim-lucius',
+  'catppuccin/vim',
+  'sainnhe/everforest',
 
   -- Fuzzy-finding
   'nvim-telescope/telescope.nvim',
@@ -371,6 +374,11 @@ vim.g.zenbones = {
   darken_noncurrent_window = true,
   darken_comments = 67,
 }
+
+vim.g.lucius_contrast = 'high'
+vim.g.lucius_contrast_bg = 'high'
+
+vim.g.everforest_background = 'hard'
 
 vim.g.gruvbox_filetype_hi_groups = 1
 
