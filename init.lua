@@ -249,6 +249,7 @@ local plugins = {
 
   'NvChad/nvim-colorizer.lua', -- Colours literal
   'lewis6991/gitsigns.nvim', -- Git integration for buffers
+  'rhysd/committia.vim',
 
   'L3MON4D3/LuaSnip',
 }
