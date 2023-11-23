@@ -296,11 +296,10 @@ require('pqf').setup()
 require('highlight-undo').setup()
 require('leap').add_default_mappings()
 require('mini.align').setup()
-require('colorizer').setup {
-  filetypes = { 'vim', 'css', 'scss', 'sass', 'lua', },
-  user_default_options = {
+
+vim.g.colorizer_user_default_options = {
     css = true,
-  },
+    names = false,
 }
 
 require('sibling-swap').setup {
