@@ -103,8 +103,11 @@ telescope.setup({
 })
 
 telescope.load_extension('fzf')
+telescope.load_extension('yank_history')
 
 vim.keymap.set('n', '<Leader>h', function() require('telescope.builtin').help_tags() end, { desc = "Search help tags" })
 vim.keymap.set('n', '<Leader>f', function() require('telescope.builtin').find_files() end, { desc = "Search files" })
 vim.keymap.set('n', '<Leader>c', function() require('telescope.builtin').colorscheme({enable_preview = true}) end, { desc = "Search colorschemes" })
-vim.keymap.set('n', '<Leader>:', function() require('telescope.builtin').commands() end, { desc = "Search commands" })
+vim.keymap.set('n', '<Leader>-', function() require('telescope.builtin').commands() end, { desc = "Search commands" })
+vim.keymap.set('n', 'gO', function() require('telescope.builtin').treesitter() end)
+vim.keymap.set({'n', 'x'}, '<Leader>p', function() require("telescope").extensions.yank_history.yank_history({ }) end, { desc = "Open Yank History" })
