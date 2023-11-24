@@ -318,15 +318,15 @@ require('sibling-swap').setup {
 }
 
 local tree_maps = {
-  ['<M-Up>'] = 'goto_parent',
-  ['<M-Down>'] = 'goto_child',
-  ['<M-Right>'] = 'goto_next',
-  ['<M-Left>'] = 'goto_prev',
+  ['H'] = 'goto_parent',
+  ['L'] = 'goto_child',
+  [')'] = 'goto_next',
+  ['('] = 'goto_prev',
 }
 
 for keys, func in pairs(tree_maps) do
   local rhs = function() require('tree-climber')[func]() end
-  vim.keymap.set({'n', 'x', 'o'}, keys, rhs, { remap = false, silent = true, desc = func })
+  vim.keymap.set({'n', 'x', 'o'}, keys, rhs, { silent = true, desc = func })
 end
 
 local function gs(f)
