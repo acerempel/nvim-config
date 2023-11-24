@@ -9,7 +9,7 @@ set title
 
 set updatetime=300 timeoutlen=700
 
-set formatoptions-=t textwidth=72
+set formatoptions-=t formatoptions+=rl textwidth=72
 
 set list listchars=tab:↹·,nbsp:⎵,trail:·,extends:⇉,precedes:⇇
 set showbreak=↪︎\ 
