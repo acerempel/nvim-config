@@ -62,6 +62,8 @@ let g:mapleader = ' '
 let g:maplocalleader = '\'
 ]] -- }}}
 
+vim.opt.spelloptions:append{"camel"}
+
 if vim.fn.has('wsl') == 1 then
   -- Disable clipboard, it makes startup so slow
   vim.g.clipboard = 0
