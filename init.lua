@@ -52,9 +52,11 @@ set statusline=[%n]\ %f\ %(%h\ %)%(%{get(b:,'gitsigns_status','')}\ %)%(%r\ %)%m
 if executable('rg')
     set grepprg=rg\ --vimgrep
     set grepformat^=%f:%l:%c:%m
+    command! -nargs=+ Find execute 'silent grep! <args>'
+  else
+    command! -nargs=+ Find execute 'silent grep! -r <args> .'
 endif
 
-command! -nargs=+ Find execute 'silent grep! <args>'
 
 let g:mapleader = ' '
 let g:maplocalleader = '\'
