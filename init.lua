@@ -75,6 +75,7 @@ end
 vim.keymap.set({'n', 'x'}, '<CR>', '<C-]>')
 vim.keymap.set({'n', 'x', 'o'}, '-', ':')
 vim.keymap.set('n', '_', '<Plug>(dirvish_up)')
+vim.keymap.set('n', 'U', '<cmd>UndotreeToggle<CR>')
 vim.cmd [[
 
 noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
