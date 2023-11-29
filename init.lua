@@ -76,6 +76,14 @@ vim.keymap.set({'n', 'x'}, '<CR>', '<C-]>')
 vim.keymap.set({'n', 'x', 'o'}, '-', ':')
 vim.keymap.set('n', '_', '<Plug>(dirvish_up)')
 vim.keymap.set('n', 'U', '<cmd>UndotreeToggle<CR>')
+
+vim.keymap.set('n', '<Leader>h', function() require('telescope.builtin').help_tags() end, { desc = "Search help tags" })
+vim.keymap.set('n', '<Leader>f', function() require('telescope.builtin').find_files() end, { desc = "Search files" })
+vim.keymap.set('n', '<Leader>c', function() require('telescope.builtin').colorscheme({enable_preview = true}) end, { desc = "Search colorschemes" })
+vim.keymap.set('n', '<Leader>-', function() require('telescope.builtin').commands() end, { desc = "Search commands" })
+vim.keymap.set('n', 'gO', function() require('telescope.builtin').treesitter() end)
+vim.keymap.set({'n', 'x'}, '<Leader>y', function() require("telescope").extensions.yank_history.yank_history({ }) end, { desc = "Open Yank History" })
+
 vim.cmd [[
 
 noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
@@ -527,6 +535,19 @@ local c_n = vim.api.nvim_replace_termcodes('<C-n>', true, false, true)
 local c_p = vim.api.nvim_replace_termcodes('<C-p>', true, false, true)
 local c_x_c_o = vim.api.nvim_replace_termcodes('<C-x><C-o>', true, false, true)
 local c_y = vim.api.nvim_replace_termcodes('<C-y>', true, false, true)
+
+local telescope_not_loaded_yet = true
+local function telescope_loader(mod)
+  if telescope_not_loaded_yet and (mod == 'telescope' or vim.startswith(mod, 'telescope.')) then
+    telescope_not_loaded_yet = false
+    require('conf.telescope')
+    return package.loaders[2](mod)
+  else
+    return nil
+  end
+end
+
+table.insert(package.loaders, 1, telescope_loader)
 
 vim.keymap.set('i', '<Tab>', function ()
   if vim.fn.pumvisible() == 1 then return c_n end
