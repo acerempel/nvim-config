@@ -72,4 +72,4 @@ require('nvim-treesitter.configs').setup {
 
 require('nvim-treesitter.install').compilers = { "gcc" }
 
-vim.keymap.set('n', '+', 'v)', {remap = true})
+vim.keymap.set('n', '+', 'v+', {remap = true})
