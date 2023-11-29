@@ -57,6 +57,8 @@ telescope.setup({
       show_all_buffers = true, ignore_current_buffer = true,
       sort_mru = true, bufnr_width = 3,
       disable_devicons = true,
+      prompt_title = false,
+      prompt_prefix = 'Buffers›',
     },
     find_files = {
       disable_devicons = true,
@@ -110,4 +112,4 @@ vim.keymap.set('n', '<Leader>f', function() require('telescope.builtin').find_fi
 vim.keymap.set('n', '<Leader>c', function() require('telescope.builtin').colorscheme({enable_preview = true}) end, { desc = "Search colorschemes" })
 vim.keymap.set('n', '<Leader>-', function() require('telescope.builtin').commands() end, { desc = "Search commands" })
 vim.keymap.set('n', 'gO', function() require('telescope.builtin').treesitter() end)
-vim.keymap.set({'n', 'x'}, '<Leader>p', function() require("telescope").extensions.yank_history.yank_history({ }) end, { desc = "Open Yank History" })
+vim.keymap.set({'n', 'x'}, '<Leader>y', function() require("telescope").extensions.yank_history.yank_history({ }) end, { desc = "Open Yank History" })
