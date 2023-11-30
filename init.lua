@@ -64,6 +64,8 @@ let g:maplocalleader = '\'
 
 vim.opt.spelloptions:append{"camel"}
 
+vim.opt.runtimepath:append(vim.env.HOME..'/code/autoclose.nvim')
+
 if vim.fn.has('wsl') == 1 then
   -- Disable clipboard, it makes startup so slow
   vim.g.clipboard = 0
