@@ -35,8 +35,6 @@ require('nvim-treesitter.configs').setup {
         aa = "@parameter.outer",
         ['i/'] = "@comment.inner",
         ['a/'] = "@comment.outer",
-        ib = "@block.inner",
-        ab = "@block.outer",
       }
     },
     move = {
