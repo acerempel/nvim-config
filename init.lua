@@ -1,70 +1,51 @@
 vim.loader.enable()
 
 -- Options {{{
-vim.cmd [[
-set noshowmode
-
-set termguicolors
-set title
-
-set updatetime=300 timeoutlen=700
-
-set formatoptions-=t formatoptions+=rl textwidth=72
-
-set list listchars=tab:↹·,nbsp:⎵,trail:·,extends:⇉,precedes:⇇
-set showbreak=↪︎\ 
-set diffopt=filler,vertical,context:3,internal,algorithm:histogram,closeoff,hiddenoff,indent-heuristic,linematch:60,iwhiteeol
-set nowrap linebreak breakindent
-set foldtext=v:lua.require'foldtext'.foldtext()
-set foldminlines=6
-set concealcursor=nc
-
-set scrolloff=2 sidescrolloff=4
-
-set expandtab tabstop=2 softtabstop=2
-set shiftwidth=2 shiftround
-
-set virtualedit=block,onemore
-
-set ignorecase smartcase gdefault
-set completeopt-=preview
-
-set splitbelow splitright
-set switchbuf+=useopen
-set lazyredraw
-
-set undofile
-set jumpoptions=stack,view
-
-set shortmess-=l
-set signcolumn=yes
-
-set wildmode=longest:full,full
-set wildignore=*.o,*.hi,*/dist-newstyle/*,*/.stack-work/*,*/node_modules/*,*/elm-stuff/*
-
-set exrc
-
-set guifont=Iosevka:h15
-set linespace=6
-
-set statusline=[%n]\ %f\ %(%h\ %)%(%{get(b:,'gitsigns_status','')}\ %)%(%r\ %)%m%=%P\ /\ %L\ 
-
-if executable('rg')
-    set grepprg=rg\ --vimgrep
-    set grepformat^=%f:%l:%c:%m
-    command! -nargs=+ Find execute 'silent grep! <args>'
-  else
-    command! -nargs=+ Find execute 'silent grep! -r <args> .'
-endif
-
-
-let g:mapleader = ' '
-let g:maplocalleader = '\'
-]] -- }}}
-
+vim.o.showmode = false
+vim.o.termguicolors = true
+vim.o.title = true
+vim.o.linebreak = true
+vim.o.breakindent = true
+vim.o.ignorecase = true
+vim.o.smartcase = true
+vim.o.gdefault = true
+vim.o.splitbelow = true
+vim.o.splitright = true
+vim.o.lazyredraw = true
+vim.o.undofile = true
+vim.o.exrc = true
+vim.o.updatetime = 300
+vim.o.timeoutlen = 700
+vim.o.textwidth = 72
+vim.o.list = true
+vim.o.listchars = "tab:↹·,nbsp:⎵,trail:·,extends:⇉,precedes:⇇"
+vim.o.showbreak = "↪︎ "
+vim.o.diffopt = "filler,vertical,context:3,internal,algorithm:histogram,closeoff,hiddenoff,indent-heuristic,linematch:60,iwhiteeol"
+vim.o.foldtext = "v:lua.require'foldtext'.foldtext()"
+vim.o.foldminlines = 6
+vim.o.scrolloff = 2
+vim.o.sidescrolloff = 4
+vim.o.expandtab = true
+vim.o.tabstop = 2
+vim.o.softtabstop = 2
+vim.o.shiftwidth = 2
+vim.o.shiftround = true
+vim.o.virtualedit = "block,onemore"
+vim.o.jumpoptions = "stack,view"
+vim.o.signcolumn = "yes"
+vim.o.wildmode = "longest:full,full"
+vim.o.wildignore = "*.o,*.hi,*/dist-newstyle/*,*/.stack-work/*,*/node_modules/*,*/elm-stuff/*"
+vim.o.guifont = "Iosevka:h15"
+vim.o.linespace = 6
+vim.o.statusline = "[%n] %f %(%h %)%(%{get(b:,'gitsigns_status','')} %)%(%r %)%m%=%P / %L"
 vim.opt.spelloptions:append{"camel"}
-
-vim.opt.runtimepath:append(vim.env.HOME..'/code/autoclose.nvim')
+vim.opt.foldopen:remove{"block"}
+vim.opt.formatoptions:remove('t')
+vim.opt.formatoptions:append('rl')
+vim.opt.completeopt:remove('preview')
+vim.opt.switchbuf:append('useopen')
+vim.opt.shortmess:remove('l')
+-- }}}
 
 if vim.fn.has('wsl') == 1 then
   -- Disable clipboard, it makes startup so slow
@@ -73,18 +54,25 @@ else
   vim.o.clipboard = 'unnamed'
 end
 
+vim.g.mapleader = ' '
+vim.g.maplocalleader = [[\]]
+
 -- Mappings {{{
 vim.keymap.set({'n', 'x'}, '<CR>', '<C-]>')
 vim.keymap.set({'n', 'x', 'o'}, '-', ':')
 vim.keymap.set('n', '_', '<Plug>(dirvish_up)')
 vim.keymap.set('n', 'U', '<cmd>UndotreeToggle<CR>')
 
+-- Telescope mappings {{{
 vim.keymap.set('n', '<Leader>h', function() require('telescope.builtin').help_tags() end, { desc = "Search help tags" })
 vim.keymap.set('n', '<Leader>f', function() require('telescope.builtin').find_files() end, { desc = "Search files" })
 vim.keymap.set('n', '<Leader>c', function() require('telescope.builtin').colorscheme({enable_preview = true}) end, { desc = "Search colorschemes" })
 vim.keymap.set('n', '<Leader>-', function() require('telescope.builtin').commands() end, { desc = "Search commands" })
+vim.keymap.set('n', '<Leader>u', function() require('telescope.builtin').buffers() end, { desc = "Search buffers" })
+vim.keymap.set('n', '<Leader>b', function() require('telescope.builtin').buffers() end, { desc = "Search buffers" })
 vim.keymap.set('n', 'gO', function() require('telescope.builtin').treesitter() end)
 vim.keymap.set({'n', 'x'}, '<Leader>y', function() require("telescope").extensions.yank_history.yank_history({ }) end, { desc = "Open Yank History" })
+-- }}}
 
 vim.cmd [[
 
@@ -107,6 +95,7 @@ function! NomodifiableMappings() abort
 endfunction
 " }}}
 
+" Readline-style mappings {{{
 inoremap <expr> <C-E> pumvisible() ? "<C-E>" : "<End>"
 inoremap <C-A> <Home>
 " Normally <C-F> re-indents the current line, but I've never used that
@@ -120,8 +109,9 @@ inoremap <D-Left> <Home>
 inoremap <D-Right> <End>
 inoremap <expr> <C-p> pumvisible() ? "\<C-p>" : "\<Up>"
 inoremap <expr> <C-n> pumvisible() ? "\<C-n>" : "\<Down>"
+" }}}
 
-if has('mac')
+if has('mac') " Changing windows {{{
   noremap <C-j> <C-W>j
   noremap <C-k> <C-W>k
   noremap <C-h> <C-W>h
@@ -131,7 +121,7 @@ else
   noremap <A-k> <C-W>k
   noremap <A-h> <C-W>h
   noremap <A-l> <C-W>l
-endif
+endif " }}}
 ]]
 
 vim.keymap.set({'n', 'v', 'i'}, vim.fn.has('mac') == 1 and '<D-s>' or '<C-s>', '<cmd>w<cr>')
@@ -230,9 +220,10 @@ local plugins = {
   'tpope/vim-repeat', -- Extensible dot-repeat
   'haya14busa/vim-metarepeat', -- Run dot-repeat for each pattern match in selection
   'tpope/vim-surround', -- Manipulate surroundings -- brackets etc
-  'AndrewRadev/splitjoin.vim', -- gS, gJ operators for smarter splitting and joining lines
+  'AndrewRadev/splitjoin.vim', -- operators for smarter splitting and joining lines
   'echasnovski/mini.align', -- Align stuff
-  'gbprod/yanky.nvim',
+  'gbprod/yanky.nvim', -- Remember yanks
+  'cohama/lexima.vim', -- Automatic pair insertion
 
   -- Tree-sitter
   { 'nvim-treesitter/nvim-treesitter', build = ':TSUpdate' },
@@ -240,9 +231,10 @@ local plugins = {
   'RRethy/nvim-treesitter-textsubjects',
   'Wansmer/sibling-swap.nvim', -- Swap neighbouring nodes
 
+  -- User interface components
   { 'nvim-lualine/lualine.nvim', as = 'lualine', }, -- Statusline
-  { 'nvim-lua/plenary.nvim', as = 'plenary' }, -- Support for other plugins, notably Cokeline
   'willothy/nvim-cokeline', -- Bufferline
+  'dstein64/nvim-scrollview', -- Scrollbar
 
   -- Color scheme
   { 'mcchrish/zenbones.nvim', as = 'zenbones' },
@@ -267,11 +259,14 @@ local plugins = {
   -- Language support
   { 'mrcjkb/rustaceanvim', pin = true }, -- Rust
 
-  'NvChad/nvim-colorizer.lua', -- Colours literal
-  'lewis6991/gitsigns.nvim', -- Git integration for buffers
-  'rhysd/committia.vim',
+  -- Git integration
+  'lewis6991/gitsigns.nvim', -- Show git changes in signcolumn
+  'rhysd/committia.vim', -- Show diff and status when committing
 
-  'L3MON4D3/LuaSnip',
+  -- Misc
+  { 'nvim-lua/plenary.nvim', as = 'plenary' }, -- Support for other plugins, notably Cokeline
+  'NvChad/nvim-colorizer.lua', -- Colourize colour literals
+  { 'L3MON4D3/LuaSnip', opt = true }, -- Snippets
 }
 
 local installed, paq = pcall(require, 'paq')
@@ -287,19 +282,12 @@ paq(plugins)
 -- }}}
 
 -- Disable some built-in plugins {{{
-vim.cmd [[
-  " Don't load netrw, I don't need it
-  let g:loaded_netrw       = 1
-  let g:loaded_netrwPlugin = 1
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
 
-  let php_html_in_strings=0
-  let php_html_in_heredoc=0
-  let php_html_in_nowdoc=0
-
-  " Use matchup instead
-  let g:loaded_matchit = 1
-  let loaded_matchparen = 1
-]]
+-- use matchup instead
+vim.g.loaded_matchit = 1
+vim.g.loaded_matchparen = 1
 -- }}}
 
 -- Plugin configuration {{{
@@ -331,7 +319,7 @@ require('sibling-swap').setup {
   },
 }
 
-local function gs(f)
+local function gs(f)-- Gitsigns {{{
   return ("<Cmd>lua require('gitsigns').%s<CR>"):format(f)
 end
 
@@ -353,9 +341,9 @@ require('gitsigns').setup {
     vim.keymap.set({'n', 'x'}, prefix..'p', gs('preview_hunk_inline()'), {buffer=bufnr})
     vim.keymap.set({'n', 'x'}, prefix..'P', gs('preview_hunk()'), {buffer=bufnr})
   end
-}
+}-- }}}
 
-desire('yanky', function(y)
+desire('yanky', function(y)-- Yanky {{{
   y.setup {
     system_clipboard = { sync_with_ring = false },
     highlight = { on_put = false, on_yank = false, },
@@ -365,6 +353,9 @@ desire('yanky', function(y)
   vim.keymap.set({"n","x"}, "P", "<Plug>(YankyPutBefore)")
   vim.keymap.set({"n","x"}, "gp", "<Plug>(YankyGPutAfter)")
   vim.keymap.set({"n","x"}, "gP", "<Plug>(YankyGPutBefore)")
+
+  vim.keymap.set("n", "[y", "<Plug>(YankyPreviousEntry)")
+  vim.keymap.set("n", "]y", "<Plug>(YankyNextEntry)")
 
   vim.keymap.set("n", "]p", "<Plug>(YankyPutIndentAfterLinewise)")
   vim.keymap.set("n", "[p", "<Plug>(YankyPutIndentBeforeLinewise)")
@@ -378,8 +369,9 @@ desire('yanky', function(y)
 
   vim.keymap.set("n", "=p", "<Plug>(YankyPutAfterFilter)")
   vim.keymap.set("n", "=P", "<Plug>(YankyPutBeforeFilter)")
-end)
+end)-- }}}
 
+-- Colorscheme {{{
 vim.g.zenbones = {
   lightness = 'bright',
   darken_noncurrent_window = true,
@@ -394,7 +386,7 @@ vim.g.everforest_background = 'hard'
 vim.g.gruvbox_filetype_hi_groups = 1
 
 vim.opt.background = 'light'
-vim.api.nvim_command('colorscheme zenbones')
+vim.api.nvim_command('colorscheme zenbones')-- }}}
 
 vim.g.qf_mapping_ack_style = 1
 vim.g.qf_nowrap = 0
@@ -412,7 +404,7 @@ vim.cmd [[
   map gz# <Plug>(asterisk-gz#)
 ]]
 
--- vim-matchup
+-- vim-matchup{{{
 vim.g.matchup_matchparen_offscreen = {
   method = 'popup',
   scrolloff = 1,
@@ -426,6 +418,7 @@ vim.g.matchup_matchpref = { html = { tagnameonly = 1 } }
 if vim.g.vscode == 1 then
   vim.g.matchup_matchparen_enabled = 0
 end
+-- }}}
 
 require('notifier').setup {}
 -- }}}
@@ -518,25 +511,27 @@ vim.api.nvim_create_autocmd("LspDetach", {
 })
 -- }}}
 
-local tab = vim.api.nvim_replace_termcodes('<Tab>', true, false, true)
-local stab = vim.api.nvim_replace_termcodes('<S-Tab>', true, false, true)
-local c_n = vim.api.nvim_replace_termcodes('<C-n>', true, false, true)
-local c_p = vim.api.nvim_replace_termcodes('<C-p>', true, false, true)
-local c_x_c_o = vim.api.nvim_replace_termcodes('<C-x><C-o>', true, false, true)
-local c_y = vim.api.nvim_replace_termcodes('<C-y>', true, false, true)
-
-local telescope_not_loaded_yet = true
+local telescope_not_loaded_yet = true -- Lazy-load Telescope {{{
 local function telescope_loader(mod)
   if telescope_not_loaded_yet and (mod == 'telescope' or vim.startswith(mod, 'telescope.')) then
     telescope_not_loaded_yet = false
     require('conf.telescope')
-    return package.loaders[2](mod)
+    return package.loaders[3](mod)
   else
     return nil
   end
 end
 
 table.insert(package.loaders, 1, telescope_loader)
+-- }}}
+
+-- Popup-menu mappings {{{
+local tab = vim.api.nvim_replace_termcodes('<Tab>', true, false, true)
+local stab = vim.api.nvim_replace_termcodes('<S-Tab>', true, false, true)
+local c_n = vim.api.nvim_replace_termcodes('<C-n>', true, false, true)
+local c_p = vim.api.nvim_replace_termcodes('<C-p>', true, false, true)
+local c_x_c_o = vim.api.nvim_replace_termcodes('<C-x><C-o>', true, false, true)
+local c_y = vim.api.nvim_replace_termcodes('<C-y>', true, false, true)
 
 vim.keymap.set('i', '<Tab>', function ()
   if vim.fn.pumvisible() == 1 then return c_n end
@@ -562,8 +557,9 @@ end, {expr = true, remap = false})
 
 vim.keymap.set('i', '<CR>', function ()
   if vim.fn.pumvisible() == 1 then return c_y else return "\r" end
-end, { expr = true, remap = false })
+end, { expr = true, remap = false })-- }}}
 
+-- Pylsp configuration {{{
 function start_pylsp()
   local settings = {
     pylsp = {
@@ -602,5 +598,5 @@ function start_pylsp()
     root_dir = root_dir,
   }
   vim.lsp.start(config)
-end
+end-- }}}
 -- vim:foldmethod=marker
