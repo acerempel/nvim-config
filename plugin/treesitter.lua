@@ -1,3 +1,13 @@
+local paren_captures = {
+  "@statement.outer",
+  "@function.outer",
+  "@call.outer",
+  "@class.outer",
+  "@conditional.outer",
+  "@loop.outer",
+  "@comment.outer",
+}
+
 require('nvim-treesitter.configs').setup {
   highlight = { enable = true },
   matchup = { enable = true },
@@ -35,6 +45,7 @@ require('nvim-treesitter.configs').setup {
       goto_next_start = {
         ["]m"] = "@function.outer",
         ["]]"] = "@class.outer",
+        [")"] = paren_captures,
       },
       goto_next_end = {
         ["]M"] = "@function.outer",
@@ -45,6 +56,7 @@ require('nvim-treesitter.configs').setup {
         ["[m"] = "@function.outer",
         ["[["] = "@class.outer",
         ["[/"] = "@comment.outer",
+        ["("] = paren_captures,
       },
       goto_previous_end = {
         ["[M"] = "@function.outer",

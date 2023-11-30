@@ -237,7 +237,6 @@ local plugins = {
   'nvim-treesitter/nvim-treesitter-textobjects',
   'RRethy/nvim-treesitter-textsubjects',
   'Wansmer/sibling-swap.nvim', -- Swap neighbouring nodes
-  'drybalka/tree-climber.nvim', -- Climb trees
 
   { 'nvim-lualine/lualine.nvim', as = 'lualine', }, -- Statusline
   { 'nvim-lua/plenary.nvim', as = 'plenary' }, -- Support for other plugins, notably Cokeline
@@ -329,18 +328,6 @@ require('sibling-swap').setup {
     ['<Leader>,'] = 'swap_with_left',
   },
 }
-
-local tree_maps = {
-  ['H'] = 'goto_parent',
-  ['L'] = 'goto_child',
-  [')'] = 'goto_next',
-  ['('] = 'goto_prev',
-}
-
-for keys, func in pairs(tree_maps) do
-  local rhs = function() require('tree-climber')[func]() end
-  vim.keymap.set({'n', 'x', 'o'}, keys, rhs, { silent = true, desc = func })
-end
 
 local function gs(f)
   return ("<Cmd>lua require('gitsigns').%s<CR>"):format(f)
