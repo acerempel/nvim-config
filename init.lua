@@ -37,7 +37,6 @@ vim.o.wildmode = "longest:full,full"
 vim.o.wildignore = "*.o,*.hi,*/dist-newstyle/*,*/.stack-work/*,*/node_modules/*,*/elm-stuff/*"
 vim.o.guifont = "Iosevka:h15"
 vim.o.linespace = 6
-vim.o.statusline = "[%n] %f %(%h %)%(%{get(b:,'gitsigns_status','')} %)%(%r %)%m%=%P / %L"
 vim.opt.spelloptions:append{"camel"}
 vim.opt.foldopen:remove{"block"}
 vim.opt.formatoptions:remove('t')
