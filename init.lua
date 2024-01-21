@@ -44,6 +44,7 @@ vim.opt.formatoptions:append('rl')
 vim.opt.completeopt:remove('preview')
 vim.opt.switchbuf:append('useopen')
 vim.opt.shortmess:remove('l')
+vim.o.mousescroll = 'ver:2,hor:4'
 -- }}}
 
 if vim.fn.has('wsl') == 1 then
@@ -61,17 +62,9 @@ vim.keymap.set({'n', 'x'}, '<CR>', '<C-]>')
 vim.keymap.set({'n', 'x', 'o'}, '-', ':')
 vim.keymap.set('n', '_', '<Plug>(dirvish_up)')
 vim.keymap.set('n', 'U', '<cmd>UndotreeToggle<CR>')
-
--- Telescope mappings {{{
-vim.keymap.set('n', '<Leader>h', function() require('telescope.builtin').help_tags() end, { desc = "Search help tags" })
-vim.keymap.set('n', '<Leader>f', function() require('telescope.builtin').find_files() end, { desc = "Search files" })
-vim.keymap.set('n', '<Leader>c', function() require('telescope.builtin').colorscheme({enable_preview = true}) end, { desc = "Search colorschemes" })
-vim.keymap.set('n', '<Leader>-', function() require('telescope.builtin').commands() end, { desc = "Search commands" })
-vim.keymap.set('n', '<Leader>u', function() require('telescope.builtin').buffers() end, { desc = "Search buffers" })
-vim.keymap.set('n', '<Leader>b', function() require('telescope.builtin').buffers() end, { desc = "Search buffers" })
-vim.keymap.set('n', 'gO', function() require('telescope.builtin').treesitter() end)
-vim.keymap.set({'n', 'x'}, '<Leader>y', function() require("telescope").extensions.yank_history.yank_history({ }) end, { desc = "Open Yank History" })
--- }}}
+vim.keymap.set('', 'H', '6gk')
+vim.keymap.set('', 'L', '6gj')
+vim.keymap.set('', "'", '`')
 
 vim.cmd [[
 
@@ -122,6 +115,17 @@ else
   noremap <A-l> <C-W>l
 endif " }}}
 ]]
+
+-- Telescope mappings {{{
+vim.keymap.set('n', '<Leader>h', function() require('telescope.builtin').help_tags() end, { desc = "Search help tags" })
+vim.keymap.set('n', '<Leader>f', function() require('telescope.builtin').find_files() end, { desc = "Search files" })
+vim.keymap.set('n', '<Leader>c', function() require('telescope.builtin').colorscheme({enable_preview = true}) end, { desc = "Search colorschemes" })
+vim.keymap.set('n', '<Leader>-', function() require('telescope.builtin').commands() end, { desc = "Search commands" })
+vim.keymap.set('n', '<Leader>u', function() require('telescope.builtin').buffers() end, { desc = "Search buffers" })
+vim.keymap.set('n', '<Leader>b', function() require('telescope.builtin').buffers() end, { desc = "Search buffers" })
+vim.keymap.set('n', 'gO', function() require('telescope.builtin').treesitter() end)
+vim.keymap.set({'n', 'x'}, '<Leader>y', function() require("telescope").extensions.yank_history.yank_history({ }) end, { desc = "Open Yank History" })
+-- }}}
 
 vim.keymap.set({'n', 'v', 'i'}, vim.fn.has('mac') == 1 and '<D-s>' or '<C-s>', '<cmd>w<cr>')
 
@@ -197,11 +201,11 @@ local plugins = {
   'romainl/vim-cool', -- Only use hlsearch while searching
   'justinmk/vim-dirvish', -- Handy directory viewer
   'dstein64/vim-startuptime', -- Profile vim startup time
-  'farmergreg/vim-lastplace', -- Remember where I left off
+  { 'farmergreg/vim-lastplace', opt = true }, -- Remember where I left off
   'tpope/vim-obsession', -- Better session management
   'nanotee/zoxide.vim', -- Zoxide integration
   { 'tzachar/highlight-undo.nvim', as = 'highlight-undo', }, -- Highlight changed text on undo/redo
-  'mbbill/undotree', -- Nice interface for vim's tree-shaped undo
+  { 'mbbill/undotree', opt = true }, -- Nice interface for vim's tree-shaped undo
   'vigoux/notifier.nvim', -- notifications
 
   -- Motions
@@ -222,18 +226,19 @@ local plugins = {
   'AndrewRadev/splitjoin.vim', -- operators for smarter splitting and joining lines
   'echasnovski/mini.align', -- Align stuff
   'gbprod/yanky.nvim', -- Remember yanks
-  'cohama/lexima.vim', -- Automatic pair insertion
+  { 'cohama/lexima.vim', opt = true }, -- Automatic pair insertion
 
   -- Tree-sitter
   { 'nvim-treesitter/nvim-treesitter', build = ':TSUpdate' },
   'nvim-treesitter/nvim-treesitter-textobjects',
   'RRethy/nvim-treesitter-textsubjects',
   'Wansmer/sibling-swap.nvim', -- Swap neighbouring nodes
+  { 'nvim-treesitter/nvim-treesitter-context', opt = true }, -- Context
 
   -- User interface components
   { 'nvim-lualine/lualine.nvim', as = 'lualine', }, -- Statusline
   'willothy/nvim-cokeline', -- Bufferline
-  'dstein64/nvim-scrollview', -- Scrollbar
+  { 'dstein64/nvim-scrollview', opt = true }, -- Scrollbar
 
   -- Color scheme
   { 'mcchrish/zenbones.nvim', as = 'zenbones' },
@@ -250,6 +255,12 @@ local plugins = {
   'jonathanfilip/vim-lucius',
   'catppuccin/vim',
   'sainnhe/everforest',
+  'https://gitlab.com/protesilaos/tempus-themes-vim',
+  'https://github.com/jasoncarr0/sidewalk-colorscheme',
+  'https://github.com/rakr/vim-one',
+  'https://github.com/yorickpeterse/vim-paper',
+  'https://github.com/owickstrom/vim-colors-paramount',
+  'https://github.com/TheNiteCoder/mountaineer.vim',
 
   -- Fuzzy-finding
   'nvim-telescope/telescope.nvim',
@@ -266,6 +277,7 @@ local plugins = {
   { 'nvim-lua/plenary.nvim', as = 'plenary' }, -- Support for other plugins, notably Cokeline
   'NvChad/nvim-colorizer.lua', -- Colourize colour literals
   { 'L3MON4D3/LuaSnip', opt = true }, -- Snippets
+  'jpe90/export-colorscheme.nvim', -- Export neovim colorscheme to others
 }
 
 local installed, paq = pcall(require, 'paq')
@@ -305,6 +317,11 @@ require('pqf').setup()
 require('highlight-undo').setup()
 require('leap').add_default_mappings()
 require('mini.align').setup()
+vim.cmd.packadd('lexima.vim')
+vim.cmd.packadd('nvim-treesitter-context')
+vim.cmd.packadd('nvim-scrollview')
+vim.cmd.packadd('vim-lastplace')
+vim.cmd.packadd('LuaSnip')
 
 vim.g.colorizer_user_default_options = {
     css = true,
@@ -523,6 +540,8 @@ end
 
 table.insert(package.loaders, 1, telescope_loader)
 -- }}}
+
+vim.keymap.set({'n', 'v', 'i'}, '<c-.>', vim.lsp.buf.code_action, {desc = "Code action"})
 
 -- Popup-menu mappings {{{
 local tab = vim.api.nvim_replace_termcodes('<Tab>', true, false, true)

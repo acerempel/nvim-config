@@ -283,6 +283,15 @@ M.selection = function(mode)
   return string.format(' (L %s, C %s)', count, wc['visual_chars'])
 end
 
+local home = vim.env.HOME
+
+local function cwd()
+  local dir = vim.fn.getcwd(vim.g.statusline_winid)
+  if dir:sub(1, #home) == home then
+    dir = '~' .. dir:sub(#home + 1)
+  end
+  dir = dir:gsub('(%.?)([^/]+)/', function(dot, name) return dot .. name[1] end)
+end
 local file_state = '%f%( %h%)%( [%M%R]%)'
 
 -- Statusline to be displayed on active windows
@@ -297,7 +306,6 @@ M.set_active = function(self)
     accent_color,
     self:get_current_mode(),
     self:highlight(palette.Progress),
-    file_state,
     self:highlight(palette.Fileinfo),
     githead and '  ' .. githead or '',
     gitdiff and ' ' .. gitdiff or '',
@@ -312,6 +320,8 @@ M.set_active = function(self)
     -- self:highlight(palette.Fileinfo),
     -- self:get_lsp_status(),
     '%=',                                               -- left / right separator
+    file_state,
+    '%=',
     '%<',                                               -- Collapse point for smaller screen sizes
     accent_color,
     self:highlight(palette.Fileinfo),
