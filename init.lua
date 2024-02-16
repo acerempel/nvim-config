@@ -44,6 +44,7 @@ vim.opt.formatoptions:append('rl')
 vim.opt.completeopt:remove('preview')
 vim.opt.switchbuf:append('useopen')
 vim.opt.shortmess:remove('l')
+vim.opt.sessionoptions:append{"globals"}
 vim.o.mousescroll = 'ver:2,hor:4'
 -- }}}
 
