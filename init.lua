@@ -237,7 +237,6 @@ local plugins = {
   { 'nvim-treesitter/nvim-treesitter-context', opt = true }, -- Context
 
   -- User interface components
-  { 'nvim-lualine/lualine.nvim', as = 'lualine', }, -- Statusline
   'willothy/nvim-cokeline', -- Bufferline
   { 'dstein64/nvim-scrollview', opt = true }, -- Scrollbar
 
@@ -279,6 +278,10 @@ local plugins = {
   'NvChad/nvim-colorizer.lua', -- Colourize colour literals
   { 'L3MON4D3/LuaSnip', opt = true }, -- Snippets
   'jpe90/export-colorscheme.nvim', -- Export neovim colorscheme to others
+  { 'hrsh7th/nvim-cmp', as = 'cmp', opt = true }, -- autocomplete
+  { 'hrsh7th/cmp-nvim-lsp', as = 'cmp-lsp', opt = true },
+  { 'hrsh7th/cmp-nvim-lsp-signature-help', as = 'cmp-signature', opt = true },
+  { 'https://github.com/echasnovski/mini.nvim', as = 'mini' },
 }
 
 local installed, paq = pcall(require, 'paq')
@@ -303,14 +306,18 @@ vim.g.loaded_matchparen = 1
 -- }}}
 
 -- Plugin configuration {{{
-local default_config = function(p) p.setup() end
 function desire(plugin, config)
   local installed, plugin = pcall(require, plugin)
   if not installed then
     vim.notify(plugin .. ' not installed', vim.log.levels.WARN)
   else
-    config = config or default_config
-    config(plugin)
+    local do_config
+    if type(config) == "function" then
+      do_config = config
+    else
+      do_config = function(p) p.setup(config) end
+    end
+    do_config(plugin)
   end
 end
 
@@ -323,6 +330,22 @@ vim.cmd.packadd('nvim-treesitter-context')
 vim.cmd.packadd('nvim-scrollview')
 vim.cmd.packadd('vim-lastplace')
 vim.cmd.packadd('LuaSnip')
+
+desire('mini.statusline', { use_icons = false })
+
+vim.cmd [[
+  augroup load_cmp
+  au!
+  au InsertEnter * lua setup_cmp()
+  augroup END
+]]
+
+function setup_cmp()
+  vim.cmd.packadd('cmp')
+  vim.cmd.packadd('cmp-lsp')
+  require('conf.cmp')
+  require('cmp_nvim_lsp')._on_insert_enter()
+end
 
 vim.g.colorizer_user_default_options = {
     css = true,
@@ -403,7 +426,7 @@ vim.g.everforest_background = 'hard'
 vim.g.gruvbox_filetype_hi_groups = 1
 
 vim.opt.background = 'light'
-vim.api.nvim_command('colorscheme zenbones')-- }}}
+vim.api.nvim_command('colorscheme tempus_totus')-- }}}
 
 vim.g.qf_mapping_ack_style = 1
 vim.g.qf_nowrap = 0
@@ -543,40 +566,6 @@ table.insert(package.loaders, 1, telescope_loader)
 -- }}}
 
 vim.keymap.set({'n', 'v', 'i'}, '<c-.>', vim.lsp.buf.code_action, {desc = "Code action"})
-
--- Popup-menu mappings {{{
-local tab = vim.api.nvim_replace_termcodes('<Tab>', true, false, true)
-local stab = vim.api.nvim_replace_termcodes('<S-Tab>', true, false, true)
-local c_n = vim.api.nvim_replace_termcodes('<C-n>', true, false, true)
-local c_p = vim.api.nvim_replace_termcodes('<C-p>', true, false, true)
-local c_x_c_o = vim.api.nvim_replace_termcodes('<C-x><C-o>', true, false, true)
-local c_y = vim.api.nvim_replace_termcodes('<C-y>', true, false, true)
-
-vim.keymap.set('i', '<Tab>', function ()
-  if vim.fn.pumvisible() == 1 then return c_n end
-  local luasnip = require('luasnip')
-  if luasnip.locally_jumpable(1) then luasnip.jump(1) end
-  local row, col = unpack(vim.api.nvim_win_get_cursor(0))
-  if col == 0 then return tab end
-  local line = vim.api.nvim_get_current_line():sub(1, col + 1)
-  if line:match("^%s*$") then return tab end
-  if luasnip.expandable() then luasnip.expand() end
-  return c_x_c_o
-end, {expr = true, remap = false})
-
-vim.keymap.set('i', '<S-Tab>', function ()
-  if vim.fn.pumvisible() == 1 then return c_p end
-  local luasnip = require('luasnip')
-  if luasnip.locally_jumpable(-1) then luasnip.jump(-1) end
-  local row, col = unpack(vim.api.nvim_win_get_cursor(0))
-  if col == 0 then return stab end
-  local line = vim.api.nvim_get_current_line():sub(1, col + 1)
-  if line:match("^%s*$") then return stab end
-end, {expr = true, remap = false})
-
-vim.keymap.set('i', '<CR>', function ()
-  if vim.fn.pumvisible() == 1 then return c_y else return "\r" end
-end, { expr = true, remap = false })-- }}}
 
 -- Pylsp configuration {{{
 function start_pylsp()
